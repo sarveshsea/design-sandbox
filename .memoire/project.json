@@ -1,0 +1,49 @@
+{
+  "framework": "nextjs",
+  "language": "typescript",
+  "styling": {
+    "tailwind": true,
+    "tailwindVersion": "4",
+    "cssModules": false,
+    "styledComponents": false
+  },
+  "shadcn": {
+    "installed": true,
+    "components": [],
+    "config": {
+      "$schema": "https://ui.shadcn.com/schema.json",
+      "style": "radix-nova",
+      "rsc": true,
+      "tsx": true,
+      "tailwind": {
+        "config": "",
+        "css": "src/app/globals.css",
+        "baseColor": "neutral",
+        "cssVariables": true,
+        "prefix": ""
+      },
+      "iconLibrary": "lucide",
+      "rtl": false,
+      "aliases": {
+        "components": "@/components",
+        "utils": "@/lib/utils",
+        "ui": "@/components/ui",
+        "lib": "@/lib",
+        "hooks": "@/hooks"
+      },
+      "menuColor": "default",
+      "menuAccent": "subtle",
+      "registries": {}
+    }
+  },
+  "designTokens": {
+    "source": "none",
+    "tokenCount": 0
+  },
+  "paths": {
+    "components": "src/components",
+    "pages": "pages",
+    "public": "public"
+  },
+  "detectedAt": "2026-05-11T16:30:10.449Z"
+}

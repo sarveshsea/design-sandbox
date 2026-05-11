@@ -1,0 +1,39 @@
+schemaVersion: 1
+product:
+  name: design2code.ground
+  suite: memoire-product-team
+memory:
+  sources:
+    - README.md
+    - docs
+    - specs
+    - .memoire
+harnesses:
+  default: codex
+  enabled:
+    - codex
+    - claude-code
+    - hermes
+    - opencode
+skills:
+  - memoire-design-tooling
+recipes:
+  - id: design-audit
+    title: Design Audit
+    prompt: "Audit the UI with Memoire project memory, design tokens, Tailwind/shadcn conventions, accessibility, and product-team handoff notes."
+    commands:
+      - "memi daemon status --json"
+      - "memi diagnose --json"
+  - id: tailwind-cleanup
+    title: Tailwind + shadcn Cleanup
+    prompt: "Find Tailwind drift, duplicated shadcn primitives, token gaps, and unsafe UI edits before coding."
+    commands:
+      - "memi daemon status --json"
+      - "memi shadcn validate"
+      - "memi fix plan --json"
+  - id: product-handoff
+    title: Product Team Handoff
+    prompt: "Create a compact product-team handoff with research evidence, UI decisions, component specs, and follow-up tasks."
+    commands:
+      - "memi daemon status --json"
+      - "memi studio run --action handoff --mode brokered --prompt \"Create a Memoire product-team handoff\""
