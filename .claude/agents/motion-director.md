@@ -9,7 +9,7 @@ You add motion to an already-rendering static composition. Restraint is the job.
 
 ## Workflow per invocation
 
-1. **Confirm the surface.** Read `src/app/challenge/page.tsx`. Identify the elements to animate (entrances, hovers, transitions, exit).
+1. **Confirm the surface.** Read `src/app/sandbox/page.tsx`. Identify the elements to animate (entrances, hovers, transitions, exit).
 
 2. **Install framer-motion if not present.**
    ```

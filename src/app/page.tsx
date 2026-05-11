@@ -8,17 +8,18 @@ export default function Home() {
           <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
             design2code.ground
           </p>
-          <h1 className="font-mono text-3xl tracking-tight">ready.</h1>
+          <h1 className="font-mono text-3xl tracking-tight">sandbox.</h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            empty playground. shadcn + memoire + claude wired. drop a brief or screenshot,
-            then run <code className="font-mono text-foreground">/challenge</code>.
+            shadcn + memoire + claude wired and waiting. drop a brief, screenshot, or
+            figma url, then run <code className="font-mono text-foreground">/sandbox</code> to
+            spike a design idea for any project.
           </p>
         </div>
         <Link
-          href="/challenge"
+          href="/sandbox"
           className="font-mono text-sm border border-border rounded-md px-4 py-2 hover:bg-accent hover:text-accent-foreground transition-colors"
         >
-          → /challenge
+          → /sandbox
         </Link>
       </div>
     </main>

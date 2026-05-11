@@ -6,13 +6,13 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # design2code.ground
 
-Empty agentic-design playground. The full operating manual is **`.claude/CLAUDE.md`**.
+General design sandbox. The full operating manual is **`.claude/CLAUDE.md`**.
 
 ## Quick orientation
-- Scaffold target: `src/app/challenge/page.tsx`
+- Scaffold target: `src/app/sandbox/page.tsx`
 - shadcn-first; theme tokens only; no hex literals
 - Subagents: `screenshot-decoder` → `component-scaffolder` → `motion-director`
-- Slash command: `/challenge "<brief>"` (or paste screenshot then `/challenge`)
+- Slash command: `/sandbox "<idea>"` (or paste screenshot then `/sandbox`)
 - Memoire MCP available as `mcp__memoire__*`
 
 ## Pointers for non-Claude tools
