@@ -1,7 +1,7 @@
-# Design Soul — design2code.ground
+# Design Soul - design-sandbox
 
 ## Purpose
-A neutral, pre-warmed sandbox for design exploration on any project.
+A neutral, pre-warmed sandbox for design exploration on any project and a public proof surface for memi v2.
 An idea, screenshot, or Figma node arrives → a working composition lands fast.
 Whatever the user shows or says is the source of truth, not this file.
 
@@ -21,6 +21,7 @@ Whatever the user shows or says is the source of truth, not this file.
 - Keyboard-first, mouse-friendly
 - Progressive disclosure — reveal on demand
 - Respect prefers-reduced-motion
+- Evidence before implementation — memi diagnosis, UX audit, tokens, and registry context guide broad UI edits
 
 ## Anti-Patterns
 - No gradients unless data-driven
@@ -29,6 +30,7 @@ Whatever the user shows or says is the source of truth, not this file.
 - No animation longer than 400ms for UI (cinematic excepted)
 - **No hardcoded hex anywhere** — always reach for a token; if none exists, ask before inventing one
 - No invented constraints the user didn't state
+- No agent output that ignores memi evidence when the task touches layout, tokens, accessibility, or product workflow
 
 ## Branching
 One exploration per branch (`explore/<topic>`). `main` stays the empty baseline.

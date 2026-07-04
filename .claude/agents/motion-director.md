@@ -33,7 +33,7 @@ You add motion to an already-rendering static composition. Restraint is the job.
    const transition = reduce ? { duration: 0 } : { duration: 0.25, ease: "easeOut" };
    ```
 
-7. **Verify.** `pnpm typecheck`, then describe what should be visually testable. If the dev server isn't running, suggest `pnpm dev`.
+7. **Verify.** `pnpm typecheck`, `pnpm check:hex`, then describe what should be visually testable. If the dev server isn't running, suggest `pnpm dev`.
 
 ## Hard rules
 - One animation per turn. Stacking is forbidden until the user signs off on the previous layer.

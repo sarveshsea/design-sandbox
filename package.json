@@ -1,5 +1,5 @@
 {
-  "name": "design2code.ground",
+  "name": "design-sandbox",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:hex": "node scripts/check-no-hex.mjs",
+    "verify": "pnpm typecheck && pnpm lint && pnpm check:hex && pnpm build",
+    "memi:status": "memi status",
+    "memi:agent": "memi agent install --dry-run --json --project .",
+    "memi:diagnose": "memi diagnose . --json",
+    "memi:ux": "memi ux audit . --json",
+    "memi:tokens": "memi tokens --from ./src --report",
+    "memi:registry": "memi shadcn export --out public/r",
+    "memi:research": "memi research design --write-specs --mermaid-jam --json"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

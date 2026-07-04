@@ -1,4 +1,6 @@
 {
+  "name": "design-sandbox",
+  "purpose": "Public memi v2 proof workspace for interface understanding and design-to-code exploration",
   "framework": "nextjs",
   "language": "typescript",
   "styling": {
@@ -37,12 +39,20 @@
     }
   },
   "designTokens": {
-    "source": "none",
-    "tokenCount": 0
+    "source": "src/app/globals.css",
+    "tokenCount": 0,
+    "extractionCommand": "pnpm memi:tokens"
+  },
+  "memoire": {
+    "package": "@memi-design/cli",
+    "mcp": "memi mcp start --no-figma",
+    "agentSkill": ".agents/skills/memoire-design-tooling/SKILL.md",
+    "suiteManifest": "memoire.agent.yaml"
   },
   "paths": {
     "components": "src/components",
-    "pages": "pages",
+    "pages": "src/app",
+    "sandbox": "src/app/sandbox/page.tsx",
     "public": "public"
   },
   "detectedAt": "2026-05-11T16:30:10.449Z"
