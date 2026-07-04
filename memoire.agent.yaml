@@ -1,13 +1,16 @@
 schemaVersion: 1
 product:
-  name: design2code.ground
+  name: design-sandbox
   suite: memoire-product-team
 memory:
   sources:
     - README.md
+    - AGENTS.md
     - docs
     - specs
     - .memoire
+    - .agents/skills
+    - src/app/sandbox
 harnesses:
   default: codex
   enabled:
@@ -20,10 +23,12 @@ skills:
 recipes:
   - id: design-audit
     title: Design Audit
-    prompt: "Audit the UI with Memoire project memory, design tokens, Tailwind/shadcn conventions, accessibility, and product-team handoff notes."
+    prompt: "Audit the sandbox UI with memi project memory, design tokens, Tailwind/shadcn conventions, UX tenets and traps, accessibility, and product-team handoff notes."
     commands:
       - "memi daemon status --json"
-      - "memi diagnose --json"
+      - "memi diagnose . --json"
+      - "memi ux audit . --json"
+      - "memi tokens --from ./src --report"
   - id: tailwind-cleanup
     title: Tailwind + shadcn Cleanup
     prompt: "Find Tailwind drift, duplicated shadcn primitives, token gaps, and unsafe UI edits before coding."
@@ -31,9 +36,38 @@ recipes:
       - "memi daemon status --json"
       - "memi shadcn validate"
       - "memi fix plan --json"
+      - "pnpm check:hex"
   - id: product-handoff
     title: Product Team Handoff
     prompt: "Create a compact product-team handoff with research evidence, UI decisions, component specs, and follow-up tasks."
     commands:
       - "memi daemon status --json"
-      - "memi studio run --action handoff --mode brokered --prompt \"Create a Memoire product-team handoff\""
+      - "memi studio run --action handoff --mode brokered --prompt \"Create a memi product-team handoff\""
+  - id: sandbox-readiness
+    title: Sandbox Readiness
+    prompt: "Verify the sandbox route before sharing a design spike publicly."
+    commands:
+      - "pnpm typecheck"
+      - "pnpm lint"
+      - "pnpm check:hex"
+      - "pnpm build"
+  - id: research-vibe-design
+    title: Research Vibe Design
+    prompt: "Turn research evidence into Atomic Design specs and FigJam-ready planning source before coding."
+    commands:
+      - "memi research synthesize"
+      - "memi research design --write-specs --mermaid-jam --json"
+      - "memi mermaid-jam export --from research --json"
+  - id: registry-export
+    title: shadcn Registry Export
+    prompt: "Export reusable sandbox patterns as shadcn registry files for downstream apps."
+    commands:
+      - "memi shadcn doctor"
+      - "memi shadcn export --out public/r"
+      - "pnpm check:hex"
+  - id: cost-compatibility-check
+    title: Cost + Compatibility Check
+    prompt: "Check whether the sandbox remains cheap, local-first, no-Figma by default, and compatible with agent stacks."
+    commands:
+      - "memi agent install --dry-run --json --project ."
+      - "memi status"

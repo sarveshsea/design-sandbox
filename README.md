@@ -1,40 +1,147 @@
 # design-sandbox
 
-A pre-warmed Next.js 16 + Tailwind 4 + shadcn surface for **design exploration on any project**.
-Drop in an idea, screenshot, or Figma URL — get a working composition out the other side.
+Public proof repo for memi v2 interface understanding.
 
-Not a deliverable, not a starter kit, not interview prep. A scratchpad for design-to-code spikes.
+`design-sandbox` is a pre-warmed Next.js 16 + Tailwind 4 + shadcn workspace for design-to-code exploration. It is intentionally small: one sandbox route, one design memory contract, one agent workflow, and a clean path from brief or screenshot to a working UI composition.
 
-## Stack
-- **Next.js 16** (App Router) + **TypeScript**
-- **Tailwind 4** + **shadcn/ui** (radix-nova, neutral, CSS variables) — *config only, zero components installed*
-- **Memoire** (`@sarveshsea/memoire`) — design memory + MCP server for Claude Code
-- **Claude Code** subagents: `screenshot-decoder`, `component-scaffolder`, `motion-director`
+Use it to prove how `@memi-design/cli` should feel inside a real design stack:
 
-## Workflow
+- Run UX and app-quality audits before coding.
+- Extract Tailwind tokens and shadcn registry context.
+- Give Codex, Claude Code, Cursor, Hermes, OpenCode, OpenClaw, and Agent Skills the same design memory.
+- Spike product UI safely without polluting a production app.
+- Preserve receipts: commands, artifacts, screenshots, and component decisions.
 
+## Five-minute setup
+
+```bash
+pnpm install
+npm i -g @memi-design/cli
+
+pnpm memi:agent
+pnpm memi:diagnose
+pnpm memi:ux
+pnpm memi:tokens
+pnpm dev
 ```
-idea / screenshot / figma url → /sandbox → page.tsx renders
+
+Open `http://localhost:3000/sandbox`.
+
+## What this repo proves
+
+| Layer | Proof in this repo |
+| --- | --- |
+| Next.js 16 App Router | `src/app/page.tsx`, `src/app/sandbox/page.tsx`, `src/app/layout.tsx` |
+| Tailwind 4 + shadcn | `src/app/globals.css`, `components.json`, token-only sandbox UI |
+| memi v2 CLI | `pnpm memi:diagnose`, `pnpm memi:ux`, `pnpm memi:tokens`, `pnpm memi:registry` |
+| MCP | `.mcp.json` runs `memi mcp start --no-figma` |
+| Agent Skills | `.agents/skills/memoire-design-tooling/SKILL.md` |
+| Claude Code | `.claude/CLAUDE.md`, `.claude/commands/sandbox.md`, specialized agents |
+| Shared agent contract | `memoire.agent.yaml`, `.memoire/*`, `AGENTS.md` |
+| Verification | `pnpm verify`, `pnpm check:hex` |
+
+Deeper docs:
+
+- [memi integration architecture](docs/MEMI_INTEGRATION.md)
+- [public repo playbook](docs/PUBLICATION.md)
+
+## Core workflow
+
+```text
+brief / screenshot / Figma URL
+  -> memi diagnose + UX audit
+  -> screenshot-decoder spec
+  -> shadcn-first component scaffold
+  -> /sandbox render
+  -> no-hex + typecheck + build
+  -> copy the proven pattern into the real product
 ```
 
 In Claude Code:
 
-```
-/sandbox "what would a calmer settings panel for [project] look like?"
-```
-
-Or paste a screenshot, then:
-
-```
-/sandbox
+```text
+/sandbox "design a calmer billing command center for a B2B SaaS"
 ```
 
-The `/sandbox` slash command runs:
-1. **screenshot-decoder** → structured spec (layout, components, tokens, motion)
-2. **component-scaffolder** → `pnpm dlx shadcn add ...` + writes `src/app/sandbox/page.tsx`
-3. **motion-director** (only if motion is in scope) → installs `framer-motion`, layers one motion pass
+For Codex, Cursor, OpenCode, Hermes, OpenClaw, or any `.agents/skills` reader:
 
-Open `http://localhost:3000/sandbox` to see the result.
+```bash
+memi agent install universal --project .
+npx skills add sarveshsea/memi --skill memoire-design-tooling
+```
+
+Then tell the agent:
+
+```text
+Use the memoire-design-tooling skill. Run memi diagnose, memi ux audit, and memi tokens before changing the sandbox UI. Keep the result shadcn-first, token-only, and verified with pnpm verify.
+```
+
+## Local commands
+
+```bash
+pnpm dev             # http://localhost:3000
+pnpm typecheck       # tsc --noEmit
+pnpm lint            # eslint
+pnpm build           # production build
+pnpm verify          # typecheck + lint + build + no-hex scan
+pnpm check:hex       # block raw hex literals in sandbox source
+
+pnpm memi:status     # memi workspace status
+pnpm memi:agent      # dry-run all agent kit writes
+pnpm memi:diagnose   # app-quality diagnosis
+pnpm memi:ux         # UX tenets and traps
+pnpm memi:tokens     # Tailwind token extraction report
+pnpm memi:registry   # shadcn registry export to public/r
+pnpm memi:research   # research-backed spec package path
+```
+
+## memi integration
+
+### MCP
+
+`.mcp.json` is already wired for a registry-safe MCP server:
+
+```json
+{
+  "mcpServers": {
+    "memoire": {
+      "command": "memi",
+      "args": ["mcp", "start", "--no-figma"]
+    }
+  }
+}
+```
+
+Use `--no-figma` by default so agents, registries, and CI can inspect the sandbox without desktop Figma.
+
+### Agent Skills
+
+The repo ships `.agents/skills/memoire-design-tooling/SKILL.md`, installed from the local memi v2 package. Refresh it after memi updates:
+
+```bash
+memi agent install universal --project . --force
+```
+
+### Suite manifest
+
+`memoire.agent.yaml` declares the shared contract for memory, harnesses, skills, and repeatable recipes. Agents should read it before editing UI.
+
+Key recipes:
+
+- `design-audit`: app quality, UX traps, token scan.
+- `sandbox-readiness`: checks `/sandbox` before sharing.
+- `research-vibe-design`: turns research into specs and FigJam-ready source.
+- `registry-export`: exports shadcn registry items for reuse.
+
+## Design rules
+
+- Use shadcn primitives before custom UI.
+- Use Tailwind tokens only; no raw hex literals in `src/app/sandbox/**`.
+- Keep components at Atomic Design levels when a composition gets complex.
+- Prefer dense, useful workbench UI over landing-page decoration.
+- Build in one route by default: `src/app/sandbox/page.tsx`.
+- Respect `prefers-reduced-motion` for any motion pass.
+- Verify on desktop and mobile before sharing screenshots.
 
 ## Branching
 
@@ -43,55 +150,18 @@ git checkout main
 git checkout -b explore/<topic>
 ```
 
-`main` always stays the empty playground. Each exploration is its own branch — keep, merge, or delete.
+`main` stays the clean baseline. Each exploration branch can be kept, merged, copied into another product, or deleted.
 
-## What's in the box
+## Public positioning
 
-```
-.claude/                         # Claude Code agentic layer
-  CLAUDE.md                      # operating manual
-  agents/                        # 3 specialized subagents
-    screenshot-decoder.md
-    component-scaffolder.md
-    motion-director.md
-  commands/sandbox.md            # /sandbox slash command
-  settings.json                  # pre-allowed shell calls (no popups mid-spike)
-.memoire/                        # Memoire design memory
-  SOUL.md                        # voice + visual baseline
-  AGENTS.md                      # agent roster (mirrors .claude/agents/)
-  TOOLS.md                       # tool permission policy
-  HEARTBEAT.md                   # end-of-exploration checks
-  project.json                   # auto-detected stack snapshot
-.mcp.json                        # Memoire MCP wired to Claude Code
-specs/                           # drop JSON specs here for complex explorations
-generated/                       # memi generate target
-research/                        # for memi research output
-prototype/                       # scratch space
-src/
-  app/
-    page.tsx                     # landing → /sandbox
-    sandbox/page.tsx             # the canvas (currently blank)
-    layout.tsx
-    globals.css                  # shadcn CSS variables (neutral, light + dark)
-  components/ui/                 # empty — fills as shadcn add runs
-  lib/utils.ts                   # cn() helper
-components.json                  # shadcn config
+Use these tags when linking this repo from memi docs, GitHub topics, or launch posts:
+
+```text
+#InterfaceUnderstanding #DesignSystems #AICodingAgents #shadcn #TailwindCSS #MCP #AgentSkills #Codex #ClaudeCode #UXAudit #FigmaToCode #DesignEngineering
 ```
 
-## Local commands
+## Relationship to memi
 
-```bash
-pnpm dev          # http://localhost:3000
-pnpm typecheck    # tsc --noEmit
-pnpm build        # production build
-memoire status    # workspace state
-memoire doctor    # health check
-memoire add <c>   # alternate path to install components
-```
+`@memi-design/cli` is the engine. `design-sandbox` is the proof surface.
 
-## Hard rules (also in `.claude/CLAUDE.md`)
-- shadcn-first; never recreate a primitive that exists
-- theme tokens only; **no hex literals anywhere**
-- one focused change per turn for visual work
-- UI animations <400ms, `prefers-reduced-motion` always honored
-- never invent constraints the user didn't state
+Publish memi first, then keep this repo as the public example that shows how a product team should wire design memory, MCP, skills, shadcn, Tailwind, and UX auditing into a real workspace.
