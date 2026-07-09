@@ -1,0 +1,52 @@
+{
+  "name": "ProofCard",
+  "type": "component",
+  "level": "molecule",
+  "purpose": "Shows the current memi proof state for an AI coding agent before it edits UI code.",
+  "researchBacking": [],
+  "designTokens": {
+    "source": "manual",
+    "mapped": true
+  },
+  "variants": [
+    "default",
+    "complete",
+    "needs-attention"
+  ],
+  "variantAxes": {
+    "tone": [
+      "neutral",
+      "success",
+      "warning"
+    ]
+  },
+  "props": {
+    "title": "string",
+    "status": "'ready' | 'running' | 'blocked'",
+    "items": "string[]"
+  },
+  "shadcnBase": [
+    "Card",
+    "Badge",
+    "Button"
+  ],
+  "composesSpecs": [],
+  "accessibility": {
+    "role": "status",
+    "ariaLabel": "optional",
+    "keyboardNav": false,
+    "focusStyle": "outline",
+    "focusWidth": "2px",
+    "touchTarget": "default",
+    "reducedMotion": false,
+    "liveRegion": "polite",
+    "colorIndependent": true
+  },
+  "tags": [
+    "proof",
+    "agent-workflow",
+    "design-system"
+  ],
+  "createdAt": "2026-07-09T00:00:00.000Z",
+  "updatedAt": "2026-07-09T00:00:00.000Z"
+}

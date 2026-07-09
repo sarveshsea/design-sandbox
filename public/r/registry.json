@@ -1,0 +1,65 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "design-sandbox",
+  "homepage": "https://raw.githubusercontent.com/sarveshsea/design-sandbox/main/public",
+  "items": [
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "proof-card",
+      "type": "registry:component",
+      "title": "ProofCard",
+      "description": "Shows the current memi proof state for an AI coding agent before it edits UI code.",
+      "registryDependencies": [
+        "card",
+        "badge",
+        "button"
+      ],
+      "files": [
+        {
+          "path": "registry/proof-card/proof-card.tsx",
+          "type": "registry:component",
+          "target": "components/molecules/proof-card.tsx"
+        },
+        {
+          "path": "components/ProofCard.json",
+          "type": "registry:file",
+          "target": ".memoire/specs/ProofCard.json"
+        }
+      ],
+      "categories": [
+        "molecule",
+        "proof",
+        "agent-workflow",
+        "design-system"
+      ],
+      "meta": {
+        "memoire": {
+          "source": "component-spec",
+          "atomicLevel": "molecule",
+          "specName": "ProofCard",
+          "composesSpecs": [],
+          "tags": [
+            "proof",
+            "agent-workflow",
+            "design-system"
+          ],
+          "variants": [
+            "default",
+            "complete",
+            "needs-attention"
+          ],
+          "itemRoute": "/r/proof-card.json",
+          "registryItemUrl": "https://raw.githubusercontent.com/sarveshsea/design-sandbox/main/public/r/proof-card.json",
+          "openInV0Url": "https://v0.dev/chat/api/open?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsarveshsea%2Fdesign-sandbox%2Fmain%2Fpublic%2Fr%2Fproof-card.json"
+        }
+      }
+    }
+  ],
+  "meta": {
+    "memoire": {
+      "protocol": "shadcn-v2",
+      "generatedAt": "2026-07-09T00:32:04.254Z",
+      "memoireVersion": "2.4.0"
+    }
+  }
+}

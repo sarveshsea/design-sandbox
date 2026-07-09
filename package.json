@@ -7,7 +7,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "memi:proof": "node scripts/memi-proof.mjs all",
+    "memi:version": "node scripts/memi-proof.mjs version",
+    "memi:diagnose": "node scripts/memi-proof.mjs diagnose",
+    "memi:ux": "node scripts/memi-proof.mjs ux",
+    "memi:tokens": "node scripts/memi-proof.mjs tokens",
+    "memi:shadcn": "node scripts/memi-proof.mjs shadcn",
+    "memi:mcp": "node scripts/memi-proof.mjs mcp",
+    "memi:agent": "node scripts/memi-proof.mjs agent",
+    "verify": "pnpm typecheck && pnpm lint && pnpm build && pnpm memi:proof"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

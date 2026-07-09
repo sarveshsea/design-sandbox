@@ -1,0 +1,2213 @@
+{
+  "tokens": [
+    {
+      "name": "accent",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.97 0 0)",
+        "dark": "oklch(0.269 0 0)"
+      },
+      "cssVariable": "--accent"
+    },
+    {
+      "name": "accent-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.205 0 0)",
+        "dark": "oklch(0.985 0 0)"
+      },
+      "cssVariable": "--accent-foreground"
+    },
+    {
+      "name": "background",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(1 0 0)",
+        "dark": "oklch(0.145 0 0)"
+      },
+      "cssVariable": "--background"
+    },
+    {
+      "name": "border",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.922 0 0)",
+        "dark": "oklch(1 0 0 / 10%)"
+      },
+      "cssVariable": "--border"
+    },
+    {
+      "name": "card",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(1 0 0)",
+        "dark": "oklch(0.205 0 0)"
+      },
+      "cssVariable": "--card"
+    },
+    {
+      "name": "card-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.145 0 0)",
+        "dark": "oklch(0.985 0 0)"
+      },
+      "cssVariable": "--card-foreground"
+    },
+    {
+      "name": "chart-1",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.87 0 0)",
+        "dark": "oklch(0.87 0 0)"
+      },
+      "cssVariable": "--chart-1"
+    },
+    {
+      "name": "chart-2",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.556 0 0)",
+        "dark": "oklch(0.556 0 0)"
+      },
+      "cssVariable": "--chart-2"
+    },
+    {
+      "name": "chart-3",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.439 0 0)",
+        "dark": "oklch(0.439 0 0)"
+      },
+      "cssVariable": "--chart-3"
+    },
+    {
+      "name": "chart-4",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.371 0 0)",
+        "dark": "oklch(0.371 0 0)"
+      },
+      "cssVariable": "--chart-4"
+    },
+    {
+      "name": "chart-5",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.269 0 0)",
+        "dark": "oklch(0.269 0 0)"
+      },
+      "cssVariable": "--chart-5"
+    },
+    {
+      "name": "color-accent",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--accent)",
+        "dark": "var(--accent)"
+      },
+      "cssVariable": "--color-accent"
+    },
+    {
+      "name": "color-accent-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--accent-foreground)",
+        "dark": "var(--accent-foreground)"
+      },
+      "cssVariable": "--color-accent-foreground"
+    },
+    {
+      "name": "color-background",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--background)",
+        "dark": "var(--background)"
+      },
+      "cssVariable": "--color-background"
+    },
+    {
+      "name": "color-border",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--border)",
+        "dark": "var(--border)"
+      },
+      "cssVariable": "--color-border"
+    },
+    {
+      "name": "color-card",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--card)",
+        "dark": "var(--card)"
+      },
+      "cssVariable": "--color-card"
+    },
+    {
+      "name": "color-card-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--card-foreground)",
+        "dark": "var(--card-foreground)"
+      },
+      "cssVariable": "--color-card-foreground"
+    },
+    {
+      "name": "color-chart-1",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--chart-1)",
+        "dark": "var(--chart-1)"
+      },
+      "cssVariable": "--color-chart-1"
+    },
+    {
+      "name": "color-chart-2",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--chart-2)",
+        "dark": "var(--chart-2)"
+      },
+      "cssVariable": "--color-chart-2"
+    },
+    {
+      "name": "color-chart-3",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--chart-3)",
+        "dark": "var(--chart-3)"
+      },
+      "cssVariable": "--color-chart-3"
+    },
+    {
+      "name": "color-chart-4",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--chart-4)",
+        "dark": "var(--chart-4)"
+      },
+      "cssVariable": "--color-chart-4"
+    },
+    {
+      "name": "color-chart-5",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--chart-5)",
+        "dark": "var(--chart-5)"
+      },
+      "cssVariable": "--color-chart-5"
+    },
+    {
+      "name": "color-destructive",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--destructive)",
+        "dark": "var(--destructive)"
+      },
+      "cssVariable": "--color-destructive"
+    },
+    {
+      "name": "color-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--foreground)",
+        "dark": "var(--foreground)"
+      },
+      "cssVariable": "--color-foreground"
+    },
+    {
+      "name": "color-input",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--input)",
+        "dark": "var(--input)"
+      },
+      "cssVariable": "--color-input"
+    },
+    {
+      "name": "color-muted",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--muted)",
+        "dark": "var(--muted)"
+      },
+      "cssVariable": "--color-muted"
+    },
+    {
+      "name": "color-muted-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--muted-foreground)",
+        "dark": "var(--muted-foreground)"
+      },
+      "cssVariable": "--color-muted-foreground"
+    },
+    {
+      "name": "color-popover",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--popover)",
+        "dark": "var(--popover)"
+      },
+      "cssVariable": "--color-popover"
+    },
+    {
+      "name": "color-popover-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--popover-foreground)",
+        "dark": "var(--popover-foreground)"
+      },
+      "cssVariable": "--color-popover-foreground"
+    },
+    {
+      "name": "color-primary",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--primary)",
+        "dark": "var(--primary)"
+      },
+      "cssVariable": "--color-primary"
+    },
+    {
+      "name": "color-primary-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--primary-foreground)",
+        "dark": "var(--primary-foreground)"
+      },
+      "cssVariable": "--color-primary-foreground"
+    },
+    {
+      "name": "color-ring",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--ring)",
+        "dark": "var(--ring)"
+      },
+      "cssVariable": "--color-ring"
+    },
+    {
+      "name": "color-secondary",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--secondary)",
+        "dark": "var(--secondary)"
+      },
+      "cssVariable": "--color-secondary"
+    },
+    {
+      "name": "color-secondary-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--secondary-foreground)",
+        "dark": "var(--secondary-foreground)"
+      },
+      "cssVariable": "--color-secondary-foreground"
+    },
+    {
+      "name": "color-sidebar",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--sidebar)",
+        "dark": "var(--sidebar)"
+      },
+      "cssVariable": "--color-sidebar"
+    },
+    {
+      "name": "color-sidebar-accent",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--sidebar-accent)",
+        "dark": "var(--sidebar-accent)"
+      },
+      "cssVariable": "--color-sidebar-accent"
+    },
+    {
+      "name": "color-sidebar-accent-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--sidebar-accent-foreground)",
+        "dark": "var(--sidebar-accent-foreground)"
+      },
+      "cssVariable": "--color-sidebar-accent-foreground"
+    },
+    {
+      "name": "color-sidebar-border",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--sidebar-border)",
+        "dark": "var(--sidebar-border)"
+      },
+      "cssVariable": "--color-sidebar-border"
+    },
+    {
+      "name": "color-sidebar-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--sidebar-foreground)",
+        "dark": "var(--sidebar-foreground)"
+      },
+      "cssVariable": "--color-sidebar-foreground"
+    },
+    {
+      "name": "color-sidebar-primary",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--sidebar-primary)",
+        "dark": "var(--sidebar-primary)"
+      },
+      "cssVariable": "--color-sidebar-primary"
+    },
+    {
+      "name": "color-sidebar-primary-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--sidebar-primary-foreground)",
+        "dark": "var(--sidebar-primary-foreground)"
+      },
+      "cssVariable": "--color-sidebar-primary-foreground"
+    },
+    {
+      "name": "color-sidebar-ring",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "var(--sidebar-ring)",
+        "dark": "var(--sidebar-ring)"
+      },
+      "cssVariable": "--color-sidebar-ring"
+    },
+    {
+      "name": "destructive",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.577 0.245 27.325)",
+        "dark": "oklch(0.704 0.191 22.216)"
+      },
+      "cssVariable": "--destructive"
+    },
+    {
+      "name": "foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.145 0 0)",
+        "dark": "oklch(0.985 0 0)"
+      },
+      "cssVariable": "--foreground"
+    },
+    {
+      "name": "input",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.922 0 0)",
+        "dark": "oklch(1 0 0 / 15%)"
+      },
+      "cssVariable": "--input"
+    },
+    {
+      "name": "muted",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.97 0 0)",
+        "dark": "oklch(0.269 0 0)"
+      },
+      "cssVariable": "--muted"
+    },
+    {
+      "name": "muted-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.556 0 0)",
+        "dark": "oklch(0.708 0 0)"
+      },
+      "cssVariable": "--muted-foreground"
+    },
+    {
+      "name": "popover",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(1 0 0)",
+        "dark": "oklch(0.205 0 0)"
+      },
+      "cssVariable": "--popover"
+    },
+    {
+      "name": "popover-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.145 0 0)",
+        "dark": "oklch(0.985 0 0)"
+      },
+      "cssVariable": "--popover-foreground"
+    },
+    {
+      "name": "primary",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.205 0 0)",
+        "dark": "oklch(0.922 0 0)"
+      },
+      "cssVariable": "--primary"
+    },
+    {
+      "name": "primary-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.985 0 0)",
+        "dark": "oklch(0.205 0 0)"
+      },
+      "cssVariable": "--primary-foreground"
+    },
+    {
+      "name": "ring",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.708 0 0)",
+        "dark": "oklch(0.556 0 0)"
+      },
+      "cssVariable": "--ring"
+    },
+    {
+      "name": "secondary",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.97 0 0)",
+        "dark": "oklch(0.269 0 0)"
+      },
+      "cssVariable": "--secondary"
+    },
+    {
+      "name": "secondary-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.205 0 0)",
+        "dark": "oklch(0.985 0 0)"
+      },
+      "cssVariable": "--secondary-foreground"
+    },
+    {
+      "name": "sidebar",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.985 0 0)",
+        "dark": "oklch(0.205 0 0)"
+      },
+      "cssVariable": "--sidebar"
+    },
+    {
+      "name": "sidebar-accent",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.97 0 0)",
+        "dark": "oklch(0.269 0 0)"
+      },
+      "cssVariable": "--sidebar-accent"
+    },
+    {
+      "name": "sidebar-accent-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.205 0 0)",
+        "dark": "oklch(0.985 0 0)"
+      },
+      "cssVariable": "--sidebar-accent-foreground"
+    },
+    {
+      "name": "sidebar-border",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.922 0 0)",
+        "dark": "oklch(1 0 0 / 10%)"
+      },
+      "cssVariable": "--sidebar-border"
+    },
+    {
+      "name": "sidebar-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.145 0 0)",
+        "dark": "oklch(0.985 0 0)"
+      },
+      "cssVariable": "--sidebar-foreground"
+    },
+    {
+      "name": "sidebar-primary",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.205 0 0)",
+        "dark": "oklch(0.488 0.243 264.376)"
+      },
+      "cssVariable": "--sidebar-primary"
+    },
+    {
+      "name": "sidebar-primary-foreground",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.985 0 0)",
+        "dark": "oklch(0.985 0 0)"
+      },
+      "cssVariable": "--sidebar-primary-foreground"
+    },
+    {
+      "name": "sidebar-ring",
+      "collection": "extracted:app/globals.css",
+      "type": "color",
+      "values": {
+        "default": "oklch(0.708 0 0)",
+        "dark": "oklch(0.556 0 0)"
+      },
+      "cssVariable": "--sidebar-ring"
+    },
+    {
+      "name": "font-heading",
+      "collection": "extracted:app/globals.css",
+      "type": "typography",
+      "values": {
+        "default": "var(--font-sans)",
+        "dark": "var(--font-sans)"
+      },
+      "cssVariable": "--font-heading"
+    },
+    {
+      "name": "font-mono",
+      "collection": "extracted:app/globals.css",
+      "type": "typography",
+      "values": {
+        "default": "var(--font-geist-mono)",
+        "dark": "var(--font-geist-mono)"
+      },
+      "cssVariable": "--font-mono"
+    },
+    {
+      "name": "font-sans",
+      "collection": "extracted:app/globals.css",
+      "type": "typography",
+      "values": {
+        "default": "var(--font-sans)",
+        "dark": "var(--font-sans)"
+      },
+      "cssVariable": "--font-sans"
+    },
+    {
+      "name": "radius",
+      "collection": "extracted:app/globals.css",
+      "type": "radius",
+      "values": {
+        "default": "0.625rem"
+      },
+      "cssVariable": "--radius"
+    },
+    {
+      "name": "radius-2xl",
+      "collection": "extracted:app/globals.css",
+      "type": "radius",
+      "values": {
+        "default": "calc(var(--radius) * 1.8)",
+        "dark": "calc(var(--radius) * 1.8)"
+      },
+      "cssVariable": "--radius-2xl"
+    },
+    {
+      "name": "radius-3xl",
+      "collection": "extracted:app/globals.css",
+      "type": "radius",
+      "values": {
+        "default": "calc(var(--radius) * 2.2)",
+        "dark": "calc(var(--radius) * 2.2)"
+      },
+      "cssVariable": "--radius-3xl"
+    },
+    {
+      "name": "radius-4xl",
+      "collection": "extracted:app/globals.css",
+      "type": "radius",
+      "values": {
+        "default": "calc(var(--radius) * 2.6)",
+        "dark": "calc(var(--radius) * 2.6)"
+      },
+      "cssVariable": "--radius-4xl"
+    },
+    {
+      "name": "radius-lg",
+      "collection": "extracted:app/globals.css",
+      "type": "radius",
+      "values": {
+        "default": "var(--radius)",
+        "dark": "var(--radius)"
+      },
+      "cssVariable": "--radius-lg"
+    },
+    {
+      "name": "radius-md",
+      "collection": "extracted:app/globals.css",
+      "type": "radius",
+      "values": {
+        "default": "calc(var(--radius) * 0.8)",
+        "dark": "calc(var(--radius) * 0.8)"
+      },
+      "cssVariable": "--radius-md"
+    },
+    {
+      "name": "radius-sm",
+      "collection": "extracted:app/globals.css",
+      "type": "radius",
+      "values": {
+        "default": "calc(var(--radius) * 0.6)",
+        "dark": "calc(var(--radius) * 0.6)"
+      },
+      "cssVariable": "--radius-sm"
+    },
+    {
+      "name": "radius-xl",
+      "collection": "extracted:app/globals.css",
+      "type": "radius",
+      "values": {
+        "default": "calc(var(--radius) * 1.4)",
+        "dark": "calc(var(--radius) * 1.4)"
+      },
+      "cssVariable": "--radius-xl"
+    }
+  ],
+  "aliases": [
+    {
+      "token": "color-background",
+      "cssVariable": "--color-background",
+      "mode": "default",
+      "references": [
+        "--background"
+      ],
+      "rawValue": "var(--background)"
+    },
+    {
+      "token": "color-foreground",
+      "cssVariable": "--color-foreground",
+      "mode": "default",
+      "references": [
+        "--foreground"
+      ],
+      "rawValue": "var(--foreground)"
+    },
+    {
+      "token": "font-sans",
+      "cssVariable": "--font-sans",
+      "mode": "default",
+      "references": [
+        "--font-sans"
+      ],
+      "rawValue": "var(--font-sans)"
+    },
+    {
+      "token": "font-mono",
+      "cssVariable": "--font-mono",
+      "mode": "default",
+      "references": [
+        "--font-geist-mono"
+      ],
+      "rawValue": "var(--font-geist-mono)"
+    },
+    {
+      "token": "font-heading",
+      "cssVariable": "--font-heading",
+      "mode": "default",
+      "references": [
+        "--font-sans"
+      ],
+      "rawValue": "var(--font-sans)"
+    },
+    {
+      "token": "color-sidebar-ring",
+      "cssVariable": "--color-sidebar-ring",
+      "mode": "default",
+      "references": [
+        "--sidebar-ring"
+      ],
+      "rawValue": "var(--sidebar-ring)"
+    },
+    {
+      "token": "color-sidebar-border",
+      "cssVariable": "--color-sidebar-border",
+      "mode": "default",
+      "references": [
+        "--sidebar-border"
+      ],
+      "rawValue": "var(--sidebar-border)"
+    },
+    {
+      "token": "color-sidebar-accent-foreground",
+      "cssVariable": "--color-sidebar-accent-foreground",
+      "mode": "default",
+      "references": [
+        "--sidebar-accent-foreground"
+      ],
+      "rawValue": "var(--sidebar-accent-foreground)"
+    },
+    {
+      "token": "color-sidebar-accent",
+      "cssVariable": "--color-sidebar-accent",
+      "mode": "default",
+      "references": [
+        "--sidebar-accent"
+      ],
+      "rawValue": "var(--sidebar-accent)"
+    },
+    {
+      "token": "color-sidebar-primary-foreground",
+      "cssVariable": "--color-sidebar-primary-foreground",
+      "mode": "default",
+      "references": [
+        "--sidebar-primary-foreground"
+      ],
+      "rawValue": "var(--sidebar-primary-foreground)"
+    },
+    {
+      "token": "color-sidebar-primary",
+      "cssVariable": "--color-sidebar-primary",
+      "mode": "default",
+      "references": [
+        "--sidebar-primary"
+      ],
+      "rawValue": "var(--sidebar-primary)"
+    },
+    {
+      "token": "color-sidebar-foreground",
+      "cssVariable": "--color-sidebar-foreground",
+      "mode": "default",
+      "references": [
+        "--sidebar-foreground"
+      ],
+      "rawValue": "var(--sidebar-foreground)"
+    },
+    {
+      "token": "color-sidebar",
+      "cssVariable": "--color-sidebar",
+      "mode": "default",
+      "references": [
+        "--sidebar"
+      ],
+      "rawValue": "var(--sidebar)"
+    },
+    {
+      "token": "color-chart-5",
+      "cssVariable": "--color-chart-5",
+      "mode": "default",
+      "references": [
+        "--chart-5"
+      ],
+      "rawValue": "var(--chart-5)"
+    },
+    {
+      "token": "color-chart-4",
+      "cssVariable": "--color-chart-4",
+      "mode": "default",
+      "references": [
+        "--chart-4"
+      ],
+      "rawValue": "var(--chart-4)"
+    },
+    {
+      "token": "color-chart-3",
+      "cssVariable": "--color-chart-3",
+      "mode": "default",
+      "references": [
+        "--chart-3"
+      ],
+      "rawValue": "var(--chart-3)"
+    },
+    {
+      "token": "color-chart-2",
+      "cssVariable": "--color-chart-2",
+      "mode": "default",
+      "references": [
+        "--chart-2"
+      ],
+      "rawValue": "var(--chart-2)"
+    },
+    {
+      "token": "color-chart-1",
+      "cssVariable": "--color-chart-1",
+      "mode": "default",
+      "references": [
+        "--chart-1"
+      ],
+      "rawValue": "var(--chart-1)"
+    },
+    {
+      "token": "color-ring",
+      "cssVariable": "--color-ring",
+      "mode": "default",
+      "references": [
+        "--ring"
+      ],
+      "rawValue": "var(--ring)"
+    },
+    {
+      "token": "color-input",
+      "cssVariable": "--color-input",
+      "mode": "default",
+      "references": [
+        "--input"
+      ],
+      "rawValue": "var(--input)"
+    },
+    {
+      "token": "color-border",
+      "cssVariable": "--color-border",
+      "mode": "default",
+      "references": [
+        "--border"
+      ],
+      "rawValue": "var(--border)"
+    },
+    {
+      "token": "color-destructive",
+      "cssVariable": "--color-destructive",
+      "mode": "default",
+      "references": [
+        "--destructive"
+      ],
+      "rawValue": "var(--destructive)"
+    },
+    {
+      "token": "color-accent-foreground",
+      "cssVariable": "--color-accent-foreground",
+      "mode": "default",
+      "references": [
+        "--accent-foreground"
+      ],
+      "rawValue": "var(--accent-foreground)"
+    },
+    {
+      "token": "color-accent",
+      "cssVariable": "--color-accent",
+      "mode": "default",
+      "references": [
+        "--accent"
+      ],
+      "rawValue": "var(--accent)"
+    },
+    {
+      "token": "color-muted-foreground",
+      "cssVariable": "--color-muted-foreground",
+      "mode": "default",
+      "references": [
+        "--muted-foreground"
+      ],
+      "rawValue": "var(--muted-foreground)"
+    },
+    {
+      "token": "color-muted",
+      "cssVariable": "--color-muted",
+      "mode": "default",
+      "references": [
+        "--muted"
+      ],
+      "rawValue": "var(--muted)"
+    },
+    {
+      "token": "color-secondary-foreground",
+      "cssVariable": "--color-secondary-foreground",
+      "mode": "default",
+      "references": [
+        "--secondary-foreground"
+      ],
+      "rawValue": "var(--secondary-foreground)"
+    },
+    {
+      "token": "color-secondary",
+      "cssVariable": "--color-secondary",
+      "mode": "default",
+      "references": [
+        "--secondary"
+      ],
+      "rawValue": "var(--secondary)"
+    },
+    {
+      "token": "color-primary-foreground",
+      "cssVariable": "--color-primary-foreground",
+      "mode": "default",
+      "references": [
+        "--primary-foreground"
+      ],
+      "rawValue": "var(--primary-foreground)"
+    },
+    {
+      "token": "color-primary",
+      "cssVariable": "--color-primary",
+      "mode": "default",
+      "references": [
+        "--primary"
+      ],
+      "rawValue": "var(--primary)"
+    },
+    {
+      "token": "color-popover-foreground",
+      "cssVariable": "--color-popover-foreground",
+      "mode": "default",
+      "references": [
+        "--popover-foreground"
+      ],
+      "rawValue": "var(--popover-foreground)"
+    },
+    {
+      "token": "color-popover",
+      "cssVariable": "--color-popover",
+      "mode": "default",
+      "references": [
+        "--popover"
+      ],
+      "rawValue": "var(--popover)"
+    },
+    {
+      "token": "color-card-foreground",
+      "cssVariable": "--color-card-foreground",
+      "mode": "default",
+      "references": [
+        "--card-foreground"
+      ],
+      "rawValue": "var(--card-foreground)"
+    },
+    {
+      "token": "color-card",
+      "cssVariable": "--color-card",
+      "mode": "default",
+      "references": [
+        "--card"
+      ],
+      "rawValue": "var(--card)"
+    },
+    {
+      "token": "radius-sm",
+      "cssVariable": "--radius-sm",
+      "mode": "default",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "calc(var(--radius) * 0.6)"
+    },
+    {
+      "token": "radius-md",
+      "cssVariable": "--radius-md",
+      "mode": "default",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "calc(var(--radius) * 0.8)"
+    },
+    {
+      "token": "radius-lg",
+      "cssVariable": "--radius-lg",
+      "mode": "default",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "var(--radius)"
+    },
+    {
+      "token": "radius-xl",
+      "cssVariable": "--radius-xl",
+      "mode": "default",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "calc(var(--radius) * 1.4)"
+    },
+    {
+      "token": "radius-2xl",
+      "cssVariable": "--radius-2xl",
+      "mode": "default",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "calc(var(--radius) * 1.8)"
+    },
+    {
+      "token": "radius-3xl",
+      "cssVariable": "--radius-3xl",
+      "mode": "default",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "calc(var(--radius) * 2.2)"
+    },
+    {
+      "token": "radius-4xl",
+      "cssVariable": "--radius-4xl",
+      "mode": "default",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "calc(var(--radius) * 2.6)"
+    },
+    {
+      "token": "color-background",
+      "cssVariable": "--color-background",
+      "mode": "dark",
+      "references": [
+        "--background"
+      ],
+      "rawValue": "var(--background)"
+    },
+    {
+      "token": "color-foreground",
+      "cssVariable": "--color-foreground",
+      "mode": "dark",
+      "references": [
+        "--foreground"
+      ],
+      "rawValue": "var(--foreground)"
+    },
+    {
+      "token": "font-sans",
+      "cssVariable": "--font-sans",
+      "mode": "dark",
+      "references": [
+        "--font-sans"
+      ],
+      "rawValue": "var(--font-sans)"
+    },
+    {
+      "token": "font-mono",
+      "cssVariable": "--font-mono",
+      "mode": "dark",
+      "references": [
+        "--font-geist-mono"
+      ],
+      "rawValue": "var(--font-geist-mono)"
+    },
+    {
+      "token": "font-heading",
+      "cssVariable": "--font-heading",
+      "mode": "dark",
+      "references": [
+        "--font-sans"
+      ],
+      "rawValue": "var(--font-sans)"
+    },
+    {
+      "token": "color-sidebar-ring",
+      "cssVariable": "--color-sidebar-ring",
+      "mode": "dark",
+      "references": [
+        "--sidebar-ring"
+      ],
+      "rawValue": "var(--sidebar-ring)"
+    },
+    {
+      "token": "color-sidebar-border",
+      "cssVariable": "--color-sidebar-border",
+      "mode": "dark",
+      "references": [
+        "--sidebar-border"
+      ],
+      "rawValue": "var(--sidebar-border)"
+    },
+    {
+      "token": "color-sidebar-accent-foreground",
+      "cssVariable": "--color-sidebar-accent-foreground",
+      "mode": "dark",
+      "references": [
+        "--sidebar-accent-foreground"
+      ],
+      "rawValue": "var(--sidebar-accent-foreground)"
+    },
+    {
+      "token": "color-sidebar-accent",
+      "cssVariable": "--color-sidebar-accent",
+      "mode": "dark",
+      "references": [
+        "--sidebar-accent"
+      ],
+      "rawValue": "var(--sidebar-accent)"
+    },
+    {
+      "token": "color-sidebar-primary-foreground",
+      "cssVariable": "--color-sidebar-primary-foreground",
+      "mode": "dark",
+      "references": [
+        "--sidebar-primary-foreground"
+      ],
+      "rawValue": "var(--sidebar-primary-foreground)"
+    },
+    {
+      "token": "color-sidebar-primary",
+      "cssVariable": "--color-sidebar-primary",
+      "mode": "dark",
+      "references": [
+        "--sidebar-primary"
+      ],
+      "rawValue": "var(--sidebar-primary)"
+    },
+    {
+      "token": "color-sidebar-foreground",
+      "cssVariable": "--color-sidebar-foreground",
+      "mode": "dark",
+      "references": [
+        "--sidebar-foreground"
+      ],
+      "rawValue": "var(--sidebar-foreground)"
+    },
+    {
+      "token": "color-sidebar",
+      "cssVariable": "--color-sidebar",
+      "mode": "dark",
+      "references": [
+        "--sidebar"
+      ],
+      "rawValue": "var(--sidebar)"
+    },
+    {
+      "token": "color-chart-5",
+      "cssVariable": "--color-chart-5",
+      "mode": "dark",
+      "references": [
+        "--chart-5"
+      ],
+      "rawValue": "var(--chart-5)"
+    },
+    {
+      "token": "color-chart-4",
+      "cssVariable": "--color-chart-4",
+      "mode": "dark",
+      "references": [
+        "--chart-4"
+      ],
+      "rawValue": "var(--chart-4)"
+    },
+    {
+      "token": "color-chart-3",
+      "cssVariable": "--color-chart-3",
+      "mode": "dark",
+      "references": [
+        "--chart-3"
+      ],
+      "rawValue": "var(--chart-3)"
+    },
+    {
+      "token": "color-chart-2",
+      "cssVariable": "--color-chart-2",
+      "mode": "dark",
+      "references": [
+        "--chart-2"
+      ],
+      "rawValue": "var(--chart-2)"
+    },
+    {
+      "token": "color-chart-1",
+      "cssVariable": "--color-chart-1",
+      "mode": "dark",
+      "references": [
+        "--chart-1"
+      ],
+      "rawValue": "var(--chart-1)"
+    },
+    {
+      "token": "color-ring",
+      "cssVariable": "--color-ring",
+      "mode": "dark",
+      "references": [
+        "--ring"
+      ],
+      "rawValue": "var(--ring)"
+    },
+    {
+      "token": "color-input",
+      "cssVariable": "--color-input",
+      "mode": "dark",
+      "references": [
+        "--input"
+      ],
+      "rawValue": "var(--input)"
+    },
+    {
+      "token": "color-border",
+      "cssVariable": "--color-border",
+      "mode": "dark",
+      "references": [
+        "--border"
+      ],
+      "rawValue": "var(--border)"
+    },
+    {
+      "token": "color-destructive",
+      "cssVariable": "--color-destructive",
+      "mode": "dark",
+      "references": [
+        "--destructive"
+      ],
+      "rawValue": "var(--destructive)"
+    },
+    {
+      "token": "color-accent-foreground",
+      "cssVariable": "--color-accent-foreground",
+      "mode": "dark",
+      "references": [
+        "--accent-foreground"
+      ],
+      "rawValue": "var(--accent-foreground)"
+    },
+    {
+      "token": "color-accent",
+      "cssVariable": "--color-accent",
+      "mode": "dark",
+      "references": [
+        "--accent"
+      ],
+      "rawValue": "var(--accent)"
+    },
+    {
+      "token": "color-muted-foreground",
+      "cssVariable": "--color-muted-foreground",
+      "mode": "dark",
+      "references": [
+        "--muted-foreground"
+      ],
+      "rawValue": "var(--muted-foreground)"
+    },
+    {
+      "token": "color-muted",
+      "cssVariable": "--color-muted",
+      "mode": "dark",
+      "references": [
+        "--muted"
+      ],
+      "rawValue": "var(--muted)"
+    },
+    {
+      "token": "color-secondary-foreground",
+      "cssVariable": "--color-secondary-foreground",
+      "mode": "dark",
+      "references": [
+        "--secondary-foreground"
+      ],
+      "rawValue": "var(--secondary-foreground)"
+    },
+    {
+      "token": "color-secondary",
+      "cssVariable": "--color-secondary",
+      "mode": "dark",
+      "references": [
+        "--secondary"
+      ],
+      "rawValue": "var(--secondary)"
+    },
+    {
+      "token": "color-primary-foreground",
+      "cssVariable": "--color-primary-foreground",
+      "mode": "dark",
+      "references": [
+        "--primary-foreground"
+      ],
+      "rawValue": "var(--primary-foreground)"
+    },
+    {
+      "token": "color-primary",
+      "cssVariable": "--color-primary",
+      "mode": "dark",
+      "references": [
+        "--primary"
+      ],
+      "rawValue": "var(--primary)"
+    },
+    {
+      "token": "color-popover-foreground",
+      "cssVariable": "--color-popover-foreground",
+      "mode": "dark",
+      "references": [
+        "--popover-foreground"
+      ],
+      "rawValue": "var(--popover-foreground)"
+    },
+    {
+      "token": "color-popover",
+      "cssVariable": "--color-popover",
+      "mode": "dark",
+      "references": [
+        "--popover"
+      ],
+      "rawValue": "var(--popover)"
+    },
+    {
+      "token": "color-card-foreground",
+      "cssVariable": "--color-card-foreground",
+      "mode": "dark",
+      "references": [
+        "--card-foreground"
+      ],
+      "rawValue": "var(--card-foreground)"
+    },
+    {
+      "token": "color-card",
+      "cssVariable": "--color-card",
+      "mode": "dark",
+      "references": [
+        "--card"
+      ],
+      "rawValue": "var(--card)"
+    },
+    {
+      "token": "radius-sm",
+      "cssVariable": "--radius-sm",
+      "mode": "dark",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "calc(var(--radius) * 0.6)"
+    },
+    {
+      "token": "radius-md",
+      "cssVariable": "--radius-md",
+      "mode": "dark",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "calc(var(--radius) * 0.8)"
+    },
+    {
+      "token": "radius-lg",
+      "cssVariable": "--radius-lg",
+      "mode": "dark",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "var(--radius)"
+    },
+    {
+      "token": "radius-xl",
+      "cssVariable": "--radius-xl",
+      "mode": "dark",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "calc(var(--radius) * 1.4)"
+    },
+    {
+      "token": "radius-2xl",
+      "cssVariable": "--radius-2xl",
+      "mode": "dark",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "calc(var(--radius) * 1.8)"
+    },
+    {
+      "token": "radius-3xl",
+      "cssVariable": "--radius-3xl",
+      "mode": "dark",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "calc(var(--radius) * 2.2)"
+    },
+    {
+      "token": "radius-4xl",
+      "cssVariable": "--radius-4xl",
+      "mode": "dark",
+      "references": [
+        "--radius"
+      ],
+      "rawValue": "calc(var(--radius) * 2.6)"
+    }
+  ],
+  "modes": [
+    "default",
+    "dark"
+  ],
+  "sourceCount": 5,
+  "families": {
+    "color": {
+      "count": 62,
+      "tokenNames": [
+        "accent",
+        "accent-foreground",
+        "background",
+        "border",
+        "card",
+        "card-foreground",
+        "chart-1",
+        "chart-2",
+        "chart-3",
+        "chart-4",
+        "chart-5",
+        "color-accent",
+        "color-accent-foreground",
+        "color-background",
+        "color-border",
+        "color-card",
+        "color-card-foreground",
+        "color-chart-1",
+        "color-chart-2",
+        "color-chart-3",
+        "color-chart-4",
+        "color-chart-5",
+        "color-destructive",
+        "color-foreground",
+        "color-input",
+        "color-muted",
+        "color-muted-foreground",
+        "color-popover",
+        "color-popover-foreground",
+        "color-primary",
+        "color-primary-foreground",
+        "color-ring",
+        "color-secondary",
+        "color-secondary-foreground",
+        "color-sidebar",
+        "color-sidebar-accent",
+        "color-sidebar-accent-foreground",
+        "color-sidebar-border",
+        "color-sidebar-foreground",
+        "color-sidebar-primary",
+        "color-sidebar-primary-foreground",
+        "color-sidebar-ring",
+        "destructive",
+        "foreground",
+        "input",
+        "muted",
+        "muted-foreground",
+        "popover",
+        "popover-foreground",
+        "primary",
+        "primary-foreground",
+        "ring",
+        "secondary",
+        "secondary-foreground",
+        "sidebar",
+        "sidebar-accent",
+        "sidebar-accent-foreground",
+        "sidebar-border",
+        "sidebar-foreground",
+        "sidebar-primary",
+        "sidebar-primary-foreground",
+        "sidebar-ring"
+      ],
+      "cssVariables": [
+        "--accent",
+        "--accent-foreground",
+        "--background",
+        "--border",
+        "--card",
+        "--card-foreground",
+        "--chart-1",
+        "--chart-2",
+        "--chart-3",
+        "--chart-4",
+        "--chart-5",
+        "--color-accent",
+        "--color-accent-foreground",
+        "--color-background",
+        "--color-border",
+        "--color-card",
+        "--color-card-foreground",
+        "--color-chart-1",
+        "--color-chart-2",
+        "--color-chart-3",
+        "--color-chart-4",
+        "--color-chart-5",
+        "--color-destructive",
+        "--color-foreground",
+        "--color-input",
+        "--color-muted",
+        "--color-muted-foreground",
+        "--color-popover",
+        "--color-popover-foreground",
+        "--color-primary",
+        "--color-primary-foreground",
+        "--color-ring",
+        "--color-secondary",
+        "--color-secondary-foreground",
+        "--color-sidebar",
+        "--color-sidebar-accent",
+        "--color-sidebar-accent-foreground",
+        "--color-sidebar-border",
+        "--color-sidebar-foreground",
+        "--color-sidebar-primary",
+        "--color-sidebar-primary-foreground",
+        "--color-sidebar-ring",
+        "--destructive",
+        "--foreground",
+        "--input",
+        "--muted",
+        "--muted-foreground",
+        "--popover",
+        "--popover-foreground",
+        "--primary",
+        "--primary-foreground",
+        "--ring",
+        "--secondary",
+        "--secondary-foreground",
+        "--sidebar",
+        "--sidebar-accent",
+        "--sidebar-accent-foreground",
+        "--sidebar-border",
+        "--sidebar-foreground",
+        "--sidebar-primary",
+        "--sidebar-primary-foreground",
+        "--sidebar-ring"
+      ],
+      "modes": [
+        "dark",
+        "default"
+      ]
+    },
+    "spacing": {
+      "count": 0,
+      "tokenNames": [],
+      "cssVariables": [],
+      "modes": []
+    },
+    "typography": {
+      "count": 3,
+      "tokenNames": [
+        "font-heading",
+        "font-mono",
+        "font-sans"
+      ],
+      "cssVariables": [
+        "--font-heading",
+        "--font-mono",
+        "--font-sans"
+      ],
+      "modes": [
+        "dark",
+        "default"
+      ]
+    },
+    "radius": {
+      "count": 8,
+      "tokenNames": [
+        "radius",
+        "radius-2xl",
+        "radius-3xl",
+        "radius-4xl",
+        "radius-lg",
+        "radius-md",
+        "radius-sm",
+        "radius-xl"
+      ],
+      "cssVariables": [
+        "--radius",
+        "--radius-2xl",
+        "--radius-3xl",
+        "--radius-4xl",
+        "--radius-lg",
+        "--radius-md",
+        "--radius-sm",
+        "--radius-xl"
+      ],
+      "modes": [
+        "dark",
+        "default"
+      ]
+    },
+    "shadow": {
+      "count": 0,
+      "tokenNames": [],
+      "cssVariables": [],
+      "modes": []
+    },
+    "other": {
+      "count": 0,
+      "tokenNames": [],
+      "cssVariables": [],
+      "modes": []
+    }
+  },
+  "semanticCoverage": {
+    "score": 100,
+    "required": [
+      "background",
+      "foreground",
+      "primary",
+      "secondary",
+      "accent",
+      "muted",
+      "border",
+      "ring",
+      "card",
+      "popover",
+      "destructive",
+      "input"
+    ],
+    "present": [
+      "background",
+      "foreground",
+      "primary",
+      "secondary",
+      "accent",
+      "muted",
+      "border",
+      "ring",
+      "card",
+      "popover",
+      "destructive",
+      "input"
+    ],
+    "missing": []
+  },
+  "scaleHealth": {
+    "overallScore": 62,
+    "colorScaleScore": 88,
+    "spacingScaleScore": 0,
+    "typographyScaleScore": 50,
+    "radiusScaleScore": 100,
+    "notes": [
+      "1 alias references point at missing variables",
+      "1 circular alias chains detected",
+      "Spacing scale is thin; expect one-off layout values"
+    ]
+  },
+  "modeCoverage": {
+    "score": 100,
+    "modes": [
+      "default",
+      "dark"
+    ],
+    "completeTokenCount": 62,
+    "partialTokenCount": 0,
+    "missingByMode": {
+      "default": [],
+      "dark": []
+    }
+  },
+  "duplicates": [
+    {
+      "type": "color",
+      "value": "oklch(0.985 0 0)",
+      "tokens": [
+        "--accent-foreground",
+        "--card-foreground",
+        "--foreground",
+        "--popover-foreground",
+        "--primary-foreground",
+        "--secondary-foreground",
+        "--sidebar",
+        "--sidebar-accent-foreground",
+        "--sidebar-foreground",
+        "--sidebar-primary-foreground"
+      ]
+    },
+    {
+      "type": "color",
+      "value": "oklch(0.205 0 0)",
+      "tokens": [
+        "--accent-foreground",
+        "--card",
+        "--popover",
+        "--primary",
+        "--primary-foreground",
+        "--secondary-foreground",
+        "--sidebar",
+        "--sidebar-accent-foreground",
+        "--sidebar-primary"
+      ]
+    },
+    {
+      "type": "color",
+      "value": "oklch(0.145 0 0)",
+      "tokens": [
+        "--background",
+        "--card-foreground",
+        "--foreground",
+        "--popover-foreground",
+        "--sidebar-foreground"
+      ]
+    },
+    {
+      "type": "color",
+      "value": "oklch(0.269 0 0)",
+      "tokens": [
+        "--accent",
+        "--chart-5",
+        "--muted",
+        "--secondary",
+        "--sidebar-accent"
+      ]
+    },
+    {
+      "type": "color",
+      "value": "oklch(0.556 0 0)",
+      "tokens": [
+        "--chart-2",
+        "--muted-foreground",
+        "--ring",
+        "--sidebar-ring"
+      ]
+    },
+    {
+      "type": "color",
+      "value": "oklch(0.922 0 0)",
+      "tokens": [
+        "--border",
+        "--input",
+        "--primary",
+        "--sidebar-border"
+      ]
+    },
+    {
+      "type": "color",
+      "value": "oklch(0.97 0 0)",
+      "tokens": [
+        "--accent",
+        "--muted",
+        "--secondary",
+        "--sidebar-accent"
+      ]
+    },
+    {
+      "type": "color",
+      "value": "oklch(0.708 0 0)",
+      "tokens": [
+        "--muted-foreground",
+        "--ring",
+        "--sidebar-ring"
+      ]
+    },
+    {
+      "type": "color",
+      "value": "oklch(1 0 0)",
+      "tokens": [
+        "--background",
+        "--card",
+        "--popover"
+      ]
+    },
+    {
+      "type": "color",
+      "value": "oklch(1 0 0 / 10%)",
+      "tokens": [
+        "--border",
+        "--sidebar-border"
+      ]
+    }
+  ],
+  "aliasGraph": {
+    "edgeCount": 41,
+    "resolvedReferenceCount": 40,
+    "unresolvedReferences": [
+      {
+        "token": "--font-mono",
+        "reference": "--font-geist-mono"
+      }
+    ],
+    "circularReferences": [
+      [
+        "--font-sans",
+        "--font-sans"
+      ]
+    ],
+    "maxDepth": 2
+  },
+  "recommendations": [
+    {
+      "priority": "high",
+      "action": "Fix token alias graph before shipping generated CSS",
+      "rationale": "1 unresolved references and 1 cycles can break runtime styles."
+    },
+    {
+      "priority": "medium",
+      "action": "Collapse duplicate literal values into semantic aliases",
+      "rationale": "10 duplicate groups suggest raw palette tokens are leaking into semantic slots."
+    },
+    {
+      "priority": "low",
+      "action": "Use Tailwind utility patterns to prioritize token migrations",
+      "rationale": "Frequently repeated utilities indicate where token adoption will remove the most design debt."
+    }
+  ],
+  "literalCandidates": [],
+  "utilityCandidates": [
+    {
+      "type": "color",
+      "utility": "text-muted-foreground",
+      "occurrences": 14
+    },
+    {
+      "type": "radius",
+      "utility": "rounded-md",
+      "occurrences": 13
+    },
+    {
+      "type": "color",
+      "utility": "border-border",
+      "occurrences": 12
+    },
+    {
+      "type": "typography",
+      "utility": "text-sm",
+      "occurrences": 12
+    },
+    {
+      "type": "color",
+      "utility": "bg-card",
+      "occurrences": 6
+    },
+    {
+      "type": "typography",
+      "utility": "font-semibold",
+      "occurrences": 6
+    },
+    {
+      "type": "spacing",
+      "utility": "p-5",
+      "occurrences": 6
+    },
+    {
+      "type": "spacing",
+      "utility": "gap-3",
+      "occurrences": 5
+    },
+    {
+      "type": "color",
+      "utility": "bg-secondary",
+      "occurrences": 4
+    },
+    {
+      "type": "typography",
+      "utility": "font-medium",
+      "occurrences": 4
+    },
+    {
+      "type": "typography",
+      "utility": "font-mono",
+      "occurrences": 4
+    },
+    {
+      "type": "spacing",
+      "utility": "gap-2",
+      "occurrences": 4
+    },
+    {
+      "type": "typography",
+      "utility": "leading-6",
+      "occurrences": 4
+    },
+    {
+      "type": "color",
+      "utility": "text-secondary-foreground",
+      "occurrences": 4
+    },
+    {
+      "type": "typography",
+      "utility": "text-xs",
+      "occurrences": 4
+    },
+    {
+      "type": "spacing",
+      "utility": "mb-2",
+      "occurrences": 3
+    },
+    {
+      "type": "spacing",
+      "utility": "mb-5",
+      "occurrences": 3
+    },
+    {
+      "type": "spacing",
+      "utility": "p-4",
+      "occurrences": 3
+    },
+    {
+      "type": "typography",
+      "utility": "text-base",
+      "occurrences": 3
+    },
+    {
+      "type": "color",
+      "utility": "bg-background",
+      "occurrences": 2
+    },
+    {
+      "type": "color",
+      "utility": "border-b",
+      "occurrences": 2
+    },
+    {
+      "type": "spacing",
+      "utility": "gap-4",
+      "occurrences": 2
+    },
+    {
+      "type": "spacing",
+      "utility": "max-w-6xl",
+      "occurrences": 2
+    },
+    {
+      "type": "spacing",
+      "utility": "mb-4",
+      "occurrences": 2
+    },
+    {
+      "type": "spacing",
+      "utility": "min-h-svh",
+      "occurrences": 2
+    },
+    {
+      "type": "spacing",
+      "utility": "mt-1",
+      "occurrences": 2
+    },
+    {
+      "type": "spacing",
+      "utility": "mx-auto",
+      "occurrences": 2
+    },
+    {
+      "type": "spacing",
+      "utility": "px-10",
+      "occurrences": 2
+    },
+    {
+      "type": "spacing",
+      "utility": "px-6",
+      "occurrences": 2
+    },
+    {
+      "type": "spacing",
+      "utility": "px-8",
+      "occurrences": 2
+    },
+    {
+      "type": "spacing",
+      "utility": "py-8",
+      "occurrences": 2
+    },
+    {
+      "type": "color",
+      "utility": "text-card-foreground",
+      "occurrences": 2
+    },
+    {
+      "type": "color",
+      "utility": "text-foreground",
+      "occurrences": 2
+    },
+    {
+      "type": "typography",
+      "utility": "tracking-normal",
+      "occurrences": 2
+    },
+    {
+      "type": "spacing",
+      "utility": "w-full",
+      "occurrences": 2
+    },
+    {
+      "type": "color",
+      "utility": "bg-accent",
+      "occurrences": 1
+    },
+    {
+      "type": "color",
+      "utility": "border-t",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "gap-5",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "gap-6",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "gap-8",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "h-10",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "h-full",
+      "occurrences": 1
+    },
+    {
+      "type": "typography",
+      "utility": "leading-5",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "max-w-2xl",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "max-w-xl",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "min-h-full",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "mt-3",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "mt-5",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "pb-5",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "pb-8",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "pt-5",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "px-3",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "px-4",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "py-2",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "space-y-3",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "space-y-4",
+      "occurrences": 1
+    },
+    {
+      "type": "typography",
+      "utility": "text-2xl",
+      "occurrences": 1
+    },
+    {
+      "type": "typography",
+      "utility": "text-3xl",
+      "occurrences": 1
+    },
+    {
+      "type": "typography",
+      "utility": "text-4xl",
+      "occurrences": 1
+    },
+    {
+      "type": "color",
+      "utility": "text-accent-foreground",
+      "occurrences": 1
+    },
+    {
+      "type": "typography",
+      "utility": "text-xl",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "w-fit",
+      "occurrences": 1
+    }
+  ],
+  "summary": {
+    "tokenCount": 73,
+    "variableTokenCount": 73,
+    "inferredTokenCount": 0,
+    "aliasCount": 82,
+    "modeCount": 2,
+    "modeCoverageScore": 100,
+    "literalCandidateCount": 0,
+    "utilityCandidateCount": 62,
+    "duplicateGroupCount": 10,
+    "unresolvedAliasCount": 1,
+    "confidenceScore": 86,
+    "notes": [
+      "1 alias references point at missing variables",
+      "1 circular alias chains detected",
+      "Spacing scale is thin; expect one-off layout values",
+      "62 Tailwind utility patterns detected for migration planning",
+      "10 duplicate value groups detected",
+      "1 unresolved alias references detected"
+    ]
+  }
+}

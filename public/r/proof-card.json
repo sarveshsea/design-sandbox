@@ -1,0 +1,52 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "proof-card",
+  "type": "registry:component",
+  "title": "ProofCard",
+  "description": "Shows the current memi proof state for an AI coding agent before it edits UI code.",
+  "registryDependencies": [
+    "card",
+    "badge",
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/proof-card/proof-card.tsx",
+      "type": "registry:component",
+      "target": "components/molecules/proof-card.tsx",
+      "content": "\"use client\"\nimport * as React from \"react\"\nimport { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from \"@/components/ui/card\"\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\nexport type ProofCardVariant = \"default\" | \"complete\" | \"needs-attention\"\n\nexport interface ProofCardProps extends React.HTMLAttributes<HTMLDivElement> {\n  title: string\n  status: \"ready\" | \"running\" | \"blocked\"\n  items: string[]\n  variant?: ProofCardVariant\n}\n/**\n * Shows the current memi proof state for an AI coding agent before it edits UI code.\n *\n * @variant default, complete, needs-attention\n * @param title - string\n * @param status - 'ready' | 'running' | 'blocked'\n * @param items - string[]\n *\n * @generated Memoire · https://memoire.cv\n */\nexport function ProofCard({ title, status, items, variant = \"default\", className, ...props }: ProofCardProps) {\n  const variantStyles: Record<ProofCardVariant, string> = {\n    \"default\": \"\",\n    \"complete\": \"\",\n    \"needs-attention\": \"\",\n  }\n  const variantClasses = variantStyles[variant ?? \"default\"] ?? \"\"\n\n  return (\n    <Card className={cn(\"transition-all\", variantClasses, className)} {...props}>\n      <CardHeader>\n        <CardTitle>{title}</CardTitle>\n      </CardHeader>\n      <CardContent>\n        {status && <Badge>{status}</Badge>}\n        {items && <span className=\"text-sm text-muted-foreground\">{items}</span>}\n      </CardContent>\n    </Card>\n  )\n}"
+    },
+    {
+      "path": "components/ProofCard.json",
+      "type": "registry:file",
+      "target": ".memoire/specs/ProofCard.json"
+    }
+  ],
+  "categories": [
+    "molecule",
+    "proof",
+    "agent-workflow",
+    "design-system"
+  ],
+  "meta": {
+    "memoire": {
+      "source": "component-spec",
+      "atomicLevel": "molecule",
+      "specName": "ProofCard",
+      "composesSpecs": [],
+      "tags": [
+        "proof",
+        "agent-workflow",
+        "design-system"
+      ],
+      "variants": [
+        "default",
+        "complete",
+        "needs-attention"
+      ],
+      "itemRoute": "/r/proof-card.json",
+      "registryItemUrl": "https://raw.githubusercontent.com/sarveshsea/design-sandbox/main/public/r/proof-card.json",
+      "openInV0Url": "https://v0.dev/chat/api/open?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsarveshsea%2Fdesign-sandbox%2Fmain%2Fpublic%2Fr%2Fproof-card.json"
+    }
+  }
+}

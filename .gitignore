@@ -45,10 +45,10 @@ next-env.d.ts
 .memoire/downloads/
 .memoire/notes/
 .memoire/agents/
+.memoire/app-quality/
 .memoire/generations.json
 .memoire/onboarded.json
 
 # claude (machine state, not source)
 .claude/projects/
 .claude/cache/
-

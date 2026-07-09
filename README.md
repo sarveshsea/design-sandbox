@@ -1,38 +1,65 @@
 # design-sandbox
 
-A pre-warmed Next.js 16 + Tailwind 4 + shadcn surface for **design exploration on any project**.
-Drop in an idea, screenshot, or Figma URL — get a working composition out the other side.
+Canonical proof repo for **memi 2.4**: a pre-warmed Next.js 16 + Tailwind 4 + shadcn workspace where AI coding agents can run interface-understanding checks before touching UI code.
 
-Not a deliverable, not a starter kit, not interview prep. A scratchpad for design-to-code spikes.
+Use it to verify the public Memi loop: diagnose design debt, audit UX tenets, extract Tailwind tokens, export a shadcn registry, print MCP no-Figma config, and dry-run Agent Skills installation.
 
 ## Stack
 - **Next.js 16** (App Router) + **TypeScript**
 - **Tailwind 4** + **shadcn/ui** (radix-nova, neutral, CSS variables) — *config only, zero components installed*
-- **Memoire** (`@sarveshsea/memoire`) — design memory + MCP server for Claude Code
+- **memi** (`@memi-design/cli@2.4.0`) — interface understanding, design-system memory, MCP, Agent Skills, and shadcn registry export
 - **Claude Code** subagents: `screenshot-decoder`, `component-scaffolder`, `motion-director`
 
-## Workflow
+## Quick proof
 
+After `@memi-design/cli@2.4.0` is published:
+
+```bash
+pnpm install
+pnpm verify
 ```
-idea / screenshot / figma url → /sandbox → page.tsx renders
+
+Before npm publish, test against a local Memi checkout:
+
+```bash
+MEMI_BIN=../memi/dist/index.js pnpm verify
+```
+
+The proof runner covers:
+
+- `memi --version`
+- `memi diagnose . --json --no-write --fail-on none`
+- `memi ux audit . --json --no-write`
+- `memi tokens --from ./src --output generated/memi-proof/tokens --format css,json --report --json`
+- `memi shadcn export --out public/r --name design-sandbox --homepage https://raw.githubusercontent.com/sarveshsea/design-sandbox/main/public --json`
+- `memi shadcn doctor --out public/r --json`
+- `memi mcp config --target generic` with `mcp start --no-figma`
+- `memi agent install universal --dry-run --json --project .`
+
+Raw registry URL after push:
+
+```text
+https://raw.githubusercontent.com/sarveshsea/design-sandbox/main/public/r/registry.json
+```
+
+## Agent workflow
+
+```text
+idea / screenshot / figma url -> /sandbox -> memi proof -> page.tsx renders
 ```
 
 In Claude Code:
 
-```
+```text
 /sandbox "what would a calmer settings panel for [project] look like?"
 ```
 
-Or paste a screenshot, then:
+The slash command sequence is:
 
-```
-/sandbox
-```
-
-The `/sandbox` slash command runs:
 1. **screenshot-decoder** → structured spec (layout, components, tokens, motion)
 2. **component-scaffolder** → `pnpm dlx shadcn add ...` + writes `src/app/sandbox/page.tsx`
 3. **motion-director** (only if motion is in scope) → installs `framer-motion`, layers one motion pass
+4. **memi proof** → run the design diagnosis, UX audit, token extraction, and registry export before sharing
 
 Open `http://localhost:3000/sandbox` to see the result.
 
@@ -56,15 +83,17 @@ git checkout -b explore/<topic>
     motion-director.md
   commands/sandbox.md            # /sandbox slash command
   settings.json                  # pre-allowed shell calls (no popups mid-spike)
-.memoire/                        # Memoire design memory
+.memoire/                        # memi design memory
   SOUL.md                        # voice + visual baseline
   AGENTS.md                      # agent roster (mirrors .claude/agents/)
   TOOLS.md                       # tool permission policy
   HEARTBEAT.md                   # end-of-exploration checks
   project.json                   # auto-detected stack snapshot
-.mcp.json                        # Memoire MCP wired to Claude Code
+.mcp.json                        # memi MCP wired to Claude Code
 specs/                           # drop JSON specs here for complex explorations
 generated/                       # memi generate target
+generated/memi-proof/tokens/     # token extraction proof artifacts
+public/r/                        # shadcn registry export proof
 research/                        # for memi research output
 prototype/                       # scratch space
 src/
@@ -84,9 +113,13 @@ components.json                  # shadcn config
 pnpm dev          # http://localhost:3000
 pnpm typecheck    # tsc --noEmit
 pnpm build        # production build
-memoire status    # workspace state
-memoire doctor    # health check
-memoire add <c>   # alternate path to install components
+pnpm memi:diagnose # design debt JSON proof
+pnpm memi:ux       # UX tenets JSON proof
+pnpm memi:tokens   # token extraction report
+pnpm memi:shadcn   # shadcn registry export + doctor
+pnpm memi:mcp      # no-Figma MCP config proof
+pnpm memi:agent    # Agent Skills dry-run proof
+pnpm verify        # typecheck + lint + build + every memi proof
 ```
 
 ## Hard rules (also in `.claude/CLAUDE.md`)

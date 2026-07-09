@@ -20,20 +20,20 @@ skills:
 recipes:
   - id: design-audit
     title: Design Audit
-    prompt: "Audit the UI with Memoire project memory, design tokens, Tailwind/shadcn conventions, accessibility, and product-team handoff notes."
+    prompt: "Audit the UI with memi project memory, design tokens, Tailwind/shadcn conventions, accessibility, and product-team handoff notes."
     commands:
-      - "memi daemon status --json"
-      - "memi diagnose --json"
+      - "memi diagnose . --json --no-write --fail-on none"
+      - "memi ux audit . --json --no-write"
   - id: tailwind-cleanup
     title: Tailwind + shadcn Cleanup
     prompt: "Find Tailwind drift, duplicated shadcn primitives, token gaps, and unsafe UI edits before coding."
     commands:
-      - "memi daemon status --json"
-      - "memi shadcn validate"
+      - "memi tokens --from ./src --output generated/memi-proof/tokens --format css,json --report --json"
+      - "memi shadcn doctor --out public/r --json"
       - "memi fix plan --json"
   - id: product-handoff
     title: Product Team Handoff
-    prompt: "Create a compact product-team handoff with research evidence, UI decisions, component specs, and follow-up tasks."
+    prompt: "Create a compact product-team handoff with research evidence, UI decisions, component specs, MCP setup, and follow-up tasks."
     commands:
-      - "memi daemon status --json"
-      - "memi studio run --action handoff --mode brokered --prompt \"Create a Memoire product-team handoff\""
+      - "memi mcp config --target generic"
+      - "memi agent install universal --dry-run --json --project ."

@@ -13,8 +13,11 @@ General design sandbox. The full operating manual is **`.claude/CLAUDE.md`**.
 - shadcn-first; theme tokens only; no hex literals
 - Subagents: `screenshot-decoder` → `component-scaffolder` → `motion-director`
 - Slash command: `/sandbox "<idea>"` (or paste screenshot then `/sandbox`)
-- Memoire MCP available as `mcp__memoire__*`
+- memi MCP available as `mcp__memoire__*`
+- Proof gate: `pnpm verify`
+- Pre-publish local proof: `MEMI_BIN=../memi/dist/index.js pnpm verify`
 
 ## Pointers for non-Claude tools
 - Codex / Cursor / OpenCode: read this file + `.memoire/SOUL.md` + `.memoire/AGENTS.md`
-- The Memoire daemon (`memi daemon start`) exposes the same context via MCP
+- The memi CLI/MCP package is `@memi-design/cli@2.4.0`.
+- Use `memi mcp config --target generic` to verify the no-Figma MCP command before configuring a client.
