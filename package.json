@@ -25,7 +25,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.14.0",
-    "next": "16.2.6",
+    "next": "16.2.12",
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -45,5 +45,15 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^3.2.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "brace-expansion@5.0.6": "5.0.8",
+      "fast-uri": "3.1.4",
+      "hono": "4.12.25",
+      "js-yaml": "4.3.0",
+      "postcss": "8.5.18",
+      "sharp": "0.35.0"
+    }
   }
 }
