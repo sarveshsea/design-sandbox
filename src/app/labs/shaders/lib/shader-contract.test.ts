@@ -47,6 +47,30 @@ describe("shader lab contract", () => {
     });
   });
 
+  it("preserves valid alternate controls and rejects primitive payloads", () => {
+    expect(
+      normalizeLabState({
+        mode: "noise",
+        seed: 44.6,
+        ripple: -3,
+        distortion: 0.7,
+        animate: false,
+      }),
+    ).toEqual({
+      mode: "noise",
+      seed: 45,
+      ripple: 0,
+      distortion: 0.7,
+      animate: false,
+    });
+    expect(normalizeLabState(null)).toEqual(DEFAULT_LAB_STATE);
+  });
+
+  it("wraps Bayer coordinates without changing the matrix period", () => {
+    expect(getBayerThreshold(-1, -1)).toBe(getBayerThreshold(3, 3));
+    expect(getBayerThreshold(5, 6)).toBe(getBayerThreshold(1, 2));
+  });
+
   it("exports stable, explicit evidence without inferring unsupported proof", () => {
     const evidence = createAuditEvidence({
       state: DEFAULT_LAB_STATE,

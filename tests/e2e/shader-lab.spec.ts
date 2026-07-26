@@ -43,16 +43,11 @@ test("offers an accessible deterministic shader comparison and evidence export",
   });
 });
 
-test("honors reduced motion with a static shader frame", async ({ browser }) => {
-  const context = await browser.newContext({
-    reducedMotion: "reduce",
-  });
-  const page = await context.newPage();
+test("honors reduced motion with a static shader frame", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
 
   await page.goto("/labs/shaders");
 
   await expect(page.getByText("Static frame active")).toBeVisible();
   await expect(page.getByLabel("Animate field")).not.toBeChecked();
-
-  await context.close();
 });
