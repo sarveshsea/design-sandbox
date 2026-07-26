@@ -1,7 +1,7 @@
 # Token Extraction Report
 
 Source: ./src
-Generated: 2026-07-09T00:32:03.961Z
+Generated: 2026-07-26T20:58:59.765Z
 
 ## Executive Summary
 
@@ -42,14 +42,15 @@ No missing mode-sensitive tokens detected.
 ## Alias Graph
 
 - Alias edges: 41
-- Resolved references: 40
-- Unresolved references: 1
-- Circular references: 1
+- Resolved references: 39
+- Unresolved references: 2
+- Circular references: 0
 - Max alias depth: 2
 
 | Token | Missing reference |
 |-------|-------------------|
 | --font-mono | --font-geist-mono |
+| --font-sans | --font-geist-sans |
 
 ## Duplicate Values
 
@@ -70,15 +71,14 @@ No missing mode-sensitive tokens detected.
 
 | Priority | Action | Rationale |
 |----------|--------|-----------|
-| high | Fix token alias graph before shipping generated CSS | 1 unresolved references and 1 cycles can break runtime styles. |
+| high | Fix token alias graph before shipping generated CSS | 2 unresolved references and 0 cycles can break runtime styles. |
 | medium | Collapse duplicate literal values into semantic aliases | 10 duplicate groups suggest raw palette tokens are leaking into semantic slots. |
 | low | Use Tailwind utility patterns to prioritize token migrations | Frequently repeated utilities indicate where token adoption will remove the most design debt. |
 
 ## Notes
 
-- 1 alias references point at missing variables
-- 1 circular alias chains detected
+- 2 alias references point at missing variables
 - Spacing scale is thin; expect one-off layout values
-- 62 Tailwind utility patterns detected for migration planning
+- 95 Tailwind utility patterns detected for migration planning
 - 10 duplicate value groups detected
-- 1 unresolved alias references detected
+- 2 unresolved alias references detected

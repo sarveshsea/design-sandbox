@@ -645,8 +645,8 @@
       "collection": "extracted:app/globals.css",
       "type": "typography",
       "values": {
-        "default": "var(--font-sans)",
-        "dark": "var(--font-sans)"
+        "default": "var(--font-geist-sans)",
+        "dark": "var(--font-geist-sans)"
       },
       "cssVariable": "--font-sans"
     },
@@ -754,9 +754,9 @@
       "cssVariable": "--font-sans",
       "mode": "default",
       "references": [
-        "--font-sans"
+        "--font-geist-sans"
       ],
-      "rawValue": "var(--font-sans)"
+      "rawValue": "var(--font-geist-sans)"
     },
     {
       "token": "font-mono",
@@ -1123,9 +1123,9 @@
       "cssVariable": "--font-sans",
       "mode": "dark",
       "references": [
-        "--font-sans"
+        "--font-geist-sans"
       ],
-      "rawValue": "var(--font-sans)"
+      "rawValue": "var(--font-geist-sans)"
     },
     {
       "token": "font-mono",
@@ -1474,7 +1474,7 @@
     "default",
     "dark"
   ],
-  "sourceCount": 5,
+  "sourceCount": 14,
   "families": {
     "color": {
       "count": 62,
@@ -1713,8 +1713,7 @@
     "typographyScaleScore": 50,
     "radiusScaleScore": 100,
     "notes": [
-      "1 alias references point at missing variables",
-      "1 circular alias chains detected",
+      "2 alias references point at missing variables",
       "Spacing scale is thin; expect one-off layout values"
     ]
   },
@@ -1844,26 +1843,25 @@
   ],
   "aliasGraph": {
     "edgeCount": 41,
-    "resolvedReferenceCount": 40,
+    "resolvedReferenceCount": 39,
     "unresolvedReferences": [
       {
         "token": "--font-mono",
         "reference": "--font-geist-mono"
+      },
+      {
+        "token": "--font-sans",
+        "reference": "--font-geist-sans"
       }
     ],
-    "circularReferences": [
-      [
-        "--font-sans",
-        "--font-sans"
-      ]
-    ],
+    "circularReferences": [],
     "maxDepth": 2
   },
   "recommendations": [
     {
       "priority": "high",
       "action": "Fix token alias graph before shipping generated CSS",
-      "rationale": "1 unresolved references and 1 cycles can break runtime styles."
+      "rationale": "2 unresolved references and 0 cycles can break runtime styles."
     },
     {
       "priority": "medium",
@@ -1881,41 +1879,96 @@
     {
       "type": "color",
       "utility": "text-muted-foreground",
-      "occurrences": 14
-    },
-    {
-      "type": "radius",
-      "utility": "rounded-md",
-      "occurrences": 13
-    },
-    {
-      "type": "color",
-      "utility": "border-border",
-      "occurrences": 12
+      "occurrences": 28
     },
     {
       "type": "typography",
       "utility": "text-sm",
-      "occurrences": 12
+      "occurrences": 25
+    },
+    {
+      "type": "color",
+      "utility": "border-border",
+      "occurrences": 21
+    },
+    {
+      "type": "radius",
+      "utility": "rounded-md",
+      "occurrences": 19
+    },
+    {
+      "type": "typography",
+      "utility": "text-xs",
+      "occurrences": 14
+    },
+    {
+      "type": "typography",
+      "utility": "font-mono",
+      "occurrences": 13
     },
     {
       "type": "color",
       "utility": "bg-card",
-      "occurrences": 6
+      "occurrences": 10
+    },
+    {
+      "type": "typography",
+      "utility": "font-medium",
+      "occurrences": 10
     },
     {
       "type": "typography",
       "utility": "font-semibold",
-      "occurrences": 6
+      "occurrences": 10
     },
     {
       "type": "spacing",
-      "utility": "p-5",
-      "occurrences": 6
+      "utility": "gap-2",
+      "occurrences": 8
     },
     {
       "type": "spacing",
       "utility": "gap-3",
+      "occurrences": 8
+    },
+    {
+      "type": "spacing",
+      "utility": "p-5",
+      "occurrences": 7
+    },
+    {
+      "type": "spacing",
+      "utility": "w-full",
+      "occurrences": 7
+    },
+    {
+      "type": "spacing",
+      "utility": "mt-1",
+      "occurrences": 6
+    },
+    {
+      "type": "color",
+      "utility": "bg-background",
+      "occurrences": 5
+    },
+    {
+      "type": "color",
+      "utility": "border-b",
+      "occurrences": 5
+    },
+    {
+      "type": "spacing",
+      "utility": "h-10",
+      "occurrences": 5
+    },
+    {
+      "type": "typography",
+      "utility": "leading-6",
+      "occurrences": 5
+    },
+    {
+      "type": "spacing",
+      "utility": "p-4",
       "occurrences": 5
     },
     {
@@ -1924,23 +1977,33 @@
       "occurrences": 4
     },
     {
-      "type": "typography",
-      "utility": "font-medium",
+      "type": "spacing",
+      "utility": "gap-4",
       "occurrences": 4
     },
     {
       "type": "typography",
-      "utility": "font-mono",
+      "utility": "leading-5",
       "occurrences": 4
     },
     {
       "type": "spacing",
-      "utility": "gap-2",
+      "utility": "px-4",
       "occurrences": 4
     },
     {
       "type": "typography",
-      "utility": "leading-6",
+      "utility": "text-base",
+      "occurrences": 4
+    },
+    {
+      "type": "color",
+      "utility": "text-card-foreground",
+      "occurrences": 4
+    },
+    {
+      "type": "color",
+      "utility": "text-foreground",
       "occurrences": 4
     },
     {
@@ -1950,8 +2013,13 @@
     },
     {
       "type": "typography",
-      "utility": "text-xs",
+      "utility": "tracking-wider",
       "occurrences": 4
+    },
+    {
+      "type": "color",
+      "utility": "bg-muted",
+      "occurrences": 3
     },
     {
       "type": "spacing",
@@ -1965,27 +2033,72 @@
     },
     {
       "type": "spacing",
-      "utility": "p-4",
+      "utility": "min-h-svh",
       "occurrences": 3
     },
     {
-      "type": "typography",
-      "utility": "text-base",
+      "type": "spacing",
+      "utility": "mx-auto",
+      "occurrences": 3
+    },
+    {
+      "type": "spacing",
+      "utility": "px-10",
+      "occurrences": 3
+    },
+    {
+      "type": "spacing",
+      "utility": "px-3",
+      "occurrences": 3
+    },
+    {
+      "type": "spacing",
+      "utility": "px-6",
+      "occurrences": 3
+    },
+    {
+      "type": "spacing",
+      "utility": "py-8",
+      "occurrences": 3
+    },
+    {
+      "type": "radius",
+      "utility": "rounded-lg",
+      "occurrences": 3
+    },
+    {
+      "type": "spacing",
+      "utility": "space-y-2",
+      "occurrences": 3
+    },
+    {
+      "type": "spacing",
+      "utility": "space-y-3",
       "occurrences": 3
     },
     {
       "type": "color",
-      "utility": "bg-background",
+      "utility": "bg-primary",
       "occurrences": 2
     },
     {
       "type": "color",
-      "utility": "border-b",
+      "utility": "border-input",
+      "occurrences": 2
+    },
+    {
+      "type": "color",
+      "utility": "border-t",
       "occurrences": 2
     },
     {
       "type": "spacing",
-      "utility": "gap-4",
+      "utility": "gap-6",
+      "occurrences": 2
+    },
+    {
+      "type": "spacing",
+      "utility": "max-w-2xl",
       "occurrences": 2
     },
     {
@@ -2000,27 +2113,22 @@
     },
     {
       "type": "spacing",
-      "utility": "min-h-svh",
+      "utility": "min-h-10",
       "occurrences": 2
     },
     {
       "type": "spacing",
-      "utility": "mt-1",
+      "utility": "min-w-0",
+      "occurrences": 2
+    },
+    {
+      "type": "color",
+      "utility": "outline-none",
       "occurrences": 2
     },
     {
       "type": "spacing",
-      "utility": "mx-auto",
-      "occurrences": 2
-    },
-    {
-      "type": "spacing",
-      "utility": "px-10",
-      "occurrences": 2
-    },
-    {
-      "type": "spacing",
-      "utility": "px-6",
+      "utility": "pb-4",
       "occurrences": 2
     },
     {
@@ -2030,17 +2138,22 @@
     },
     {
       "type": "spacing",
-      "utility": "py-8",
+      "utility": "space-y-4",
+      "occurrences": 2
+    },
+    {
+      "type": "typography",
+      "utility": "text-3xl",
+      "occurrences": 2
+    },
+    {
+      "type": "typography",
+      "utility": "text-lg",
       "occurrences": 2
     },
     {
       "type": "color",
-      "utility": "text-card-foreground",
-      "occurrences": 2
-    },
-    {
-      "type": "color",
-      "utility": "text-foreground",
+      "utility": "text-primary-foreground",
       "occurrences": 2
     },
     {
@@ -2050,7 +2163,7 @@
     },
     {
       "type": "spacing",
-      "utility": "w-full",
+      "utility": "w-fit",
       "occurrences": 2
     },
     {
@@ -2060,7 +2173,7 @@
     },
     {
       "type": "color",
-      "utility": "border-t",
+      "utility": "bg-border",
       "occurrences": 1
     },
     {
@@ -2070,17 +2183,17 @@
     },
     {
       "type": "spacing",
-      "utility": "gap-6",
-      "occurrences": 1
-    },
-    {
-      "type": "spacing",
       "utility": "gap-8",
       "occurrences": 1
     },
     {
       "type": "spacing",
-      "utility": "h-10",
+      "utility": "gap-px",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "h-8",
       "occurrences": 1
     },
     {
@@ -2089,13 +2202,13 @@
       "occurrences": 1
     },
     {
-      "type": "typography",
-      "utility": "leading-5",
+      "type": "spacing",
+      "utility": "inset-0",
       "occurrences": 1
     },
     {
       "type": "spacing",
-      "utility": "max-w-2xl",
+      "utility": "max-w-[96rem]",
       "occurrences": 1
     },
     {
@@ -2120,7 +2233,27 @@
     },
     {
       "type": "spacing",
+      "utility": "p-3",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "p-6",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "pb-1",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
       "utility": "pb-5",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "pb-7",
       "occurrences": 1
     },
     {
@@ -2135,12 +2268,12 @@
     },
     {
       "type": "spacing",
-      "utility": "px-3",
+      "utility": "pt-6",
       "occurrences": 1
     },
     {
       "type": "spacing",
-      "utility": "px-4",
+      "utility": "px-1",
       "occurrences": 1
     },
     {
@@ -2150,12 +2283,32 @@
     },
     {
       "type": "spacing",
-      "utility": "space-y-3",
+      "utility": "py-6",
       "occurrences": 1
     },
     {
       "type": "spacing",
-      "utility": "space-y-4",
+      "utility": "space-y-1",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "space-y-5",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "space-y-6",
+      "occurrences": 1
+    },
+    {
+      "type": "spacing",
+      "utility": "space-y-8",
+      "occurrences": 1
+    },
+    {
+      "type": "color",
+      "utility": "text-[0.6875rem]",
       "occurrences": 1
     },
     {
@@ -2165,12 +2318,12 @@
     },
     {
       "type": "typography",
-      "utility": "text-3xl",
+      "utility": "text-4xl",
       "occurrences": 1
     },
     {
       "type": "typography",
-      "utility": "text-4xl",
+      "utility": "text-5xl",
       "occurrences": 1
     },
     {
@@ -2179,13 +2332,23 @@
       "occurrences": 1
     },
     {
+      "type": "color",
+      "utility": "text-center",
+      "occurrences": 1
+    },
+    {
+      "type": "color",
+      "utility": "text-right",
+      "occurrences": 1
+    },
+    {
       "type": "typography",
       "utility": "text-xl",
       "occurrences": 1
     },
     {
-      "type": "spacing",
-      "utility": "w-fit",
+      "type": "typography",
+      "utility": "tracking-tight",
       "occurrences": 1
     }
   ],
@@ -2197,17 +2360,16 @@
     "modeCount": 2,
     "modeCoverageScore": 100,
     "literalCandidateCount": 0,
-    "utilityCandidateCount": 62,
+    "utilityCandidateCount": 95,
     "duplicateGroupCount": 10,
-    "unresolvedAliasCount": 1,
+    "unresolvedAliasCount": 2,
     "confidenceScore": 86,
     "notes": [
-      "1 alias references point at missing variables",
-      "1 circular alias chains detected",
+      "2 alias references point at missing variables",
       "Spacing scale is thin; expect one-off layout values",
-      "62 Tailwind utility patterns detected for migration planning",
+      "95 Tailwind utility patterns detected for migration planning",
       "10 duplicate value groups detected",
-      "1 unresolved alias references detected"
+      "2 unresolved alias references detected"
     ]
   }
 }

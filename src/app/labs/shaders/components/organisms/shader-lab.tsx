@@ -47,7 +47,16 @@ export function ShaderLab() {
   const medianSubmissionMs = useMemo(() => median(samples), [samples]);
 
   const handleStateChange = (next: ShaderLabState) => {
-    setState(normalizeLabState(next));
+    const normalized = normalizeLabState(next);
+    if (
+      normalized.mode !== state.mode ||
+      normalized.seed !== state.seed ||
+      normalized.ripple !== state.ripple ||
+      normalized.distortion !== state.distortion
+    ) {
+      setSamples([]);
+    }
+    setState(normalized);
   };
 
   const handleExport = () => {

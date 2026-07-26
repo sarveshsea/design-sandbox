@@ -32,11 +32,17 @@ test("offers an accessible deterministic shader comparison and evidence export",
   const evidence = JSON.parse(
     await (await import("node:fs/promises")).readFile(path!, "utf8"),
   );
+  await (await import("node:fs/promises")).writeFile(
+    testInfo.outputPath("shader-audit-evidence.json"),
+    `${JSON.stringify(evidence, null, 2)}\n`,
+  );
   expect(evidence.controls).toMatchObject({ mode: "noise", seed: 404 });
   expect(evidence.deterministic).toBe(true);
   expect(evidence.performance.medianMs).toBeLessThanOrEqual(16.7);
   expect(evidence.performance.sampleCount).toBeGreaterThanOrEqual(30);
 
+  await page.getByLabel("Animate field").uncheck();
+  await expect(page.getByText("Static frame active")).toBeVisible();
   await page.screenshot({
     path: testInfo.outputPath("shader-lab.png"),
     fullPage: true,
@@ -50,4 +56,16 @@ test("honors reduced motion with a static shader frame", async ({ page }) => {
 
   await expect(page.getByText("Static frame active")).toBeVisible();
   await expect(page.getByLabel("Animate field")).not.toBeChecked();
+});
+
+test("keeps the comparison usable on a narrow viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/labs/shaders");
+
+  await expect(page.getByRole("heading", { name: "Shader field notes" })).toBeVisible();
+  await expect(page.getByLabel("Dither method", { exact: true })).toBeVisible();
+  const horizontalOverflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(horizontalOverflow).toBeLessThanOrEqual(1);
 });

@@ -102,7 +102,7 @@ export function ShaderControls({
       <p role="status" className="text-xs leading-5 text-muted-foreground">
         {reducedMotion || !state.animate
           ? "Static frame active"
-          : "Motion is procedural and stays below the 400ms UI-transition limit."}
+          : "Continuous procedural motion. Reduced motion holds a static frame."}
       </p>
 
       <button

@@ -60,7 +60,8 @@ float ordered_threshold(ivec2 pixel) {
 
 vec3 procedural_field(vec2 uv) {
   vec2 center = uv - 0.5;
-  float radius = length(center);
+  float aspect = u_resolution.x / max(u_resolution.y, 1.0);
+  float radius = length(vec2(center.x * aspect, center.y));
   float ripple = sin(radius * 42.0 - u_time * 2.4);
   vec2 direction = radius > 0.0001 ? center / radius : vec2(0.0);
   vec2 warped = uv + direction * ripple * 0.018 * u_ripple;
