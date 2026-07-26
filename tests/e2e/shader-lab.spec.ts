@@ -99,6 +99,7 @@ test("exports Canvas 2D fallback evidence when WebGL2 is unavailable", async ({
   await page.addInitScript(() => {
     const getContext = HTMLCanvasElement.prototype.getContext;
     HTMLCanvasElement.prototype.getContext = function (
+      this: HTMLCanvasElement,
       contextId: string,
       ...args: unknown[]
     ) {

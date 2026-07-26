@@ -149,6 +149,6 @@ describe("shader lab contract", () => {
       rendererStatus: "fallback",
     });
     expect(evidence.assessedDimensions).toContain("canvas-2d-fallback");
-    expect(evidence.unassessedDimensions).toContain("webgl2-availability");
+    expect(evidence.unassessedDimensions).toContain("webgl2-rendering");
   });
 });

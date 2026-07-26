@@ -2,7 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import type { ShaderLabState } from "../../lib/shader-contract";
+import type {
+  RendererAvailability,
+  ShaderLabState,
+} from "../../lib/shader-contract";
 import {
   DITHER_FRAGMENT_SHADER,
   FULLSCREEN_VERTEX_SHADER,
@@ -15,6 +18,7 @@ interface ShaderCanvasProps {
   paused: boolean;
   testId: string;
   onPerformance?: (samples: number[]) => void;
+  onStatusChange?: (status: RendererAvailability) => void;
 }
 
 function compileShader(
@@ -60,11 +64,10 @@ export function ShaderCanvas({
   paused,
   testId,
   onPerformance,
+  onStatusChange,
 }: ShaderCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [status, setStatus] = useState<"loading" | "ready" | "unavailable">(
-    "loading",
-  );
+  const [status, setStatus] = useState<RendererAvailability>("loading");
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -74,7 +77,10 @@ export function ShaderCanvas({
       powerPreference: "high-performance",
     });
     if (!canvas || !gl) {
-      queueMicrotask(() => setStatus("unavailable"));
+      queueMicrotask(() => {
+        setStatus("unavailable");
+        onStatusChange?.("unavailable");
+      });
       return;
     }
 
@@ -83,7 +89,10 @@ export function ShaderCanvas({
       program = createProgram(gl);
     } catch (error) {
       console.error("Shader lab renderer failed to initialize.", error);
-      queueMicrotask(() => setStatus("unavailable"));
+      queueMicrotask(() => {
+        setStatus("unavailable");
+        onStatusChange?.("unavailable");
+      });
       return;
     }
 
@@ -131,7 +140,10 @@ export function ShaderCanvas({
       if (samples.length > 120) samples.shift();
       frame += 1;
 
-      if (frame === 1) setStatus("ready");
+      if (frame === 1) {
+        setStatus("ready");
+        onStatusChange?.("ready");
+      }
       if (onPerformance && frame % 10 === 0) onPerformance([...samples]);
       if (!paused) animationFrame = requestAnimationFrame(draw);
     };
@@ -146,6 +158,7 @@ export function ShaderCanvas({
   }, [
     mode,
     onPerformance,
+    onStatusChange,
     paused,
     state.distortion,
     state.mode,

@@ -1,22 +1,36 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getBayerThreshold, seededNoise } from "../../lib/shader-contract";
-import type { ShaderLabState } from "../../lib/shader-contract";
+import type {
+  RendererAvailability,
+  ShaderLabState,
+} from "../../lib/shader-contract";
 
 interface FallbackCanvasProps {
   state: ShaderLabState;
+  onStatusChange?: (status: RendererAvailability) => void;
 }
 
 /** Atomic Design: organism — a static Canvas 2D fallback, not WebGL proof. */
-export function FallbackCanvas({ state }: FallbackCanvasProps) {
+export function FallbackCanvas({
+  state,
+  onStatusChange,
+}: FallbackCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [status, setStatus] = useState<RendererAvailability>("loading");
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
-    if (!canvas || !context) return;
+    if (!canvas || !context) {
+      queueMicrotask(() => {
+        setStatus("unavailable");
+        onStatusChange?.("unavailable");
+      });
+      return;
+    }
 
     const bounds = canvas.getBoundingClientRect();
     const scale = Math.min(window.devicePixelRatio || 1, 2);
@@ -44,7 +58,12 @@ export function FallbackCanvas({ state }: FallbackCanvasProps) {
         }
       }
     }
-  }, [state.mode, state.seed]);
+    const statusFrame = requestAnimationFrame(() => {
+      setStatus("ready");
+      onStatusChange?.("ready");
+    });
+    return () => cancelAnimationFrame(statusFrame);
+  }, [onStatusChange, state.mode, state.seed]);
 
   return (
     <div className="aspect-[4/3] overflow-hidden rounded-md border border-border bg-muted">
@@ -53,6 +72,7 @@ export function FallbackCanvas({ state }: FallbackCanvasProps) {
         role="img"
         aria-label="Static Canvas 2D fallback using the selected treatment"
         data-testid="fallback-renderer"
+        data-status={status}
         className="size-full"
       />
     </div>

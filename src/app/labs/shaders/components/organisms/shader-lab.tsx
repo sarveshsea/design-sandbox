@@ -7,7 +7,12 @@ import {
   DEFAULT_LAB_STATE,
   normalizeLabState,
 } from "../../lib/shader-contract";
-import type { ShaderLabState } from "../../lib/shader-contract";
+import type {
+  RendererAvailability,
+  RendererEvidenceStatus,
+  RendererKind,
+  ShaderLabState,
+} from "../../lib/shader-contract";
 import { ShaderControls } from "../molecules/shader-controls";
 import { FallbackCanvas } from "./fallback-canvas";
 import { ShaderCanvas } from "./shader-canvas";
@@ -41,10 +46,30 @@ function useReducedMotion() {
 export function ShaderLab() {
   const [state, setState] = useState<ShaderLabState>(DEFAULT_LAB_STATE);
   const [samples, setSamples] = useState<number[]>([]);
+  const [webglStatus, setWebglStatus] =
+    useState<RendererAvailability>("loading");
+  const [fallbackStatus, setFallbackStatus] =
+    useState<RendererAvailability>("loading");
   const reducedMotion = useReducedMotion();
   const paused = reducedMotion || !state.animate;
   const updatePerformance = useCallback((next: number[]) => setSamples(next), []);
   const medianSubmissionMs = useMemo(() => median(samples), [samples]);
+  const rendererResolved =
+    webglStatus === "ready" ||
+    (webglStatus === "unavailable" && fallbackStatus !== "loading");
+  const renderer: RendererKind =
+    webglStatus === "ready"
+      ? "webgl2"
+      : fallbackStatus === "ready"
+        ? "canvas-2d"
+        : "unavailable";
+  const rendererStatus: RendererEvidenceStatus =
+    renderer === "webgl2"
+      ? "ready"
+      : renderer === "canvas-2d"
+        ? "fallback"
+        : "unavailable";
+  const staticEvidence = paused || renderer !== "webgl2";
 
   const handleStateChange = (next: ShaderLabState) => {
     const normalized = normalizeLabState(next);
@@ -62,13 +87,14 @@ export function ShaderLab() {
   const handleExport = () => {
     const effectiveState = {
       ...state,
-      animate: state.animate && !reducedMotion,
+      animate: state.animate && !reducedMotion && renderer === "webgl2",
     };
     const evidence = createAuditEvidence({
       state: effectiveState,
       reducedMotion,
-      renderer: "webgl2",
-      performance: paused
+      renderer,
+      rendererStatus,
+      performance: staticEvidence
         ? null
         : {
             medianSubmissionMs,
@@ -115,6 +141,7 @@ export function ShaderLab() {
           paused={paused}
           testId="processed-renderer"
           onPerformance={updatePerformance}
+          onStatusChange={setWebglStatus}
         />
       ),
     },
@@ -122,7 +149,9 @@ export function ShaderLab() {
       eyebrow: "No WebGL",
       title: "Static fallback",
       body: "Canvas 2D proof with no animation claim.",
-      renderer: <FallbackCanvas state={state} />,
+      renderer: (
+        <FallbackCanvas state={state} onStatusChange={setFallbackStatus} />
+      ),
     },
   ];
 
@@ -131,7 +160,10 @@ export function ShaderLab() {
       <ShaderControls
         state={state}
         reducedMotion={reducedMotion}
-        evidenceReady={paused || samples.length >= PERFORMANCE_SAMPLE_TARGET}
+        evidenceReady={
+          rendererResolved &&
+          (staticEvidence || samples.length >= PERFORMANCE_SAMPLE_TARGET)
+        }
         onChange={handleStateChange}
         onExport={handleExport}
       />

@@ -31,6 +31,10 @@ export interface ShaderLabState {
   animate: boolean;
 }
 
+export type RendererKind = "webgl2" | "canvas-2d" | "unavailable";
+export type RendererAvailability = "loading" | "ready" | "unavailable";
+export type RendererEvidenceStatus = "ready" | "fallback" | "unavailable";
+
 export const DEFAULT_LAB_STATE: ShaderLabState = {
   mode: "ordered",
   seed: 2026,
@@ -49,7 +53,8 @@ interface PerformanceEvidenceInput {
 interface AuditEvidenceInput {
   state: ShaderLabState;
   reducedMotion: boolean;
-  renderer: "webgl2" | "canvas-2d";
+  renderer: RendererKind;
+  rendererStatus?: RendererEvidenceStatus;
   performance: PerformanceEvidenceInput | null;
 }
 
@@ -121,6 +126,13 @@ export function normalizeLabState(
 }
 
 export function createAuditEvidence(input: AuditEvidenceInput) {
+  const rendererStatus =
+    input.rendererStatus ??
+    (input.renderer === "webgl2"
+      ? "ready"
+      : input.renderer === "canvas-2d"
+        ? "fallback"
+        : "unavailable");
   const performance = input.performance
     ? {
         measurement: "main-thread-webgl-submission",
@@ -146,6 +158,7 @@ export function createAuditEvidence(input: AuditEvidenceInput) {
     route: "/labs/shaders",
     deterministic: true,
     renderer: input.renderer,
+    rendererStatus,
     reducedMotion: input.reducedMotion,
     controls: { ...input.state },
     algorithms: [
@@ -160,14 +173,18 @@ export function createAuditEvidence(input: AuditEvidenceInput) {
     },
     performance,
     assessedDimensions: [
-      "webgl2-availability",
       "deterministic-output",
       "reduced-motion",
       "canvas-2d-fallback",
+      ...(input.renderer === "webgl2"
+        ? ["webgl2-availability"]
+        : ["renderer-fallback-resolution"]),
       ...(input.performance ? ["main-thread-webgl-submission"] : []),
     ],
     unassessedDimensions: [
       ...(!input.performance ? ["main-thread-webgl-submission"] : []),
+      ...(input.renderer !== "webgl2" ? ["webgl2-rendering"] : []),
+      ...(input.renderer === "unavailable" ? ["rendered-output"] : []),
       "gpu-frame-time",
       "power-consumption",
       "wide-gamut-color-accuracy",
