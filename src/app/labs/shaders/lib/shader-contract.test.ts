@@ -31,6 +31,18 @@ describe("shader lab contract", () => {
     expect(changedSeed).not.toBe(first);
   });
 
+  it.each([
+    { x: 12, y: 34, seed: 2026, uint: 3_467_517_367 },
+    { x: 0, y: 0, seed: 0, uint: 0 },
+    { x: 1, y: 1, seed: 1, uint: 397_079_400 },
+    { x: 4095, y: 2047, seed: 9999, uint: 3_633_305_628 },
+  ])(
+    "matches the shared GLSL uint hash for ($x, $y, $seed)",
+    ({ x, y, seed, uint }) => {
+      expect(seededNoise(x, y, seed)).toBe(uint / 4_294_967_296);
+    },
+  );
+
   it("normalizes external control values at the shader boundary", () => {
     expect(
       normalizeLabState({
@@ -100,5 +112,26 @@ describe("shader lab contract", () => {
       },
     });
     expect(evidence.unassessedDimensions).toContain("gpu-frame-time");
+  });
+
+  it("exports static evidence without inventing a timing measurement", () => {
+    const evidence = createAuditEvidence({
+      state: { ...DEFAULT_LAB_STATE, animate: false },
+      reducedMotion: true,
+      renderer: "webgl2",
+      performance: null as never,
+    });
+
+    expect(evidence.performance).toEqual({
+      measurement: "unassessed-static-mode",
+      budgetMs: 16.7,
+      medianMs: null,
+      passesBudget: null,
+      sampleCount: 0,
+      reason: "Static mode does not collect animation performance samples.",
+    });
+    expect(evidence.unassessedDimensions).toContain(
+      "main-thread-webgl-submission",
+    );
   });
 });

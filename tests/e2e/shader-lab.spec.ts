@@ -49,13 +49,36 @@ test("offers an accessible deterministic shader comparison and evidence export",
   });
 });
 
-test("honors reduced motion with a static shader frame", async ({ page }) => {
+test("honors reduced motion and exports static evidence", async ({
+  page,
+}, testInfo) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 
   await page.goto("/labs/shaders");
 
   await expect(page.getByText("Static frame active")).toBeVisible();
   await expect(page.getByLabel("Animate field")).not.toBeChecked();
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export audit evidence" }).click();
+  const download = await downloadPromise;
+  const path = await download.path();
+  expect(path).not.toBeNull();
+
+  const evidence = JSON.parse(
+    await (await import("node:fs/promises")).readFile(path!, "utf8"),
+  );
+  await (await import("node:fs/promises")).writeFile(
+    testInfo.outputPath("reduced-motion-audit-evidence.json"),
+    `${JSON.stringify(evidence, null, 2)}\n`,
+  );
+  expect(evidence.reducedMotion).toBe(true);
+  expect(evidence.controls.animate).toBe(false);
+  expect(evidence.performance).toMatchObject({
+    measurement: "unassessed-static-mode",
+    medianMs: null,
+    passesBudget: null,
+    sampleCount: 0,
+  });
 });
 
 test("keeps the comparison usable on a narrow viewport", async ({ page }) => {
