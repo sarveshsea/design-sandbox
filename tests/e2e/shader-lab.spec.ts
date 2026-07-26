@@ -92,3 +92,44 @@ test("keeps the comparison usable on a narrow viewport", async ({ page }) => {
   );
   expect(horizontalOverflow).toBeLessThanOrEqual(1);
 });
+
+test("exports Canvas 2D fallback evidence when WebGL2 is unavailable", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    const getContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (
+      contextId: string,
+      ...args: unknown[]
+    ) {
+      if (contextId === "webgl2") return null;
+      return Reflect.apply(getContext, this, [contextId, ...args]);
+    } as typeof getContext;
+  });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/labs/shaders");
+
+  await expect(page.getByTestId("processed-renderer")).toHaveAttribute(
+    "data-status",
+    "unavailable",
+  );
+  await expect(page.getByTestId("fallback-renderer")).toHaveAttribute(
+    "data-status",
+    "ready",
+  );
+
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export audit evidence" }).click();
+  const download = await downloadPromise;
+  const path = await download.path();
+  expect(path).not.toBeNull();
+  const evidence = JSON.parse(
+    await (await import("node:fs/promises")).readFile(path!, "utf8"),
+  );
+
+  expect(evidence).toMatchObject({
+    renderer: "canvas-2d",
+    rendererStatus: "fallback",
+    reducedMotion: true,
+  });
+});

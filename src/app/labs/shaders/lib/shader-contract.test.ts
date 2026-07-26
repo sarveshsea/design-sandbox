@@ -134,4 +134,21 @@ describe("shader lab contract", () => {
       "main-thread-webgl-submission",
     );
   });
+
+  it("reports the Canvas 2D fallback instead of an unavailable WebGL renderer", () => {
+    const evidence = createAuditEvidence({
+      state: { ...DEFAULT_LAB_STATE, animate: false },
+      reducedMotion: true,
+      renderer: "canvas-2d",
+      rendererStatus: "fallback",
+      performance: null,
+    } as never);
+
+    expect(evidence).toMatchObject({
+      renderer: "canvas-2d",
+      rendererStatus: "fallback",
+    });
+    expect(evidence.assessedDimensions).toContain("canvas-2d-fallback");
+    expect(evidence.unassessedDimensions).toContain("webgl2-availability");
+  });
 });
