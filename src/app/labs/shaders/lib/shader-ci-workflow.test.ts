@@ -23,6 +23,7 @@ describe("shader lab CI workflow", () => {
     expect(actionReferences).toEqual(
       expect.arrayContaining([
         expect.stringMatching(/^actions\/checkout@[a-f0-9]{40}$/),
+        expect.stringMatching(/^pnpm\/action-setup@[a-f0-9]{40}$/),
         expect.stringMatching(/^actions\/setup-node@[a-f0-9]{40}$/),
         expect.stringMatching(/^actions\/upload-artifact@[a-f0-9]{40}$/),
       ]),
@@ -30,6 +31,9 @@ describe("shader lab CI workflow", () => {
     expect(actionReferences.every((reference) => /@[a-f0-9]{40}$/.test(reference))).toBe(
       true,
     );
+    expect(workflow).toContain("runs-on: ubuntu-24.04");
+    expect(workflow).toContain("version: 10.17.0");
+    expect(workflow).toContain("node-version: 22.22.0");
   });
 
   it("runs every blocking shader proof gate after a frozen install", () => {
