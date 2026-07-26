@@ -1,3 +1,5 @@
+import { SEEDED_NOISE_HASH } from "./shader-contract";
+
 export const FULLSCREEN_VERTEX_SHADER = `#version 300 es
 precision highp float;
 
@@ -38,18 +40,18 @@ const float BAYER[16] = float[16](
 );
 
 uint mix_bits(uint value) {
-  value ^= value >> 16;
-  value *= 2246822519u;
-  value ^= value >> 13;
-  value *= 3266489917u;
-  return value ^ (value >> 16);
+  value ^= value >> ${SEEDED_NOISE_HASH.firstShift};
+  value *= ${SEEDED_NOISE_HASH.firstMixMultiplier}u;
+  value ^= value >> ${SEEDED_NOISE_HASH.secondShift};
+  value *= ${SEEDED_NOISE_HASH.secondMixMultiplier}u;
+  return value ^ (value >> ${SEEDED_NOISE_HASH.finalShift});
 }
 
 float seeded_noise(ivec2 pixel) {
-  uint packed = uint(pixel.x) * 374761393u;
-  packed ^= uint(pixel.y) * 668265263u;
-  packed ^= u_seed * 69069u;
-  return float(mix_bits(packed)) / 4294967296.0;
+  uint packed = uint(pixel.x) * ${SEEDED_NOISE_HASH.xMultiplier}u;
+  packed ^= uint(pixel.y) * ${SEEDED_NOISE_HASH.yMultiplier}u;
+  packed ^= u_seed * ${SEEDED_NOISE_HASH.seedMultiplier}u;
+  return float(mix_bits(packed)) / ${SEEDED_NOISE_HASH.divisor}.0;
 }
 
 float ordered_threshold(ivec2 pixel) {

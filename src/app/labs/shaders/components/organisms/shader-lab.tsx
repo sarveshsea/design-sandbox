@@ -68,12 +68,14 @@ export function ShaderLab() {
       state: effectiveState,
       reducedMotion,
       renderer: "webgl2",
-      performance: {
-        medianSubmissionMs,
-        sampleCount: samples.length,
-        browser: navigator.userAgent,
-        hardwareConcurrency: navigator.hardwareConcurrency,
-      },
+      performance: paused
+        ? null
+        : {
+            medianSubmissionMs,
+            sampleCount: samples.length,
+            browser: navigator.userAgent,
+            hardwareConcurrency: navigator.hardwareConcurrency,
+          },
     });
     const blob = new Blob([`${JSON.stringify(evidence, null, 2)}\n`], {
       type: "application/json",
@@ -129,7 +131,7 @@ export function ShaderLab() {
       <ShaderControls
         state={state}
         reducedMotion={reducedMotion}
-        evidenceReady={samples.length >= PERFORMANCE_SAMPLE_TARGET}
+        evidenceReady={paused || samples.length >= PERFORMANCE_SAMPLE_TARGET}
         onChange={handleStateChange}
         onExport={handleExport}
       />
