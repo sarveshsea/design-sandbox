@@ -1,57 +1,66 @@
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import path from "node:path";
+
 import { describe, expect, it } from "vitest";
 
-const evidenceDirectory = path.resolve(process.cwd(), "docs/evidence");
+const root = process.cwd();
 const summaryPath = path.join(
-  evidenceDirectory,
-  "shader-lab-hardware-2026-07-27.json",
-);
-const rawPath = path.join(
-  evidenceDirectory,
-  "shader-lab-hardware-raw-2026-07-27.json",
+  root,
+  "docs/evidence/shader-lab-hardware-2026-07-27.json",
 );
 
 function readJson(filePath: string) {
   return JSON.parse(readFileSync(filePath, "utf8")) as Record<string, unknown>;
 }
 
+function digest(filePath: string) {
+  return createHash("sha256").update(readFileSync(filePath)).digest("hex");
+}
+
 describe("durable shader hardware evidence", () => {
-  it("binds the privacy-preserving summary to the raw export", () => {
+  it("binds every semantic claim to retained run, raw, and image artifacts", () => {
     const summary = readJson(summaryPath);
-    const raw = readFileSync(rawPath);
-    const rawEvidence = JSON.parse(raw.toString("utf8")) as {
-      performance: {
-        browser: string;
-        budgetMs: number;
-        medianMs: number;
-        sampleCount: number;
-        gpuTimer: string;
-        medianGpuFrameMs: number;
-        gpuSampleCount: number;
-        gpuPassesBudget: boolean;
-      };
-      rendering: {
-        requestedColorSpace: string;
-        alphaContext: boolean;
-        alphaBits: number;
-        sampledAlpha: number;
-        drawingBufferColorSpace: string;
-        powerPreference: string;
-      };
-      assessedDimensions: string[];
-      unassessedDimensions: string[];
-    };
-    const digest = createHash("sha256").update(raw).digest("hex");
+    const artifacts = summary.artifacts as Record<
+      string,
+      { path: string; sha256: string; byteLength: number }
+    >;
+    const requiredArtifacts = [
+      "runReport",
+      "rawEvidence",
+      "staticFrame",
+      "fullPageScreenshot",
+    ];
+
+    expect(Object.keys(artifacts)).toEqual(
+      expect.arrayContaining(requiredArtifacts),
+    );
+
+    for (const key of requiredArtifacts) {
+      const artifact = artifacts[key];
+      expect(artifact.path).toMatch(/^docs\/evidence\/[a-z0-9.-]+$/);
+      const absolutePath = path.resolve(root, artifact.path);
+      expect(absolutePath.startsWith(path.join(root, "docs/evidence/"))).toBe(
+        true,
+      );
+      expect(statSync(absolutePath).isFile()).toBe(true);
+      expect(statSync(absolutePath).size).toBe(artifact.byteLength);
+      expect(digest(absolutePath)).toBe(artifact.sha256);
+    }
+
+    const runReport = readJson(path.resolve(root, artifacts.runReport.path));
+    const rawEvidence = readJson(path.resolve(root, artifacts.rawEvidence.path));
     const result = summary.result as Record<string, unknown>;
-    const privacy = summary.privacy as Record<string, unknown>;
-    const environment = summary.environment as Record<string, unknown>;
     const summaryPerformance = result.performance as Record<string, unknown>;
-    const summaryRendering = result.rendering as Record<string, unknown>;
+    const rawPerformance = rawEvidence.performance as Record<string, unknown>;
+    const runArtifacts = runReport.artifacts as Record<
+      string,
+      { sha256: string }
+    >;
 
     expect(summary.sourceCommit).toMatch(/^[0-9a-f]{40}$/);
+    expect(runReport.sourceCommit).toBe(summary.sourceCommit);
     const sourceCommit = String(summary.sourceCommit);
     expect(() =>
       execFileSync("git", ["cat-file", "-e", `${sourceCommit}^{commit}`], {
@@ -65,47 +74,47 @@ describe("durable shader hardware evidence", () => {
         { stdio: "pipe" },
       ),
     ).not.toThrow();
-    expect(result.rawEvidenceSha256).toBe(digest);
-    expect(environment.browserBinaryVersion).toMatch(
-      /^Google Chrome \d+\.\d+\.\d+\.\d+$/,
+
+    expect(runArtifacts.rawEvidence.sha256).toBe(
+      artifacts.rawEvidence.sha256,
     );
-    expect(environment.emulatedUserAgent).toBe(
-      rawEvidence.performance.browser,
+    expect(runArtifacts.staticFrame.sha256).toBe(artifacts.staticFrame.sha256);
+    expect(runArtifacts.fullPageScreenshot.sha256).toBe(
+      artifacts.fullPageScreenshot.sha256,
     );
+    expect(runReport.auditEvidenceSha256).toBe(artifacts.rawEvidence.sha256);
+    expect(runReport.deterministicFrame).toMatchObject({
+      repeatMatched: true,
+      sha256: artifacts.staticFrame.sha256,
+    });
     expect(summaryPerformance).toMatchObject({
-      budgetMs: rawEvidence.performance.budgetMs,
-      mainThreadSubmissionMedianMs: rawEvidence.performance.medianMs,
-      mainThreadSampleCount: rawEvidence.performance.sampleCount,
-      gpuTimer: rawEvidence.performance.gpuTimer,
-      gpuFrameMedianMs: rawEvidence.performance.medianGpuFrameMs,
-      gpuSampleCount: rawEvidence.performance.gpuSampleCount,
-      gpuPassesBudget: rawEvidence.performance.gpuPassesBudget,
+      budgetMs: rawPerformance.budgetMs,
+      mainThreadSubmission: rawPerformance.mainThreadSubmission,
+      animationFrameCadence: rawPerformance.animationFrameCadence,
+      gpuDrawPass: rawPerformance.gpuDrawPass,
     });
-    expect(summaryRendering).toEqual(rawEvidence.rendering);
-    expect(
-      (summary.assessedDimensions as string[]).every((dimension) =>
-        rawEvidence.assessedDimensions.includes(dimension),
-      ),
-    ).toBe(true);
-    expect(summary.unassessedDimensions).toEqual(
-      rawEvidence.unassessedDimensions,
+    expect(summaryPerformance).not.toHaveProperty("gpuFrameMedianMs");
+    expect(summary.assessedDimensions).toEqual(
+      expect.arrayContaining([
+        "animation-frame-cadence",
+        "gpu-draw-pass-duration",
+        "static-frame-determinism",
+        "automated-wcag-a-aa",
+        "durable-artifact-binding",
+      ]),
     );
-    expect(privacy).toEqual({
-      serialNumberRecorded: false,
-      hardwareUuidRecorded: false,
-      personalIdentifiersRecorded: false,
-    });
-  });
-
-  it("keeps unsupported power and wide-gamut claims open", () => {
-    const summary = readJson(summaryPath);
-    const result = summary.result as Record<string, unknown>;
-
-    expect(result.status).toBe("partial");
     expect(summary.unassessedDimensions).toEqual([
       "power-consumption",
       "wide-gamut-color-accuracy",
     ]);
+  });
+
+  it("keeps unsupported claims open and stores no direct personal identifiers", () => {
+    const summary = readJson(summaryPath);
+    const result = summary.result as Record<string, unknown>;
+    const serialized = JSON.stringify(summary).toLowerCase();
+
+    expect(result.status).toBe("partial");
     expect(summary.accessIssues).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -118,5 +127,11 @@ describe("durable shader hardware evidence", () => {
         }),
       ]),
     );
+    expect(summary.privacy).toEqual({
+      serialNumberRecorded: false,
+      hardwareUuidRecorded: false,
+      personalIdentifiersRecorded: false,
+    });
+    expect(serialized).not.toMatch(/serial_number|hardware_uuid|username|home\//);
   });
 });
