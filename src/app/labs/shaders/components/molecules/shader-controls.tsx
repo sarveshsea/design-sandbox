@@ -48,6 +48,21 @@ export function ShaderControls({
         <option value="noise">Seeded noise</option>
       </SelectField>
 
+      <SelectField
+        id="output-color-space"
+        label="Output color space"
+        value={state.colorSpace}
+        onChange={(event) =>
+          update(
+            "colorSpace",
+            event.target.value === "display-p3" ? "display-p3" : "srgb",
+          )
+        }
+      >
+        <option value="srgb">sRGB</option>
+        <option value="display-p3">Display P3</option>
+      </SelectField>
+
       <div className="space-y-2">
         <label htmlFor="shader-seed" className="block text-sm font-medium">
           Deterministic seed

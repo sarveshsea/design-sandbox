@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import type {
+  OutputColorSpace,
   RenderingEvidenceInput,
   RendererAvailability,
   ShaderLabState,
@@ -37,7 +38,10 @@ interface DebugRendererExtension {
   UNMASKED_RENDERER_WEBGL: number;
 }
 
-function rendererDetails(gl: WebGL2RenderingContext): RenderingEvidenceInput {
+function rendererDetails(
+  gl: WebGL2RenderingContext,
+  requestedColorSpace: OutputColorSpace,
+): RenderingEvidenceInput {
   const attributes = gl.getContextAttributes();
   const debug = gl.getExtension(
     "WEBGL_debug_renderer_info",
@@ -64,10 +68,12 @@ function rendererDetails(gl: WebGL2RenderingContext): RenderingEvidenceInput {
       : "unreported";
 
   return {
+    requestedColorSpace,
     alphaContext: attributes?.alpha ?? true,
     alphaBits: Number(gl.getParameter(gl.ALPHA_BITS)),
     sampledAlpha: pixel[3],
     drawingBufferColorSpace: colorSpace,
+    powerPreference: attributes?.powerPreference ?? "default",
     renderer,
     vendor,
     softwareRenderer: /swiftshader|llvmpipe|software/i.test(
@@ -131,7 +137,7 @@ export function ShaderCanvas({
     const gl = canvas?.getContext("webgl2", {
       alpha: false,
       antialias: false,
-      powerPreference: "high-performance",
+      powerPreference: "low-power",
     });
     if (!canvas || !gl) {
       queueMicrotask(() => {
@@ -140,6 +146,7 @@ export function ShaderCanvas({
       });
       return;
     }
+    gl.drawingBufferColorSpace = state.colorSpace;
 
     let program: WebGLProgram;
     try {
@@ -240,7 +247,7 @@ export function ShaderCanvas({
       }
       if (!renderingEvidenceReported) {
         renderingEvidenceReported = true;
-        onRenderingEvidence?.(rendererDetails(gl));
+        onRenderingEvidence?.(rendererDetails(gl, state.colorSpace));
       }
       if (onPerformance && frame % 10 === 0) onPerformance([...samples]);
       if (!paused) animationFrame = requestAnimationFrame(draw);
@@ -262,6 +269,7 @@ export function ShaderCanvas({
     onStatusChange,
     paused,
     state.distortion,
+    state.colorSpace,
     state.mode,
     state.ripple,
     state.seed,

@@ -22,9 +22,11 @@ export const SEEDED_NOISE_HASH = {
 } as const;
 
 export type DitherMode = "ordered" | "noise";
+export type OutputColorSpace = "srgb" | "display-p3";
 
 export interface ShaderLabState {
   mode: DitherMode;
+  colorSpace: OutputColorSpace;
   seed: number;
   ripple: number;
   distortion: number;
@@ -37,6 +39,7 @@ export type RendererEvidenceStatus = "ready" | "fallback" | "unavailable";
 
 export const DEFAULT_LAB_STATE: ShaderLabState = {
   mode: "ordered",
+  colorSpace: "srgb",
   seed: 2026,
   ripple: 0.35,
   distortion: 0.2,
@@ -54,10 +57,12 @@ export interface PerformanceEvidenceInput {
 }
 
 export interface RenderingEvidenceInput {
+  requestedColorSpace: OutputColorSpace;
   alphaContext: boolean;
   alphaBits: number;
   sampledAlpha: number;
   drawingBufferColorSpace: string;
+  powerPreference: WebGLPowerPreference;
   renderer: string;
   vendor: string;
   softwareRenderer: boolean;
@@ -116,9 +121,14 @@ export function normalizeLabState(
     values.mode === "ordered" || values.mode === "noise"
       ? values.mode
       : DEFAULT_LAB_STATE.mode;
+  const colorSpace =
+    values.colorSpace === "display-p3" || values.colorSpace === "srgb"
+      ? values.colorSpace
+      : DEFAULT_LAB_STATE.colorSpace;
 
   return {
     mode,
+    colorSpace,
     seed: Math.round(
       clamp(finiteNumber(values.seed, DEFAULT_LAB_STATE.seed), 0, 9999),
     ),
@@ -154,6 +164,11 @@ export function createAuditEvidence(input: AuditEvidenceInput) {
     typeof input.performance.gpuSampleCount === "number" &&
     input.performance.gpuSampleCount > 0 &&
     input.rendering?.softwareRenderer === false;
+  const hasWideGamutOutput =
+    input.rendering?.requestedColorSpace === "display-p3" &&
+    input.rendering.drawingBufferColorSpace === "display-p3";
+  const hasLowPowerContext =
+    input.rendering?.powerPreference === "low-power";
   const performance = input.performance
     ? {
         measurement: "main-thread-webgl-submission",
@@ -213,6 +228,8 @@ export function createAuditEvidence(input: AuditEvidenceInput) {
       ...(input.performance ? ["main-thread-webgl-submission"] : []),
       ...(hasHardwareGpuEvidence ? ["gpu-frame-time"] : []),
       ...(input.rendering ? ["opaque-alpha-contract", "render-color-space"] : []),
+      ...(hasWideGamutOutput ? ["wide-gamut-output-contract"] : []),
+      ...(hasLowPowerContext ? ["low-power-context"] : []),
     ],
     unassessedDimensions: [
       ...(!input.performance ? ["main-thread-webgl-submission"] : []),

@@ -98,6 +98,7 @@ export function ShaderLab() {
     const normalized = normalizeLabState(next);
     if (
       normalized.mode !== state.mode ||
+      normalized.colorSpace !== state.colorSpace ||
       normalized.seed !== state.seed ||
       normalized.ripple !== state.ripple ||
       normalized.distortion !== state.distortion
