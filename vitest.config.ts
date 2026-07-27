@@ -5,7 +5,10 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "json-summary"],
-      include: ["src/app/labs/shaders/lib/shader-contract.ts"],
+      include: [
+        "src/app/labs/shaders/lib/shader-capabilities.ts",
+        "src/app/labs/shaders/lib/shader-contract.ts",
+      ],
       thresholds: {
         branches: 90,
         functions: 90,

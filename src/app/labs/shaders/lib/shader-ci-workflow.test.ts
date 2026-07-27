@@ -7,6 +7,7 @@ const WORKFLOW_PATH = resolve(
   process.cwd(),
   ".github/workflows/shader-lab-proof.yml",
 );
+const PLAYWRIGHT_CONFIG_PATH = resolve(process.cwd(), "playwright.config.ts");
 
 function readWorkflow(): string {
   return readFileSync(WORKFLOW_PATH, "utf8");
@@ -84,5 +85,13 @@ describe("shader lab CI workflow", () => {
     expect(workflow).toContain("coverage/");
     expect(workflow).toContain("if-no-files-found: error");
     expect(workflow).toContain("retention-days: 30");
+  });
+
+  it("captures retained hardware screenshots from a production build", () => {
+    const config = readFileSync(PLAYWRIGHT_CONFIG_PATH, "utf8");
+
+    expect(config).toContain(
+      'hardwareProof\n      ? "pnpm build && pnpm start --hostname 127.0.0.1 --port 3100"',
+    );
   });
 });
