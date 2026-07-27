@@ -45,7 +45,7 @@ describe("shader lab CI workflow", () => {
       "pnpm lint",
       "pnpm test:coverage",
       "pnpm build",
-      "pnpm exec playwright install --with-deps chromium",
+      "pnpm exec playwright install --with-deps chromium webkit",
       "pnpm test:e2e",
     ];
 
@@ -60,13 +60,15 @@ describe("shader lab CI workflow", () => {
     );
   });
 
-  it("retains deterministic screenshots and diagnostics when a gate fails", () => {
+  it("retains deterministic cross-browser evidence on every completed run", () => {
     const workflow = readWorkflow();
 
-    expect(workflow).toContain("if: failure() && !cancelled()");
+    expect(workflow).toContain("if: always() && !cancelled()");
+    expect(workflow).toContain("shader-lab-proof-${{ github.run_id }}");
     expect(workflow).toContain("test-results/");
     expect(workflow).toContain("playwright-report/");
     expect(workflow).toContain("coverage/");
-    expect(workflow).toContain("if-no-files-found: ignore");
+    expect(workflow).toContain("if-no-files-found: error");
+    expect(workflow).toContain("retention-days: 30");
   });
 });

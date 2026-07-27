@@ -93,6 +93,18 @@ describe("shader lab contract", () => {
         sampleCount: 120,
         browser: "Chromium test",
         hardwareConcurrency: 8,
+        gpuTimer: "EXT_disjoint_timer_query_webgl2",
+        medianGpuFrameMs: 2.4,
+        gpuSampleCount: 30,
+      },
+      rendering: {
+        alphaContext: false,
+        alphaBits: 0,
+        sampledAlpha: 255,
+        drawingBufferColorSpace: "srgb",
+        renderer: "ANGLE Metal Renderer: Apple M3 Pro",
+        vendor: "Google Inc. (Apple)",
+        softwareRenderer: false,
       },
     });
 
@@ -109,9 +121,22 @@ describe("shader lab contract", () => {
         medianMs: 1.25,
         passesBudget: true,
         sampleCount: 120,
+        gpuTimer: "EXT_disjoint_timer_query_webgl2",
+        medianGpuFrameMs: 2.4,
+        gpuPassesBudget: true,
+        gpuSampleCount: 30,
+      },
+      rendering: {
+        alphaContext: false,
+        alphaBits: 0,
+        sampledAlpha: 255,
+        drawingBufferColorSpace: "srgb",
+        softwareRenderer: false,
       },
     });
-    expect(evidence.unassessedDimensions).toContain("gpu-frame-time");
+    expect(evidence.assessedDimensions).toContain("gpu-frame-time");
+    expect(evidence.assessedDimensions).toContain("opaque-alpha-contract");
+    expect(evidence.unassessedDimensions).not.toContain("gpu-frame-time");
   });
 
   it("exports static evidence without inventing a timing measurement", () => {
@@ -120,6 +145,7 @@ describe("shader lab contract", () => {
       reducedMotion: true,
       renderer: "webgl2",
       performance: null as never,
+      rendering: null,
     });
 
     expect(evidence.performance).toEqual({
@@ -142,6 +168,7 @@ describe("shader lab contract", () => {
       renderer: "canvas-2d",
       rendererStatus: "fallback",
       performance: null,
+      rendering: null,
     } as never);
 
     expect(evidence).toMatchObject({
