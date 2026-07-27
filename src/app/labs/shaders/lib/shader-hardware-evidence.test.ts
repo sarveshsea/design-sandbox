@@ -22,9 +22,13 @@ describe("durable shader hardware evidence", () => {
   it("binds the privacy-preserving summary to the raw export", () => {
     const summary = readJson(summaryPath);
     const raw = readFileSync(rawPath);
+    const rawEvidence = JSON.parse(raw.toString("utf8")) as {
+      performance: { browser: string };
+    };
     const digest = createHash("sha256").update(raw).digest("hex");
     const result = summary.result as Record<string, unknown>;
     const privacy = summary.privacy as Record<string, unknown>;
+    const environment = summary.environment as Record<string, unknown>;
 
     expect(summary.sourceCommit).toMatch(/^[0-9a-f]{40}$/);
     const sourceCommit = String(summary.sourceCommit);
@@ -41,6 +45,12 @@ describe("durable shader hardware evidence", () => {
       ),
     ).not.toThrow();
     expect(result.rawEvidenceSha256).toBe(digest);
+    expect(environment.browserBinaryVersion).toMatch(
+      /^Google Chrome \d+\.\d+\.\d+\.\d+$/,
+    );
+    expect(environment.emulatedUserAgent).toBe(
+      rawEvidence.performance.browser,
+    );
     expect(privacy).toEqual({
       serialNumberRecorded: false,
       hardwareUuidRecorded: false,
