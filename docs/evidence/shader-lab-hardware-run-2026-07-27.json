@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0.0",
+  "capturedAt": "2026-07-27T02:59:08.354Z",
+  "sourceCommit": "6c5ef82549f557f6fd5e5c0d86eef39028534b52",
+  "route": "/labs/shaders",
+  "project": "chrome-hardware",
+  "browserBinaryVersion": "150.0.7871.186",
+  "emulatedUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+  "auditEvidenceSha256": "e624dd0344df21b8dc8ba28fa48220302b94ff8eded343de9f656d3cf4154c95",
+  "deterministicFrame": {
+    "repeatMatched": true,
+    "sha256": "c8b64b76496b72ceffc053e7ba4be7244be28b61376e87972cedaf413bae017a"
+  },
+  "reducedMotionFrame": {
+    "repeatMatched": true,
+    "sha256": "c8b64b76496b72ceffc053e7ba4be7244be28b61376e87972cedaf413bae017a"
+  },
+  "accessibility": {
+    "standard": "WCAG 2 A/AA and WCAG 2.1 A/AA",
+    "violations": 0
+  },
+  "artifacts": {
+    "rawEvidence": {
+      "path": "docs/evidence/shader-lab-hardware-raw-2026-07-27.json",
+      "sha256": "e624dd0344df21b8dc8ba28fa48220302b94ff8eded343de9f656d3cf4154c95",
+      "byteLength": 2443
+    },
+    "staticFrame": {
+      "path": "docs/evidence/shader-lab-hardware-static-2026-07-27.png",
+      "sha256": "c8b64b76496b72ceffc053e7ba4be7244be28b61376e87972cedaf413bae017a",
+      "byteLength": 88788
+    },
+    "reducedMotionFrame": {
+      "path": "docs/evidence/shader-lab-hardware-reduced-motion-2026-07-27.png",
+      "sha256": "c8b64b76496b72ceffc053e7ba4be7244be28b61376e87972cedaf413bae017a",
+      "byteLength": 88788
+    },
+    "fullPageScreenshot": {
+      "path": "docs/evidence/shader-lab-hardware-full-page-2026-07-27.png",
+      "sha256": "396fe95b14582de81ca992a17161ec1e337d51c583d355b4012985eb49c12c35",
+      "byteLength": 277663
+    }
+  }
+}

@@ -12,6 +12,9 @@
 
 # testing
 /coverage
+/test-results
+/playwright-report
+/.memi-proof-tmp-*
 
 # next.js
 /.next/

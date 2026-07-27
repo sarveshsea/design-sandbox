@@ -1,23 +1,28 @@
 # design-sandbox
 
-Canonical proof repo for **memi 2.4**: a pre-warmed Next.js 16 + Tailwind 4 + shadcn workspace where AI coding agents can run interface-understanding checks before touching UI code.
+Canonical proof repo for **Memi 2.6.2**: a pre-warmed Next.js 16 + Tailwind 4 + shadcn workspace where AI coding agents can run interface-understanding checks before touching UI code.
 
 Use it to verify the public Memi loop: diagnose design debt, audit UX tenets, extract Tailwind tokens, export a shadcn registry, print MCP no-Figma config, and dry-run Agent Skills installation.
 
 ## Stack
 - **Next.js 16** (App Router) + **TypeScript**
 - **Tailwind 4** + **shadcn/ui** (radix-nova, neutral, CSS variables) — *config only, zero components installed*
-- **memi** (`@memi-design/cli@2.4.0`) — interface understanding, design-system memory, MCP, Agent Skills, and shadcn registry export
+- **Memi** (`@memi-design/cli@2.6.2`) — interface understanding, design-system memory, MCP, Agent Skills, and shadcn registry export
 - **Claude Code** subagents: `screenshot-decoder`, `component-scaffolder`, `motion-director`
 
 ## Quick proof
 
-After `@memi-design/cli@2.4.0` is published:
+The release manifest pins the exact public package and npm integrity:
 
 ```bash
 pnpm install
 pnpm verify
 ```
+
+This command verifies the npm package integrity, runs the complete read-only
+Memi proof in a temporary directory, checks type safety, lint, unit coverage,
+the production build, Chromium and WebKit rendering, reduced motion,
+accessibility, and the explicit Canvas fallback.
 
 Before npm publish, test against a local Memi checkout:
 
@@ -41,6 +46,17 @@ Raw registry URL after push:
 ```text
 https://raw.githubusercontent.com/sarveshsea/design-sandbox/main/public/r/registry.json
 ```
+
+## Shader lab
+
+Open `/labs/shaders` for the original WebGL2 and Canvas 2D proof. It includes
+ordered Bayer and seeded-noise dithering, ripple and distortion controls,
+reduced-motion behavior, output-color-space capability reporting, and
+exportable evidence.
+
+The implementation and source boundary are documented in
+[`docs/evidence/shader-lab-sources.md`](docs/evidence/shader-lab-sources.md).
+No external shader source or media is embedded.
 
 ## Agent workflow
 

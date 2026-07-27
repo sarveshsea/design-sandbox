@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "1.1.0",
+  "route": "/labs/shaders",
+  "deterministic": false,
+  "determinism": {
+    "seededSpatialNoise": true,
+    "staticFrame": false,
+    "reason": "Animation is time-dependent; only the seeded spatial noise is deterministic."
+  },
+  "renderer": "webgl2",
+  "rendererStatus": "ready",
+  "reducedMotion": false,
+  "controls": {
+    "mode": "noise",
+    "colorSpace": "display-p3",
+    "seed": 404,
+    "ripple": 0.35,
+    "distortion": 0.2,
+    "animate": true
+  },
+  "algorithms": [
+    "bayer-4x4",
+    "seeded-noise",
+    "ripple-distortion"
+  ],
+  "sourcePolicy": {
+    "implementation": "original-composition-with-attributed-algorithm-constants",
+    "externalShaderCodeCopied": false,
+    "externalAssetsCopied": false,
+    "references": [
+      "docs/evidence/shader-lab-sources.md",
+      "NOTICE"
+    ]
+  },
+  "performance": {
+    "measurement": "webgl-render-loop",
+    "budgetMs": 16.7,
+    "mainThreadSubmission": {
+      "medianMs": 0,
+      "sampleCount": 50
+    },
+    "animationFrameCadence": {
+      "medianIntervalMs": 16.7,
+      "p95IntervalMs": 17.1,
+      "sampleCount": 49,
+      "passesBudget": true
+    },
+    "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+    "hardwareConcurrency": 12,
+    "gpuDrawPass": {
+      "timer": "EXT_disjoint_timer_query_webgl2",
+      "medianMs": 0.083,
+      "passesBudget": true,
+      "sampleCount": 50
+    }
+  },
+  "rendering": {
+    "requestedColorSpace": "display-p3",
+    "colorSpaceSupport": "native",
+    "alphaContext": false,
+    "alphaBits": 0,
+    "sampledAlpha": 255,
+    "drawingBufferColorSpace": "display-p3",
+    "powerPreference": "low-power",
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Pro, Unspecified Version)",
+    "vendor": "Google Inc. (Apple)",
+    "rendererClassification": "hardware",
+    "rendererInfoSource": "unmasked"
+  },
+  "assessedDimensions": [
+    "seeded-spatial-noise",
+    "canvas-2d-fallback",
+    "webgl2-availability",
+    "main-thread-webgl-submission",
+    "animation-frame-cadence",
+    "gpu-draw-pass-duration",
+    "opaque-alpha-contract",
+    "render-color-space",
+    "renderer-classification",
+    "wide-gamut-output-contract",
+    "low-power-context"
+  ],
+  "unassessedDimensions": [
+    "static-frame-determinism",
+    "reduced-motion-active",
+    "power-consumption",
+    "wide-gamut-color-accuracy"
+  ]
+}

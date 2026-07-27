@@ -1,0 +1,100 @@
+name: Shader Lab Proof
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/shader-lab-proof.yml"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "playwright.config.ts"
+      - "vitest.config.ts"
+      - "memi-proof.manifest.json"
+      - "scripts/memi-proof.mjs"
+      - "README.md"
+      - "LICENSE"
+      - "NOTICE"
+      - "docs/evidence/**"
+      - "src/app/globals.css"
+      - "src/app/layout.tsx"
+      - "src/app/page.tsx"
+      - "src/app/labs/shaders/**"
+      - "tests/e2e/shader-lab.spec.ts"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/shader-lab-proof.yml"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "playwright.config.ts"
+      - "vitest.config.ts"
+      - "memi-proof.manifest.json"
+      - "scripts/memi-proof.mjs"
+      - "README.md"
+      - "LICENSE"
+      - "NOTICE"
+      - "docs/evidence/**"
+      - "src/app/globals.css"
+      - "src/app/layout.tsx"
+      - "src/app/page.tsx"
+      - "src/app/labs/shaders/**"
+      - "tests/e2e/shader-lab.spec.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: shader-lab-proof-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shader-lab-proof:
+    name: Read-only shader lab proof
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      CI: true
+      NEXT_TELEMETRY_DISABLED: 1
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pinned pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        with:
+          version: 10.17.0
+          run_install: false
+
+      - name: Install pinned Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22.22.0
+          cache: pnpm
+
+      - name: Install dependencies from lockfile
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit production dependencies
+        run: pnpm audit --prod
+
+      - name: Install browser engines and system dependencies
+        run: pnpm exec playwright install --with-deps chromium webkit
+
+      - name: Run current Memi and cross-browser proof
+        run: pnpm verify:ci
+
+      - name: Upload shader proof artifacts
+        if: always() && !cancelled()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: shader-lab-proof-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            test-results/
+            playwright-report/
+            coverage/
+          if-no-files-found: error
+          retention-days: 30
