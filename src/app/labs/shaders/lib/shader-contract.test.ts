@@ -96,12 +96,16 @@ describe("shader lab contract", () => {
         sampleCount: 120,
         browser: "Chromium test",
         hardwareConcurrency: 8,
+        frameCadenceMedianMs: 16.6,
+        frameCadenceP95Ms: 16.9,
+        frameCadenceSampleCount: 90,
         gpuTimer: "EXT_disjoint_timer_query_webgl2",
-        medianGpuFrameMs: 2.4,
-        gpuSampleCount: 30,
+        medianGpuDrawPassMs: 2.4,
+        gpuDrawPassSampleCount: 30,
       },
       rendering: {
         requestedColorSpace: "display-p3",
+        colorSpaceSupport: "native",
         alphaContext: false,
         alphaBits: 0,
         sampledAlpha: 255,
@@ -109,45 +113,64 @@ describe("shader lab contract", () => {
         powerPreference: "low-power",
         renderer: "ANGLE Metal Renderer: Apple M3 Pro",
         vendor: "Google Inc. (Apple)",
-        softwareRenderer: false,
+        rendererClassification: "hardware",
+        rendererInfoSource: "unmasked",
       },
     });
 
     expect(evidence).toMatchObject({
       schemaVersion: "1.0.0",
       route: "/labs/shaders",
-      deterministic: true,
+      deterministic: false,
+      determinism: {
+        seededSpatialNoise: true,
+        staticFrame: false,
+        reason: "Animation is time-dependent; only the seeded spatial noise is deterministic.",
+      },
       reducedMotion: true,
       renderer: "webgl2",
       algorithms: ["bayer-4x4", "seeded-noise", "ripple-distortion"],
       performance: {
-        measurement: "main-thread-webgl-submission",
+        measurement: "webgl-render-loop",
         budgetMs: 16.7,
-        medianMs: 1.25,
-        passesBudget: true,
-        sampleCount: 120,
-        gpuTimer: "EXT_disjoint_timer_query_webgl2",
-        medianGpuFrameMs: 2.4,
-        gpuPassesBudget: true,
-        gpuSampleCount: 30,
+        mainThreadSubmission: {
+          medianMs: 1.25,
+          sampleCount: 120,
+        },
+        animationFrameCadence: {
+          medianIntervalMs: 16.6,
+          p95IntervalMs: 16.9,
+          sampleCount: 90,
+          passesBudget: false,
+        },
+        gpuDrawPass: {
+          timer: "EXT_disjoint_timer_query_webgl2",
+          medianMs: 2.4,
+          sampleCount: 30,
+          passesBudget: true,
+        },
       },
       rendering: {
         requestedColorSpace: "display-p3",
+        colorSpaceSupport: "native",
         alphaContext: false,
         alphaBits: 0,
         sampledAlpha: 255,
         drawingBufferColorSpace: "display-p3",
         powerPreference: "low-power",
-        softwareRenderer: false,
+        rendererClassification: "hardware",
+        rendererInfoSource: "unmasked",
       },
     });
-    expect(evidence.assessedDimensions).toContain("gpu-frame-time");
+    expect(evidence.assessedDimensions).toContain("gpu-draw-pass-duration");
+    expect(evidence.assessedDimensions).toContain("animation-frame-cadence");
     expect(evidence.assessedDimensions).toContain("opaque-alpha-contract");
     expect(evidence.assessedDimensions).toContain(
       "wide-gamut-output-contract",
     );
     expect(evidence.assessedDimensions).toContain("low-power-context");
-    expect(evidence.unassessedDimensions).not.toContain("gpu-frame-time");
+    expect(evidence.assessedDimensions).not.toContain("gpu-frame-time");
+    expect(evidence.unassessedDimensions).toContain("static-frame-determinism");
   });
 
   it("exports static evidence without inventing a timing measurement", () => {
@@ -162,11 +185,14 @@ describe("shader lab contract", () => {
     expect(evidence.performance).toEqual({
       measurement: "unassessed-static-mode",
       budgetMs: 16.7,
-      medianMs: null,
-      passesBudget: null,
-      sampleCount: 0,
       reason: "Static mode does not collect animation performance samples.",
     });
+    expect(evidence.deterministic).toBe(true);
+    expect(evidence.determinism).toMatchObject({
+      seededSpatialNoise: true,
+      staticFrame: true,
+    });
+    expect(evidence.assessedDimensions).toContain("static-frame-determinism");
     expect(evidence.unassessedDimensions).toContain(
       "main-thread-webgl-submission",
     );
@@ -182,12 +208,16 @@ describe("shader lab contract", () => {
         sampleCount: 60,
         browser: "Headless Chromium",
         hardwareConcurrency: 4,
+        frameCadenceMedianMs: 16.6,
+        frameCadenceP95Ms: 17,
+        frameCadenceSampleCount: 45,
         gpuTimer: "EXT_disjoint_timer_query_webgl2",
-        medianGpuFrameMs: 0.4,
-        gpuSampleCount: 30,
+        medianGpuDrawPassMs: 0.4,
+        gpuDrawPassSampleCount: 30,
       },
       rendering: {
         requestedColorSpace: "srgb",
+        colorSpaceSupport: "native",
         alphaContext: false,
         alphaBits: 0,
         sampledAlpha: 255,
@@ -195,13 +225,50 @@ describe("shader lab contract", () => {
         powerPreference: "low-power",
         renderer: "ANGLE Vulkan SwiftShader",
         vendor: "Google Inc.",
-        softwareRenderer: true,
+        rendererClassification: "software",
+        rendererInfoSource: "unmasked",
       },
     });
 
-    expect(evidence.performance).not.toHaveProperty("medianGpuFrameMs");
-    expect(evidence.assessedDimensions).not.toContain("gpu-frame-time");
-    expect(evidence.unassessedDimensions).toContain("gpu-frame-time");
+    expect(evidence.performance).not.toHaveProperty("gpuDrawPass");
+    expect(evidence.assessedDimensions).not.toContain("gpu-draw-pass-duration");
+    expect(evidence.unassessedDimensions).toContain("gpu-draw-pass-duration");
+  });
+
+  it("does not treat an unknown renderer as hardware proof", () => {
+    const evidence = createAuditEvidence({
+      state: DEFAULT_LAB_STATE,
+      reducedMotion: false,
+      renderer: "webgl2",
+      performance: {
+        medianSubmissionMs: 0.2,
+        sampleCount: 60,
+        browser: "Masked WebKit",
+        hardwareConcurrency: 4,
+        frameCadenceMedianMs: 16.6,
+        frameCadenceP95Ms: 16.8,
+        frameCadenceSampleCount: 45,
+        gpuTimer: "EXT_disjoint_timer_query_webgl2",
+        medianGpuDrawPassMs: 0.4,
+        gpuDrawPassSampleCount: 30,
+      },
+      rendering: {
+        requestedColorSpace: "srgb",
+        colorSpaceSupport: "native",
+        alphaContext: false,
+        alphaBits: 0,
+        sampledAlpha: 255,
+        drawingBufferColorSpace: "srgb",
+        powerPreference: "low-power",
+        renderer: "WebKit WebGL",
+        vendor: "WebKit",
+        rendererClassification: "unknown",
+        rendererInfoSource: "masked",
+      },
+    });
+
+    expect(evidence.performance).not.toHaveProperty("gpuDrawPass");
+    expect(evidence.unassessedDimensions).toContain("gpu-draw-pass-duration");
   });
 
   it("reports the Canvas 2D fallback instead of an unavailable WebGL renderer", () => {

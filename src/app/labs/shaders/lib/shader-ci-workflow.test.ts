@@ -42,12 +42,8 @@ describe("shader lab CI workflow", () => {
     const commands = [
       "pnpm install --frozen-lockfile",
       "pnpm audit --prod",
-      "pnpm typecheck",
-      "pnpm lint",
-      "pnpm test:coverage",
-      "pnpm build",
       "pnpm exec playwright install --with-deps chromium webkit",
-      "pnpm test:e2e",
+      "pnpm verify:ci",
     ];
 
     for (const command of commands) {
@@ -56,9 +52,26 @@ describe("shader lab CI workflow", () => {
 
     const positions = commands.map((command) => workflow.indexOf(`run: ${command}`));
     expect(positions).toEqual([...positions].sort((left, right) => left - right));
-    expect(workflow).not.toMatch(
-      /name:\s+Run Chromium shader proof[\s\S]*?continue-on-error:\s+true/,
-    );
+    expect(workflow).not.toContain("continue-on-error: true");
+  });
+
+  it("reruns when public proof, source policy, or durable evidence changes", () => {
+    const workflow = readWorkflow();
+    const protectedPaths = [
+      '"docs/evidence/**"',
+      '"src/app/globals.css"',
+      '"src/app/layout.tsx"',
+      '"src/app/page.tsx"',
+      '"scripts/memi-proof.mjs"',
+      '"memi-proof.manifest.json"',
+      '"README.md"',
+      '"LICENSE"',
+      '"NOTICE"',
+    ];
+
+    for (const protectedPath of protectedPaths) {
+      expect(workflow).toContain(protectedPath);
+    }
   });
 
   it("retains deterministic cross-browser evidence on every completed run", () => {

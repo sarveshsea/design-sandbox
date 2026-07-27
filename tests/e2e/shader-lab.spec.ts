@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 
@@ -50,12 +51,25 @@ test("offers an accessible deterministic shader comparison and evidence export",
     colorSpace: "display-p3",
     seed: 404,
   });
-  expect(evidence.deterministic).toBe(true);
-  expect(evidence.performance.medianMs).toBeLessThanOrEqual(16.7);
-  expect(evidence.performance.sampleCount).toBeGreaterThanOrEqual(30);
+  expect(evidence.deterministic).toBe(false);
+  expect(evidence.determinism).toMatchObject({
+    seededSpatialNoise: true,
+    staticFrame: false,
+  });
+  expect(
+    evidence.performance.mainThreadSubmission.medianMs,
+  ).toBeLessThanOrEqual(16.7);
+  expect(
+    evidence.performance.mainThreadSubmission.sampleCount,
+  ).toBeGreaterThanOrEqual(30);
+  expect(
+    evidence.performance.animationFrameCadence.sampleCount,
+  ).toBeGreaterThanOrEqual(30);
+  expect(evidence.performance).not.toHaveProperty("gpuFrameMedianMs");
   expect(evidence.rendering).toMatchObject({
     requestedColorSpace: "display-p3",
     drawingBufferColorSpace: "display-p3",
+    colorSpaceSupport: "native",
     powerPreference: "low-power",
     alphaContext: false,
     alphaBits: 0,
@@ -119,10 +133,11 @@ test("honors reduced motion and exports static evidence", async ({
   expect(evidence.controls.animate).toBe(false);
   expect(evidence.performance).toMatchObject({
     measurement: "unassessed-static-mode",
-    medianMs: null,
-    passesBudget: null,
-    sampleCount: 0,
   });
+  const firstFrame = await page.getByTestId("processed-renderer").screenshot();
+  await page.waitForTimeout(250);
+  const secondFrame = await page.getByTestId("processed-renderer").screenshot();
+  expect(secondFrame).toEqual(firstFrame);
   await testInfo.attach("reduced-motion-render", {
     body: await page.getByTestId("processed-renderer").screenshot(),
     contentType: "image/png",
@@ -139,6 +154,49 @@ test("keeps the comparison usable on a narrow viewport", async ({ page }) => {
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
   expect(horizontalOverflow).toBeLessThanOrEqual(1);
+});
+
+test("supports keyboard operation and has no automated WCAG A/AA violations", async ({
+  page,
+}) => {
+  await page.goto("/labs/shaders");
+  await expect(
+    page.getByRole("button", { name: "Export audit evidence" }),
+  ).toBeEnabled();
+
+  const dither = page.getByLabel("Dither method");
+  await dither.focus();
+  await expect(dither).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await expect(dither).toHaveValue("noise");
+  await page.keyboard.press("Tab");
+  await expect(page.getByLabel("Output color space")).toBeFocused();
+
+  const ripple = page.getByLabel("Ripple strength");
+  await ripple.focus();
+  const before = await ripple.inputValue();
+  await page.keyboard.press("ArrowRight");
+  expect(await ripple.inputValue()).not.toBe(before);
+
+  const results = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  expect(results.violations).toEqual([]);
+});
+
+test("Canvas fallback responds to ripple and distortion controls", async ({
+  page,
+}) => {
+  await page.goto("/labs/shaders");
+  const fallback = page.getByTestId("fallback-renderer");
+  const initial = await fallback.screenshot();
+
+  await page.getByLabel("Ripple strength").fill("1");
+  await page.getByLabel("Distortion").fill("1");
+  await expect(page.getByText("100%")).toHaveCount(2);
+  const changed = await fallback.screenshot();
+
+  expect(changed).not.toEqual(initial);
 });
 
 test("exports Canvas 2D fallback evidence when WebGL2 is unavailable", async ({
