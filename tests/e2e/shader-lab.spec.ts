@@ -262,13 +262,30 @@ test("offers an accessible deterministic shader comparison and evidence export",
   expect(evidence.performance).not.toHaveProperty("gpuFrameMedianMs");
   expect(evidence.rendering).toMatchObject({
     requestedColorSpace: "display-p3",
-    drawingBufferColorSpace: "display-p3",
-    colorSpaceSupport: "native",
     powerPreference: "low-power",
     alphaContext: false,
     alphaBits: 0,
     sampledAlpha: 255,
   });
+  if (evidence.rendering.colorSpaceSupport === "native") {
+    expect(evidence.rendering.drawingBufferColorSpace).toBe("display-p3");
+    expect(evidence.assessedDimensions).toContain(
+      "wide-gamut-output-contract",
+    );
+    expect(evidence.unassessedDimensions).not.toContain(
+      "wide-gamut-output-contract",
+    );
+  } else {
+    expect(["unsupported", "rejected"]).toContain(
+      evidence.rendering.colorSpaceSupport,
+    );
+    expect(evidence.assessedDimensions).not.toContain(
+      "wide-gamut-output-contract",
+    );
+    expect(evidence.unassessedDimensions).toContain(
+      "wide-gamut-output-contract",
+    );
+  }
 
   await page.getByLabel("Animate field").uncheck();
   await expect(page.getByText("Static frame active")).toBeVisible();
@@ -403,7 +420,16 @@ test("supports keyboard operation and has no automated WCAG A/AA violations", as
 test("Canvas fallback responds to ripple and distortion controls", async ({
   page,
 }) => {
+  const hydrationWarnings: string[] = [];
+  page.on("console", (message) => {
+    if (/hydrated|hydration mismatch/i.test(message.text())) {
+      hydrationWarnings.push(message.text());
+    }
+  });
   await page.goto("/labs/shaders");
+  await expect(
+    page.getByRole("button", { name: "Export audit evidence" }),
+  ).toBeEnabled();
   const fallback = page.getByTestId("fallback-renderer");
   const initial = await fallback.screenshot();
 
@@ -413,6 +439,7 @@ test("Canvas fallback responds to ripple and distortion controls", async ({
   const changed = await fallback.screenshot();
 
   expect(changed).not.toEqual(initial);
+  expect(hydrationWarnings).toEqual([]);
 });
 
 test("exports Canvas 2D fallback evidence when WebGL2 is unavailable", async ({

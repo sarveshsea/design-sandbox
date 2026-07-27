@@ -279,6 +279,35 @@ describe("shader lab contract", () => {
     expect(evidence.unassessedDimensions).toContain("gpu-draw-pass-duration");
   });
 
+  it("keeps the wide-gamut output contract unassessed when the platform rejects it", () => {
+    const evidence = createAuditEvidence({
+      state: { ...DEFAULT_LAB_STATE, colorSpace: "display-p3" },
+      reducedMotion: false,
+      renderer: "webgl2",
+      performance: null,
+      rendering: {
+        requestedColorSpace: "display-p3",
+        colorSpaceSupport: "unsupported",
+        alphaContext: false,
+        alphaBits: 0,
+        sampledAlpha: 255,
+        drawingBufferColorSpace: null,
+        powerPreference: "low-power",
+        renderer: "WebKit WebGL",
+        vendor: "WebKit",
+        rendererClassification: "unknown",
+        rendererInfoSource: "masked",
+      },
+    });
+
+    expect(evidence.assessedDimensions).not.toContain(
+      "wide-gamut-output-contract",
+    );
+    expect(evidence.unassessedDimensions).toContain(
+      "wide-gamut-output-contract",
+    );
+  });
+
   it("reports the Canvas 2D fallback instead of an unavailable WebGL renderer", () => {
     const evidence = createAuditEvidence({
       state: { ...DEFAULT_LAB_STATE, animate: false },

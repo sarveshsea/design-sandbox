@@ -292,6 +292,7 @@ export function createAuditEvidence(input: AuditEvidenceInput) {
     ...(input.renderer !== "webgl2" ? ["webgl2-rendering"] : []),
     ...(input.renderer === "unavailable" ? ["rendered-output"] : []),
     ...(!hasHardwareGpuEvidence ? ["gpu-draw-pass-duration"] : []),
+    ...(!hasWideGamutOutput ? ["wide-gamut-output-contract"] : []),
     ...(!input.rendering
       ? ["opaque-alpha-contract", "render-color-space", "renderer-classification"]
       : []),
