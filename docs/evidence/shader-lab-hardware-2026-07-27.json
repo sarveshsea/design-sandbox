@@ -10,7 +10,8 @@
     "chip": "Apple M3 Pro",
     "cpuCores": 12,
     "memoryGb": 36,
-    "browser": "Chrome 151.0.7922.34",
+    "browserBinaryVersion": "Google Chrome 150.0.7871.186",
+    "emulatedUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
     "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Pro, Unspecified Version)",
     "vendor": "Google Inc. (Apple)",
     "softwareRenderer": false
