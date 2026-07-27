@@ -14,6 +14,7 @@ describe("public shader proof contract", () => {
       npmIntegrity: string;
     };
     const proofScript = read("scripts/memi-proof.mjs");
+    const gitignore = read(".gitignore");
     const home = read("src/app/page.tsx");
     const readme = read("README.md");
 
@@ -25,6 +26,9 @@ describe("public shader proof contract", () => {
     });
     expect(proofScript).toContain("memi-proof.manifest.json");
     expect(proofScript).not.toContain('"2.4.0"');
+    expect(proofScript).toContain(".memi-proof-tmp-");
+    expect(proofScript).not.toContain("tmpdir()");
+    expect(gitignore).toContain("/.memi-proof-tmp-*");
     expect(home).toContain("releaseManifest.version");
     expect(readme).toContain("@memi-design/cli@2.6.2");
   });

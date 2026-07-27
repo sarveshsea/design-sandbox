@@ -2,7 +2,6 @@
 
 import { spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const releaseManifest = JSON.parse(
@@ -14,7 +13,7 @@ const registryBaseUrl = "https://raw.githubusercontent.com/sarveshsea/design-san
 const retainArtifacts = process.env.MEMI_PROOF_RETAIN_ARTIFACTS === "1";
 const proofRoot = retainArtifacts
   ? process.cwd()
-  : mkdtempSync(join(tmpdir(), "memi-design-sandbox-proof-"));
+  : mkdtempSync(join(process.cwd(), ".memi-proof-tmp-"));
 const tokenOutput = retainArtifacts
   ? "generated/memi-proof/tokens"
   : join(proofRoot, "tokens");
