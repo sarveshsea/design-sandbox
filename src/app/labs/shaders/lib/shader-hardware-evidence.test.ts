@@ -23,12 +23,33 @@ describe("durable shader hardware evidence", () => {
     const summary = readJson(summaryPath);
     const raw = readFileSync(rawPath);
     const rawEvidence = JSON.parse(raw.toString("utf8")) as {
-      performance: { browser: string };
+      performance: {
+        browser: string;
+        budgetMs: number;
+        medianMs: number;
+        sampleCount: number;
+        gpuTimer: string;
+        medianGpuFrameMs: number;
+        gpuSampleCount: number;
+        gpuPassesBudget: boolean;
+      };
+      rendering: {
+        requestedColorSpace: string;
+        alphaContext: boolean;
+        alphaBits: number;
+        sampledAlpha: number;
+        drawingBufferColorSpace: string;
+        powerPreference: string;
+      };
+      assessedDimensions: string[];
+      unassessedDimensions: string[];
     };
     const digest = createHash("sha256").update(raw).digest("hex");
     const result = summary.result as Record<string, unknown>;
     const privacy = summary.privacy as Record<string, unknown>;
     const environment = summary.environment as Record<string, unknown>;
+    const summaryPerformance = result.performance as Record<string, unknown>;
+    const summaryRendering = result.rendering as Record<string, unknown>;
 
     expect(summary.sourceCommit).toMatch(/^[0-9a-f]{40}$/);
     const sourceCommit = String(summary.sourceCommit);
@@ -50,6 +71,24 @@ describe("durable shader hardware evidence", () => {
     );
     expect(environment.emulatedUserAgent).toBe(
       rawEvidence.performance.browser,
+    );
+    expect(summaryPerformance).toMatchObject({
+      budgetMs: rawEvidence.performance.budgetMs,
+      mainThreadSubmissionMedianMs: rawEvidence.performance.medianMs,
+      mainThreadSampleCount: rawEvidence.performance.sampleCount,
+      gpuTimer: rawEvidence.performance.gpuTimer,
+      gpuFrameMedianMs: rawEvidence.performance.medianGpuFrameMs,
+      gpuSampleCount: rawEvidence.performance.gpuSampleCount,
+      gpuPassesBudget: rawEvidence.performance.gpuPassesBudget,
+    });
+    expect(summaryRendering).toEqual(rawEvidence.rendering);
+    expect(
+      (summary.assessedDimensions as string[]).every((dimension) =>
+        rawEvidence.assessedDimensions.includes(dimension),
+      ),
+    ).toBe(true);
+    expect(summary.unassessedDimensions).toEqual(
+      rawEvidence.unassessedDimensions,
     );
     expect(privacy).toEqual({
       serialNumberRecorded: false,

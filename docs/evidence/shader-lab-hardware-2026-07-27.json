@@ -35,7 +35,10 @@
       "alphaBits": 0,
       "sampledAlpha": 255,
       "drawingBufferColorSpace": "display-p3",
-      "powerPreference": "low-power"
+      "powerPreference": "low-power",
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Pro, Unspecified Version)",
+      "vendor": "Google Inc. (Apple)",
+      "softwareRenderer": false
     },
     "deterministicFrame": {
       "repeatMatched": true,
