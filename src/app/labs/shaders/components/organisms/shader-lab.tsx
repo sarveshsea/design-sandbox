@@ -29,6 +29,16 @@ function median(values: number[]) {
     : ordered[middle];
 }
 
+function percentile(values: number[], percentileValue: number) {
+  if (values.length === 0) return 0;
+  const ordered = [...values].sort((left, right) => left - right);
+  const index = Math.min(
+    ordered.length - 1,
+    Math.max(0, Math.ceil(percentileValue * ordered.length) - 1),
+  );
+  return ordered[index];
+}
+
 function useReducedMotion() {
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -48,6 +58,7 @@ export function ShaderLab() {
   const [state, setState] = useState<ShaderLabState>(DEFAULT_LAB_STATE);
   const [samples, setSamples] = useState<number[]>([]);
   const [gpuSamples, setGpuSamples] = useState<number[]>([]);
+  const [frameCadenceSamples, setFrameCadenceSamples] = useState<number[]>([]);
   const [gpuTimer, setGpuTimer] = useState<
     "EXT_disjoint_timer_query_webgl2" | null
   >(null);
@@ -61,6 +72,10 @@ export function ShaderLab() {
   const reducedMotion = useReducedMotion();
   const paused = reducedMotion || !state.animate;
   const updatePerformance = useCallback((next: number[]) => setSamples(next), []);
+  const updateFrameCadence = useCallback(
+    (next: number[]) => setFrameCadenceSamples(next),
+    [],
+  );
   const updateGpuPerformance = useCallback(
     (
       timer: "EXT_disjoint_timer_query_webgl2",
@@ -77,6 +92,14 @@ export function ShaderLab() {
   );
   const medianSubmissionMs = useMemo(() => median(samples), [samples]);
   const medianGpuFrameMs = useMemo(() => median(gpuSamples), [gpuSamples]);
+  const medianFrameCadenceMs = useMemo(
+    () => median(frameCadenceSamples),
+    [frameCadenceSamples],
+  );
+  const p95FrameCadenceMs = useMemo(
+    () => percentile(frameCadenceSamples, 0.95),
+    [frameCadenceSamples],
+  );
   const rendererResolved =
     webglStatus === "ready" ||
     (webglStatus === "unavailable" && fallbackStatus !== "loading");
@@ -105,6 +128,8 @@ export function ShaderLab() {
     ) {
       setSamples([]);
       setGpuSamples([]);
+      setFrameCadenceSamples([]);
+      setRendering(null);
     }
     setState(normalized);
   };
@@ -119,6 +144,7 @@ export function ShaderLab() {
       reducedMotion,
       renderer,
       rendererStatus,
+      fallbackRendered: fallbackStatus === "ready",
       performance: staticEvidence
         ? null
         : {
@@ -126,11 +152,14 @@ export function ShaderLab() {
             sampleCount: samples.length,
             browser: navigator.userAgent,
             hardwareConcurrency: navigator.hardwareConcurrency,
+            frameCadenceMedianMs: medianFrameCadenceMs,
+            frameCadenceP95Ms: p95FrameCadenceMs,
+            frameCadenceSampleCount: frameCadenceSamples.length,
             ...(gpuTimer && gpuSamples.length >= PERFORMANCE_SAMPLE_TARGET
               ? {
                   gpuTimer,
-                  medianGpuFrameMs,
-                  gpuSampleCount: gpuSamples.length,
+                  medianGpuDrawPassMs: medianGpuFrameMs,
+                  gpuDrawPassSampleCount: gpuSamples.length,
                 }
               : {}),
           },
@@ -174,6 +203,7 @@ export function ShaderLab() {
           paused={paused}
           testId="processed-renderer"
           onPerformance={updatePerformance}
+          onFrameCadence={updateFrameCadence}
           onGpuPerformance={updateGpuPerformance}
           onRenderingEvidence={updateRendering}
           onStatusChange={setWebglStatus}
@@ -199,6 +229,7 @@ export function ShaderLab() {
           rendererResolved &&
           (staticEvidence ||
             (samples.length >= PERFORMANCE_SAMPLE_TARGET &&
+              frameCadenceSamples.length >= PERFORMANCE_SAMPLE_TARGET &&
               (!gpuTimer ||
                 gpuSamples.length >= PERFORMANCE_SAMPLE_TARGET)))
         }
@@ -217,7 +248,8 @@ export function ShaderLab() {
             </h2>
           </div>
           <p className="font-mono text-xs text-muted-foreground">
-            median submission {medianSubmissionMs.toFixed(3)}ms / 16.7ms
+            median frame interval {medianFrameCadenceMs.toFixed(3)}ms · submission{" "}
+            {medianSubmissionMs.toFixed(3)}ms
           </p>
         </div>
 

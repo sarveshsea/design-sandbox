@@ -36,6 +36,8 @@ export interface ShaderLabState {
 export type RendererKind = "webgl2" | "canvas-2d" | "unavailable";
 export type RendererAvailability = "loading" | "ready" | "unavailable";
 export type RendererEvidenceStatus = "ready" | "fallback" | "unavailable";
+export type RendererClassification = "hardware" | "software" | "unknown";
+export type ColorSpaceSupport = "native" | "unsupported" | "rejected";
 
 export const DEFAULT_LAB_STATE: ShaderLabState = {
   mode: "ordered",
@@ -51,21 +53,26 @@ export interface PerformanceEvidenceInput {
   sampleCount: number;
   browser: string;
   hardwareConcurrency: number;
+  frameCadenceMedianMs: number;
+  frameCadenceP95Ms: number;
+  frameCadenceSampleCount: number;
   gpuTimer?: "EXT_disjoint_timer_query_webgl2";
-  medianGpuFrameMs?: number;
-  gpuSampleCount?: number;
+  medianGpuDrawPassMs?: number;
+  gpuDrawPassSampleCount?: number;
 }
 
 export interface RenderingEvidenceInput {
   requestedColorSpace: OutputColorSpace;
+  colorSpaceSupport: ColorSpaceSupport;
   alphaContext: boolean;
   alphaBits: number;
   sampledAlpha: number;
-  drawingBufferColorSpace: string;
+  drawingBufferColorSpace: OutputColorSpace | null;
   powerPreference: WebGLPowerPreference;
   renderer: string;
   vendor: string;
-  softwareRenderer: boolean;
+  rendererClassification: RendererClassification;
+  rendererInfoSource: "unmasked" | "masked";
 }
 
 interface AuditEvidenceInput {
@@ -73,6 +80,7 @@ interface AuditEvidenceInput {
   reducedMotion: boolean;
   renderer: RendererKind;
   rendererStatus?: RendererEvidenceStatus;
+  fallbackRendered?: boolean;
   performance: PerformanceEvidenceInput | null;
   rendering: RenderingEvidenceInput | null;
 }
@@ -108,6 +116,40 @@ export function seededNoise(x: number, y: number, seed: number) {
     Math.imul(value, SEEDED_NOISE_HASH.secondMixMultiplier) >>> 0;
   value ^= value >>> SEEDED_NOISE_HASH.finalShift;
   return (value >>> 0) / SEEDED_NOISE_HASH.divisor;
+}
+
+export function proceduralFieldLuminance(
+  u: number,
+  v: number,
+  width: number,
+  height: number,
+  rippleStrength: number,
+  distortionStrength: number,
+  time = 0,
+) {
+  const centerX = u - 0.5;
+  const centerY = v - 0.5;
+  const aspect = width / Math.max(height, 1);
+  const radius = Math.hypot(centerX * aspect, centerY);
+  const ripple = Math.sin(radius * 42 - time * 2.4);
+  const directionX = radius > 0.0001 ? centerX / radius : 0;
+  const directionY = radius > 0.0001 ? centerY / radius : 0;
+  let warpedX = u + directionX * ripple * 0.018 * rippleStrength;
+  let warpedY = v + directionY * ripple * 0.018 * rippleStrength;
+  warpedX +=
+    Math.sin((warpedY + time * 0.08) * 18) * 0.025 * distortionStrength;
+  warpedY +=
+    Math.cos((warpedX - time * 0.06) * 14) * 0.018 * distortionStrength;
+
+  const bands = 0.5 + 0.5 * Math.sin((warpedX * 1.25 + warpedY) * 11);
+  const rings =
+    0.5 + 0.5 * Math.cos(Math.hypot(warpedX - 0.5, warpedY - 0.5) * 31);
+  const pulse =
+    0.5 + 0.5 * Math.sin((warpedX - warpedY) * 9 + time * 0.35);
+  const red = 0.09 + bands * 0.72;
+  const green = 0.12 + rings * 0.68;
+  const blue = 0.18 + pulse * 0.72;
+  return red * 0.2126 + green * 0.7152 + blue * 0.0722;
 }
 
 export function normalizeLabState(
@@ -159,49 +201,115 @@ export function createAuditEvidence(input: AuditEvidenceInput) {
         : "unavailable");
   const hasHardwareGpuEvidence =
     input.performance?.gpuTimer === "EXT_disjoint_timer_query_webgl2" &&
-    typeof input.performance.medianGpuFrameMs === "number" &&
-    Number.isFinite(input.performance.medianGpuFrameMs) &&
-    typeof input.performance.gpuSampleCount === "number" &&
-    input.performance.gpuSampleCount > 0 &&
-    input.rendering?.softwareRenderer === false;
+    typeof input.performance.medianGpuDrawPassMs === "number" &&
+    Number.isFinite(input.performance.medianGpuDrawPassMs) &&
+    typeof input.performance.gpuDrawPassSampleCount === "number" &&
+    input.performance.gpuDrawPassSampleCount > 0 &&
+    input.rendering?.rendererClassification === "hardware";
   const hasWideGamutOutput =
     input.rendering?.requestedColorSpace === "display-p3" &&
+    input.rendering.colorSpaceSupport === "native" &&
     input.rendering.drawingBufferColorSpace === "display-p3";
   const hasLowPowerContext =
     input.rendering?.powerPreference === "low-power";
+  const hasFrameCadence =
+    typeof input.performance?.frameCadenceMedianMs === "number" &&
+    Number.isFinite(input.performance.frameCadenceMedianMs) &&
+    typeof input.performance.frameCadenceP95Ms === "number" &&
+    Number.isFinite(input.performance.frameCadenceP95Ms) &&
+    input.performance.frameCadenceSampleCount > 0;
+  const staticFrame = !input.state.animate;
   const performance = input.performance
     ? {
-        measurement: "main-thread-webgl-submission",
+        measurement: "webgl-render-loop",
         budgetMs: 16.7,
-        medianMs:
-          Math.round(input.performance.medianSubmissionMs * 1000) / 1000,
-        passesBudget: input.performance.medianSubmissionMs <= 16.7,
-        sampleCount: input.performance.sampleCount,
+        mainThreadSubmission: {
+          medianMs:
+            Math.round(input.performance.medianSubmissionMs * 1000) / 1000,
+          sampleCount: input.performance.sampleCount,
+        },
+        ...(hasFrameCadence
+          ? {
+              animationFrameCadence: {
+                medianIntervalMs:
+                  Math.round(input.performance.frameCadenceMedianMs * 1000) /
+                  1000,
+                p95IntervalMs:
+                  Math.round(input.performance.frameCadenceP95Ms * 1000) / 1000,
+                sampleCount: input.performance.frameCadenceSampleCount,
+                passesBudget: input.performance.frameCadenceMedianMs <= 16.7,
+              },
+            }
+          : {}),
         browser: input.performance.browser,
         hardwareConcurrency: input.performance.hardwareConcurrency,
         ...(hasHardwareGpuEvidence
           ? {
-              gpuTimer: input.performance.gpuTimer,
-              medianGpuFrameMs:
-                Math.round(input.performance.medianGpuFrameMs! * 1000) / 1000,
-              gpuPassesBudget: input.performance.medianGpuFrameMs! <= 16.7,
-              gpuSampleCount: input.performance.gpuSampleCount,
+              gpuDrawPass: {
+                timer: input.performance.gpuTimer,
+                medianMs:
+                  Math.round(input.performance.medianGpuDrawPassMs! * 1000) /
+                  1000,
+                passesBudget: input.performance.medianGpuDrawPassMs! <= 16.7,
+                sampleCount: input.performance.gpuDrawPassSampleCount,
+              },
             }
           : {}),
       }
     : {
         measurement: "unassessed-static-mode",
         budgetMs: 16.7,
-        medianMs: null,
-        passesBudget: null,
-        sampleCount: 0,
         reason: "Static mode does not collect animation performance samples.",
       };
 
+  const assessedDimensions = [
+    "seeded-spatial-noise",
+    ...(staticFrame ? ["static-frame-determinism"] : []),
+    ...(input.reducedMotion ? ["reduced-motion-active"] : []),
+    ...(input.renderer === "canvas-2d" || input.fallbackRendered
+      ? ["canvas-2d-fallback"]
+      : []),
+    ...(input.renderer === "webgl2"
+      ? ["webgl2-availability"]
+      : ["renderer-fallback-resolution"]),
+    ...(input.performance ? ["main-thread-webgl-submission"] : []),
+    ...(hasFrameCadence ? ["animation-frame-cadence"] : []),
+    ...(hasHardwareGpuEvidence ? ["gpu-draw-pass-duration"] : []),
+    ...(input.rendering
+      ? ["opaque-alpha-contract", "render-color-space", "renderer-classification"]
+      : []),
+    ...(hasWideGamutOutput ? ["wide-gamut-output-contract"] : []),
+    ...(hasLowPowerContext ? ["low-power-context"] : []),
+  ];
+  const unassessedDimensions = [
+    ...(!staticFrame ? ["static-frame-determinism"] : []),
+    ...(!input.reducedMotion ? ["reduced-motion-active"] : []),
+    ...(input.renderer !== "canvas-2d" && !input.fallbackRendered
+      ? ["canvas-2d-fallback"]
+      : []),
+    ...(!input.performance ? ["main-thread-webgl-submission"] : []),
+    ...(!hasFrameCadence ? ["animation-frame-cadence"] : []),
+    ...(input.renderer !== "webgl2" ? ["webgl2-rendering"] : []),
+    ...(input.renderer === "unavailable" ? ["rendered-output"] : []),
+    ...(!hasHardwareGpuEvidence ? ["gpu-draw-pass-duration"] : []),
+    ...(!input.rendering
+      ? ["opaque-alpha-contract", "render-color-space", "renderer-classification"]
+      : []),
+    "power-consumption",
+    "wide-gamut-color-accuracy",
+  ];
+
   return {
-    schemaVersion: "1.0.0",
+    schemaVersion: "1.1.0",
     route: "/labs/shaders",
-    deterministic: true,
+    deterministic: staticFrame,
+    determinism: {
+      seededSpatialNoise: true,
+      staticFrame,
+      reason: staticFrame
+        ? "Static mode fixes shader time at zero for repeatable controls."
+        : "Animation is time-dependent; only the seeded spatial noise is deterministic.",
+    },
     renderer: input.renderer,
     rendererStatus,
     reducedMotion: input.reducedMotion,
@@ -212,33 +320,17 @@ export function createAuditEvidence(input: AuditEvidenceInput) {
       "ripple-distortion",
     ] as const,
     sourcePolicy: {
-      implementation: "original-procedural-code",
+      implementation: "original-composition-with-attributed-algorithm-constants",
       externalShaderCodeCopied: false,
       externalAssetsCopied: false,
+      references: [
+        "docs/evidence/shader-lab-sources.md",
+        "NOTICE",
+      ],
     },
     performance,
     rendering: input.rendering ? { ...input.rendering } : null,
-    assessedDimensions: [
-      "deterministic-output",
-      "reduced-motion",
-      "canvas-2d-fallback",
-      ...(input.renderer === "webgl2"
-        ? ["webgl2-availability"]
-        : ["renderer-fallback-resolution"]),
-      ...(input.performance ? ["main-thread-webgl-submission"] : []),
-      ...(hasHardwareGpuEvidence ? ["gpu-frame-time"] : []),
-      ...(input.rendering ? ["opaque-alpha-contract", "render-color-space"] : []),
-      ...(hasWideGamutOutput ? ["wide-gamut-output-contract"] : []),
-      ...(hasLowPowerContext ? ["low-power-context"] : []),
-    ],
-    unassessedDimensions: [
-      ...(!input.performance ? ["main-thread-webgl-submission"] : []),
-      ...(input.renderer !== "webgl2" ? ["webgl2-rendering"] : []),
-      ...(input.renderer === "unavailable" ? ["rendered-output"] : []),
-      ...(!hasHardwareGpuEvidence ? ["gpu-frame-time"] : []),
-      ...(!input.rendering ? ["opaque-alpha-contract", "render-color-space"] : []),
-      "power-consumption",
-      "wide-gamut-color-accuracy",
-    ],
+    assessedDimensions: [...new Set(assessedDimensions)],
+    unassessedDimensions: [...new Set(unassessedDimensions)],
   };
 }

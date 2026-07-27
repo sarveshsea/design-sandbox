@@ -7,6 +7,7 @@ import {
   getBayerThreshold,
   normalizeLabState,
   seededNoise,
+  proceduralFieldLuminance,
 } from "./shader-contract";
 
 describe("shader lab contract", () => {
@@ -86,6 +87,13 @@ describe("shader lab contract", () => {
     expect(getBayerThreshold(5, 6)).toBe(getBayerThreshold(1, 2));
   });
 
+  it("keeps the Canvas fallback field sensitive to ripple and distortion", () => {
+    const baseline = proceduralFieldLuminance(0.31, 0.67, 640, 480, 0, 0);
+    const changed = proceduralFieldLuminance(0.31, 0.67, 640, 480, 1, 1);
+
+    expect(changed).not.toBe(baseline);
+  });
+
   it("exports stable, explicit evidence without inferring unsupported proof", () => {
     const evidence = createAuditEvidence({
       state: DEFAULT_LAB_STATE,
@@ -119,7 +127,7 @@ describe("shader lab contract", () => {
     });
 
     expect(evidence).toMatchObject({
-      schemaVersion: "1.0.0",
+      schemaVersion: "1.1.0",
       route: "/labs/shaders",
       deterministic: false,
       determinism: {
@@ -141,7 +149,7 @@ describe("shader lab contract", () => {
           medianIntervalMs: 16.6,
           p95IntervalMs: 16.9,
           sampleCount: 90,
-          passesBudget: false,
+          passesBudget: true,
         },
         gpuDrawPass: {
           timer: "EXT_disjoint_timer_query_webgl2",

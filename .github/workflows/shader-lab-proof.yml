@@ -8,6 +8,15 @@ on:
       - "pnpm-lock.yaml"
       - "playwright.config.ts"
       - "vitest.config.ts"
+      - "memi-proof.manifest.json"
+      - "scripts/memi-proof.mjs"
+      - "README.md"
+      - "LICENSE"
+      - "NOTICE"
+      - "docs/evidence/**"
+      - "src/app/globals.css"
+      - "src/app/layout.tsx"
+      - "src/app/page.tsx"
       - "src/app/labs/shaders/**"
       - "tests/e2e/shader-lab.spec.ts"
   push:
@@ -19,6 +28,15 @@ on:
       - "pnpm-lock.yaml"
       - "playwright.config.ts"
       - "vitest.config.ts"
+      - "memi-proof.manifest.json"
+      - "scripts/memi-proof.mjs"
+      - "README.md"
+      - "LICENSE"
+      - "NOTICE"
+      - "docs/evidence/**"
+      - "src/app/globals.css"
+      - "src/app/layout.tsx"
+      - "src/app/page.tsx"
       - "src/app/labs/shaders/**"
       - "tests/e2e/shader-lab.spec.ts"
   workflow_dispatch:
@@ -63,23 +81,11 @@ jobs:
       - name: Audit production dependencies
         run: pnpm audit --prod
 
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Run unit tests and coverage gate
-        run: pnpm test:coverage
-
-      - name: Build production bundle
-        run: pnpm build
-
       - name: Install browser engines and system dependencies
         run: pnpm exec playwright install --with-deps chromium webkit
 
-      - name: Run cross-browser shader proof
-        run: pnpm test:e2e
+      - name: Run current Memi and cross-browser proof
+        run: pnpm verify:ci
 
       - name: Upload shader proof artifacts
         if: always() && !cancelled()

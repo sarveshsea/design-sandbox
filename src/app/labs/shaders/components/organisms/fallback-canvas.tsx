@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { getBayerThreshold, seededNoise } from "../../lib/shader-contract";
+import {
+  getBayerThreshold,
+  proceduralFieldLuminance,
+  seededNoise,
+} from "../../lib/shader-contract";
 import type {
   RendererAvailability,
   ShaderLabState,
@@ -45,9 +49,16 @@ export function FallbackCanvas({
     context.fillRect(0, 0, canvas.width, canvas.height);
     for (let y = 0; y < canvas.height; y += cell) {
       for (let x = 0; x < canvas.width; x += cell) {
-        const horizontal = x / canvas.width;
-        const vertical = y / canvas.height;
-        const field = (Math.sin(horizontal * 9 + vertical * 7) + 1) / 2;
+        const horizontal = (x + cell * 0.5) / canvas.width;
+        const vertical = (y + cell * 0.5) / canvas.height;
+        const field = proceduralFieldLuminance(
+          horizontal,
+          vertical,
+          canvas.width,
+          canvas.height,
+          state.ripple,
+          state.distortion,
+        );
         const threshold =
           state.mode === "ordered"
             ? getBayerThreshold(x / cell, y / cell)
@@ -63,7 +74,13 @@ export function FallbackCanvas({
       onStatusChange?.("ready");
     });
     return () => cancelAnimationFrame(statusFrame);
-  }, [onStatusChange, state.mode, state.seed]);
+  }, [
+    onStatusChange,
+    state.distortion,
+    state.mode,
+    state.ripple,
+    state.seed,
+  ]);
 
   return (
     <div className="aspect-[4/3] overflow-hidden rounded-md border border-border bg-muted">

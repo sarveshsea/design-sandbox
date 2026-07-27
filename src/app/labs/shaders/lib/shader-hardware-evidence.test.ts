@@ -30,6 +30,7 @@ describe("durable shader hardware evidence", () => {
       "runReport",
       "rawEvidence",
       "staticFrame",
+      "reducedMotionFrame",
       "fullPageScreenshot",
     ];
 
@@ -79,6 +80,9 @@ describe("durable shader hardware evidence", () => {
       artifacts.rawEvidence.sha256,
     );
     expect(runArtifacts.staticFrame.sha256).toBe(artifacts.staticFrame.sha256);
+    expect(runArtifacts.reducedMotionFrame.sha256).toBe(
+      artifacts.reducedMotionFrame.sha256,
+    );
     expect(runArtifacts.fullPageScreenshot.sha256).toBe(
       artifacts.fullPageScreenshot.sha256,
     );
@@ -86,6 +90,10 @@ describe("durable shader hardware evidence", () => {
     expect(runReport.deterministicFrame).toMatchObject({
       repeatMatched: true,
       sha256: artifacts.staticFrame.sha256,
+    });
+    expect(runReport.reducedMotionFrame).toMatchObject({
+      repeatMatched: true,
+      sha256: artifacts.reducedMotionFrame.sha256,
     });
     expect(summaryPerformance).toMatchObject({
       budgetMs: rawPerformance.budgetMs,

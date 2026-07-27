@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Boxes, ShieldCheck, Terminal } from "lucide-react";
+import releaseManifest from "../../memi-proof.manifest.json";
 
 export default function Home() {
   const proofItems = [
@@ -20,7 +21,7 @@ export default function Home() {
               design-sandbox
             </p>
             <h1 className="text-3xl font-semibold tracking-normal sm:text-4xl">
-              memi 2.4 proof workspace
+              Memi {releaseManifest.version} proof workspace
             </h1>
             <p className="max-w-xl text-sm leading-6 text-muted-foreground">
               A Next.js, Tailwind, and shadcn sandbox where agents run interface-understanding checks before editing UI.
@@ -51,7 +52,10 @@ export default function Home() {
               </span>
               <div>
                 <h2 className="text-base font-semibold">Public proof command</h2>
-                <p className="text-sm text-muted-foreground">Runs after @memi-design/cli@2.4.0 is published.</p>
+                <p className="text-sm text-muted-foreground">
+                  Runs against verified {releaseManifest.package}@
+                  {releaseManifest.version}.
+                </p>
               </div>
             </div>
             <pre className="overflow-x-auto rounded-md bg-secondary p-4 text-sm text-secondary-foreground">

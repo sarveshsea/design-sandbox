@@ -12,6 +12,10 @@ import {
   DITHER_FRAGMENT_SHADER,
   FULLSCREEN_VERTEX_SHADER,
 } from "../../lib/shader-source";
+import {
+  applyDrawingBufferColorSpace,
+  classifyRenderer,
+} from "../../lib/shader-capabilities";
 
 interface ShaderCanvasProps {
   label: string;
@@ -20,6 +24,7 @@ interface ShaderCanvasProps {
   paused: boolean;
   testId: string;
   onPerformance?: (samples: number[]) => void;
+  onFrameCadence?: (samples: number[]) => void;
   onGpuPerformance?: (
     timer: "EXT_disjoint_timer_query_webgl2",
     samples: number[],
@@ -41,6 +46,7 @@ interface DebugRendererExtension {
 function rendererDetails(
   gl: WebGL2RenderingContext,
   requestedColorSpace: OutputColorSpace,
+  colorSpace: ReturnType<typeof applyDrawingBufferColorSpace>,
 ): RenderingEvidenceInput {
   const attributes = gl.getContextAttributes();
   const debug = gl.getExtension(
@@ -62,23 +68,24 @@ function rendererDetails(
     gl.UNSIGNED_BYTE,
     pixel,
   );
-  const colorSpace =
-    "drawingBufferColorSpace" in gl
-      ? String(gl.drawingBufferColorSpace)
-      : "unreported";
+  const rendererClassification = classifyRenderer({
+    renderer,
+    vendor,
+    unmasked: Boolean(debug),
+  });
 
   return {
     requestedColorSpace,
+    colorSpaceSupport: colorSpace.support,
     alphaContext: attributes?.alpha ?? true,
     alphaBits: Number(gl.getParameter(gl.ALPHA_BITS)),
     sampledAlpha: pixel[3],
-    drawingBufferColorSpace: colorSpace,
+    drawingBufferColorSpace: colorSpace.applied,
     powerPreference: attributes?.powerPreference ?? "default",
     renderer,
     vendor,
-    softwareRenderer: /swiftshader|llvmpipe|software/i.test(
-      `${vendor} ${renderer}`,
-    ),
+    rendererClassification,
+    rendererInfoSource: debug ? "unmasked" : "masked",
   };
 }
 
@@ -125,6 +132,7 @@ export function ShaderCanvas({
   paused,
   testId,
   onPerformance,
+  onFrameCadence,
   onGpuPerformance,
   onRenderingEvidence,
   onStatusChange,
@@ -146,7 +154,7 @@ export function ShaderCanvas({
       });
       return;
     }
-    gl.drawingBufferColorSpace = state.colorSpace;
+    const colorSpace = applyDrawingBufferColorSpace(gl, state.colorSpace);
 
     let program: WebGLProgram;
     try {
@@ -170,6 +178,7 @@ export function ShaderCanvas({
       seed: uniform("u_seed"),
     };
     const samples: number[] = [];
+    const frameCadenceSamples: number[] = [];
     const gpuSamples: number[] = [];
     const timer = gl.getExtension(
       "EXT_disjoint_timer_query_webgl2",
@@ -180,9 +189,15 @@ export function ShaderCanvas({
     let disposed = false;
     let pendingQuery: WebGLQuery | null = null;
     let renderingEvidenceReported = false;
+    let lastFrameAt: number | null = null;
 
     const draw = (now: number) => {
       if (disposed) return;
+      if (lastFrameAt !== null) {
+        frameCadenceSamples.push(now - lastFrameAt);
+        if (frameCadenceSamples.length > 120) frameCadenceSamples.shift();
+      }
+      lastFrameAt = now;
       if (pendingQuery && timer) {
         const available = gl.getQueryParameter(
           pendingQuery,
@@ -247,9 +262,14 @@ export function ShaderCanvas({
       }
       if (!renderingEvidenceReported) {
         renderingEvidenceReported = true;
-        onRenderingEvidence?.(rendererDetails(gl, state.colorSpace));
+        onRenderingEvidence?.(
+          rendererDetails(gl, state.colorSpace, colorSpace),
+        );
       }
       if (onPerformance && frame % 10 === 0) onPerformance([...samples]);
+      if (onFrameCadence && frame % 10 === 0) {
+        onFrameCadence([...frameCadenceSamples]);
+      }
       if (!paused) animationFrame = requestAnimationFrame(draw);
     };
 
@@ -264,6 +284,7 @@ export function ShaderCanvas({
   }, [
     mode,
     onPerformance,
+    onFrameCadence,
     onGpuPerformance,
     onRenderingEvidence,
     onStatusChange,

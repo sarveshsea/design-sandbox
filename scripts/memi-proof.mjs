@@ -1,10 +1,28 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
-const MEMI_VERSION = "2.4.0";
-const MEMI_PACKAGE = `@memi-design/cli@${MEMI_VERSION}`;
+const releaseManifest = JSON.parse(
+  readFileSync(new URL("../memi-proof.manifest.json", import.meta.url), "utf8"),
+);
+const MEMI_VERSION = releaseManifest.version;
+const MEMI_PACKAGE = `${releaseManifest.package}@${MEMI_VERSION}`;
 const registryBaseUrl = "https://raw.githubusercontent.com/sarveshsea/design-sandbox/main/public";
+const retainArtifacts = process.env.MEMI_PROOF_RETAIN_ARTIFACTS === "1";
+const proofRoot = retainArtifacts
+  ? process.cwd()
+  : mkdtempSync(join(tmpdir(), "memi-design-sandbox-proof-"));
+const tokenOutput = retainArtifacts
+  ? "generated/memi-proof/tokens"
+  : join(proofRoot, "tokens");
+const registryOutput = retainArtifacts ? "public/r" : join(proofRoot, "registry");
+
+if (!retainArtifacts) {
+  process.on("exit", () => rmSync(proofRoot, { recursive: true, force: true }));
+}
 
 const task = process.argv[2] ?? "all";
 
@@ -38,7 +56,7 @@ const tasks = {
         "--from",
         "./src",
         "--output",
-        "generated/memi-proof/tokens",
+        tokenOutput,
         "--format",
         "css,json",
         "--report",
@@ -54,7 +72,7 @@ const tasks = {
         "shadcn",
         "export",
         "--out",
-        "public/r",
+        registryOutput,
         "--name",
         "design-sandbox",
         "--homepage",
@@ -65,7 +83,7 @@ const tasks = {
     },
     {
       label: "shadcn registry doctor",
-      args: ["shadcn", "doctor", "--out", "public/r", "--json"],
+      args: ["shadcn", "doctor", "--out", registryOutput, "--json"],
       verifyJson: true,
     },
   ],
@@ -105,6 +123,8 @@ if (task !== "all" && !tasks[task]) {
 
 const selectedTasks = task === "all" ? allTasks : [task];
 
+if (!process.env.MEMI_BIN) verifyPublishedPackage();
+
 for (const name of selectedTasks) {
   for (const step of tasks[name]) {
     runStep(step);
@@ -112,6 +132,28 @@ for (const name of selectedTasks) {
 }
 
 console.log(`memi ${MEMI_VERSION} proof passed for ${selectedTasks.join(", ")}.`);
+
+function verifyPublishedPackage() {
+  const result = spawnSync(
+    "npm",
+    ["view", MEMI_PACKAGE, "dist.integrity", "--json"],
+    {
+      cwd: process.cwd(),
+      encoding: "utf-8",
+      maxBuffer: 1024 * 1024,
+    },
+  );
+  if (result.status !== 0) fail("npm package integrity", result);
+  const integrity = parseJson(result.stdout, "npm package integrity");
+  if (integrity !== releaseManifest.npmIntegrity) {
+    fail(
+      "npm package integrity",
+      result,
+      `Expected ${releaseManifest.npmIntegrity}, received ${integrity}.`,
+    );
+  }
+  console.log(`ok: npm package integrity (${releaseManifest.npmIntegrity})`);
+}
 
 function runStep(step) {
   const invocation = buildInvocation(step.args);
