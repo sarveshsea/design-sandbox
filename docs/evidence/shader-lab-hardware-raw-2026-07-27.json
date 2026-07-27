@@ -41,7 +41,7 @@
     },
     "animationFrameCadence": {
       "medianIntervalMs": 16.7,
-      "p95IntervalMs": 17.5,
+      "p95IntervalMs": 17.1,
       "sampleCount": 49,
       "passesBudget": true
     },
@@ -49,9 +49,9 @@
     "hardwareConcurrency": 12,
     "gpuDrawPass": {
       "timer": "EXT_disjoint_timer_query_webgl2",
-      "medianMs": 2.861,
+      "medianMs": 0.083,
       "passesBudget": true,
-      "sampleCount": 51
+      "sampleCount": 50
     }
   },
   "rendering": {
