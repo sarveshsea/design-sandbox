@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -26,6 +27,19 @@ describe("durable shader hardware evidence", () => {
     const privacy = summary.privacy as Record<string, unknown>;
 
     expect(summary.sourceCommit).toMatch(/^[0-9a-f]{40}$/);
+    const sourceCommit = String(summary.sourceCommit);
+    expect(() =>
+      execFileSync("git", ["cat-file", "-e", `${sourceCommit}^{commit}`], {
+        stdio: "pipe",
+      }),
+    ).not.toThrow();
+    expect(() =>
+      execFileSync(
+        "git",
+        ["merge-base", "--is-ancestor", sourceCommit, "HEAD"],
+        { stdio: "pipe" },
+      ),
+    ).not.toThrow();
     expect(result.rawEvidenceSha256).toBe(digest);
     expect(privacy).toEqual({
       serialNumberRecorded: false,

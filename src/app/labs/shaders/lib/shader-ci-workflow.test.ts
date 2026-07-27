@@ -34,6 +34,7 @@ describe("shader lab CI workflow", () => {
     expect(workflow).toContain("runs-on: ubuntu-24.04");
     expect(workflow).toContain("version: 10.17.0");
     expect(workflow).toContain("node-version: 22.22.0");
+    expect(workflow).toContain("fetch-depth: 0");
   });
 
   it("runs every blocking shader proof gate after a frozen install", () => {
