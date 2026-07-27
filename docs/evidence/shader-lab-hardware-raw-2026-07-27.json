@@ -1,7 +1,12 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "route": "/labs/shaders",
-  "deterministic": true,
+  "deterministic": false,
+  "determinism": {
+    "seededSpatialNoise": true,
+    "staticFrame": false,
+    "reason": "Animation is time-dependent; only the seeded spatial noise is deterministic."
+  },
   "renderer": "webgl2",
   "rendererStatus": "ready",
   "reducedMotion": false,
@@ -19,25 +24,39 @@
     "ripple-distortion"
   ],
   "sourcePolicy": {
-    "implementation": "original-procedural-code",
+    "implementation": "original-composition-with-attributed-algorithm-constants",
     "externalShaderCodeCopied": false,
-    "externalAssetsCopied": false
+    "externalAssetsCopied": false,
+    "references": [
+      "docs/evidence/shader-lab-sources.md",
+      "NOTICE"
+    ]
   },
   "performance": {
-    "measurement": "main-thread-webgl-submission",
+    "measurement": "webgl-render-loop",
     "budgetMs": 16.7,
-    "medianMs": 0,
-    "passesBudget": true,
-    "sampleCount": 50,
+    "mainThreadSubmission": {
+      "medianMs": 0,
+      "sampleCount": 50
+    },
+    "animationFrameCadence": {
+      "medianIntervalMs": 16.7,
+      "p95IntervalMs": 17.5,
+      "sampleCount": 49,
+      "passesBudget": true
+    },
     "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
     "hardwareConcurrency": 12,
-    "gpuTimer": "EXT_disjoint_timer_query_webgl2",
-    "medianGpuFrameMs": 0.079,
-    "gpuPassesBudget": true,
-    "gpuSampleCount": 50
+    "gpuDrawPass": {
+      "timer": "EXT_disjoint_timer_query_webgl2",
+      "medianMs": 2.861,
+      "passesBudget": true,
+      "sampleCount": 51
+    }
   },
   "rendering": {
     "requestedColorSpace": "display-p3",
+    "colorSpaceSupport": "native",
     "alphaContext": false,
     "alphaBits": 0,
     "sampledAlpha": 255,
@@ -45,21 +64,25 @@
     "powerPreference": "low-power",
     "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Pro, Unspecified Version)",
     "vendor": "Google Inc. (Apple)",
-    "softwareRenderer": false
+    "rendererClassification": "hardware",
+    "rendererInfoSource": "unmasked"
   },
   "assessedDimensions": [
-    "deterministic-output",
-    "reduced-motion",
+    "seeded-spatial-noise",
     "canvas-2d-fallback",
     "webgl2-availability",
     "main-thread-webgl-submission",
-    "gpu-frame-time",
+    "animation-frame-cadence",
+    "gpu-draw-pass-duration",
     "opaque-alpha-contract",
     "render-color-space",
+    "renderer-classification",
     "wide-gamut-output-contract",
     "low-power-context"
   ],
   "unassessedDimensions": [
+    "static-frame-determinism",
+    "reduced-motion-active",
     "power-consumption",
     "wide-gamut-color-accuracy"
   ]

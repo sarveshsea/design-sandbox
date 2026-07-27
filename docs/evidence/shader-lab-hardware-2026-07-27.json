@@ -1,20 +1,20 @@
 {
-  "schemaVersion": "1.0.0",
-  "capturedAt": "2026-07-27T01:23:50Z",
-  "sourceCommit": "0d37b20507bca7d2c15c18266d7075932e8c5abf",
+  "schemaVersion": "1.1.0",
+  "capturedAt": "2026-07-27T02:50:44.154Z",
+  "sourceCommit": "9fa820c773592c7a7ab45d509083e53fb233ffd2",
   "route": "/labs/shaders",
-  "command": "SHADER_HARDWARE_PROOF=1 pnpm exec playwright test --project chrome-hardware --grep \"accessible deterministic\"",
+  "command": "SHADER_HARDWARE_PROOF=1 SHADER_EVIDENCE_DIR=docs/evidence pnpm exec playwright test --project chrome-hardware --grep \"accessible deterministic\"",
   "environment": {
-    "os": "macOS 26.2 (25C56)",
-    "model": "MacBook Pro (Mac15,7)",
-    "chip": "Apple M3 Pro",
+    "os": "darwin 25.2.0",
+    "cpu": "Apple M3 Pro",
     "cpuCores": 12,
     "memoryGb": 36,
-    "browserBinaryVersion": "Google Chrome 150.0.7871.186",
+    "browserBinaryVersion": "150.0.7871.186",
     "emulatedUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
     "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Pro, Unspecified Version)",
     "vendor": "Google Inc. (Apple)",
-    "softwareRenderer": false
+    "rendererClassification": "hardware",
+    "rendererInfoSource": "unmasked"
   },
   "result": {
     "status": "partial",
@@ -22,15 +22,26 @@
     "testsFailed": 0,
     "performance": {
       "budgetMs": 16.7,
-      "mainThreadSubmissionMedianMs": 0,
-      "mainThreadSampleCount": 50,
-      "gpuTimer": "EXT_disjoint_timer_query_webgl2",
-      "gpuFrameMedianMs": 0.079,
-      "gpuSampleCount": 50,
-      "gpuPassesBudget": true
+      "mainThreadSubmission": {
+        "medianMs": 0,
+        "sampleCount": 50
+      },
+      "animationFrameCadence": {
+        "medianIntervalMs": 16.7,
+        "p95IntervalMs": 17.5,
+        "sampleCount": 49,
+        "passesBudget": true
+      },
+      "gpuDrawPass": {
+        "timer": "EXT_disjoint_timer_query_webgl2",
+        "medianMs": 2.861,
+        "passesBudget": true,
+        "sampleCount": 51
+      }
     },
     "rendering": {
       "requestedColorSpace": "display-p3",
+      "colorSpaceSupport": "native",
       "alphaContext": false,
       "alphaBits": 0,
       "sampledAlpha": 255,
@@ -38,24 +49,65 @@
       "powerPreference": "low-power",
       "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Pro, Unspecified Version)",
       "vendor": "Google Inc. (Apple)",
-      "softwareRenderer": false
+      "rendererClassification": "hardware",
+      "rendererInfoSource": "unmasked"
     },
     "deterministicFrame": {
       "repeatMatched": true,
       "sha256": "c8b64b76496b72ceffc053e7ba4be7244be28b61376e87972cedaf413bae017a"
     },
-    "rawEvidenceSha256": "6538176c7a2ad7d5de3c5fbc1e9aef37bdd1ffce84cb6c91e79b0177bb41e775",
-    "fullPageScreenshotSha256": "0b76130482616295e6d2fa4493fb7c94e12d8d87d2cc7217c2cfe3949b0e9804"
+    "reducedMotionFrame": {
+      "repeatMatched": true,
+      "sha256": "c8b64b76496b72ceffc053e7ba4be7244be28b61376e87972cedaf413bae017a"
+    },
+    "accessibility": {
+      "standard": "WCAG 2 A/AA and WCAG 2.1 A/AA",
+      "violations": 0
+    }
+  },
+  "artifacts": {
+    "runReport": {
+      "path": "docs/evidence/shader-lab-hardware-run-2026-07-27.json",
+      "sha256": "9f45c65862d561ed51c076ca6ea3ae70728be4a6731020b858f851d4a1c5da04",
+      "byteLength": 1737
+    },
+    "rawEvidence": {
+      "path": "docs/evidence/shader-lab-hardware-raw-2026-07-27.json",
+      "sha256": "902be1222c83dc6cb980c468a81a3e899c0b1b1d6ee5a44365a418dda153418e",
+      "byteLength": 2443
+    },
+    "staticFrame": {
+      "path": "docs/evidence/shader-lab-hardware-static-2026-07-27.png",
+      "sha256": "c8b64b76496b72ceffc053e7ba4be7244be28b61376e87972cedaf413bae017a",
+      "byteLength": 88788
+    },
+    "reducedMotionFrame": {
+      "path": "docs/evidence/shader-lab-hardware-reduced-motion-2026-07-27.png",
+      "sha256": "c8b64b76496b72ceffc053e7ba4be7244be28b61376e87972cedaf413bae017a",
+      "byteLength": 88788
+    },
+    "fullPageScreenshot": {
+      "path": "docs/evidence/shader-lab-hardware-full-page-2026-07-27.png",
+      "sha256": "396fe95b14582de81ca992a17161ec1e337d51c583d355b4012985eb49c12c35",
+      "byteLength": 277663
+    }
   },
   "assessedDimensions": [
-    "deterministic-output",
+    "seeded-spatial-noise",
+    "canvas-2d-fallback",
     "webgl2-availability",
     "main-thread-webgl-submission",
-    "gpu-frame-time",
+    "animation-frame-cadence",
+    "gpu-draw-pass-duration",
     "opaque-alpha-contract",
     "render-color-space",
+    "renderer-classification",
     "wide-gamut-output-contract",
-    "low-power-context"
+    "low-power-context",
+    "static-frame-determinism",
+    "reduced-motion-active",
+    "automated-wcag-a-aa",
+    "durable-artifact-binding"
   ],
   "unassessedDimensions": [
     "power-consumption",
@@ -65,12 +117,12 @@
     {
       "dimension": "power-consumption",
       "status": "blocked",
-      "reason": "The Xcode Power Profiler instrument reports that it is unsupported on macOS, while powermetrics requires superuser access. No privilege escalation was attempted."
+      "reason": "No supported unprivileged power instrument was available. No privilege escalation was attempted."
     },
     {
       "dimension": "wide-gamut-color-accuracy",
       "status": "pending",
-      "reason": "The tested WebGL2 drawing buffer accepts Display P3 and the evidence binds requested and applied output spaces, but no calibrated Display P3 reference and physical capture path has been verified."
+      "reason": "The native WebGL drawing buffer reports Display P3, but no calibrated reference and physical capture path has been verified."
     }
   ],
   "privacy": {
@@ -79,9 +131,8 @@
     "personalIdentifiersRecorded": false
   },
   "notes": [
-    "The checked-in record is a privacy-preserving summary of a local hardware run.",
-    "Chromium and WebKit software-renderer runs remain separate CI compatibility evidence.",
-    "This record must not be used to claim measured power consumption or calibrated wide-gamut accuracy.",
-    "The failed Power Profiler trace was temporary and is not treated as evidence."
+    "The retained run report, raw export, static frame, reduced-motion frame, and full-page screenshot are bound by SHA-256.",
+    "GPU timing measures the processed WebGL draw pass only. Animation-frame cadence is reported separately.",
+    "This record must not be used to claim measured power consumption or calibrated wide-gamut accuracy."
   ]
 }
