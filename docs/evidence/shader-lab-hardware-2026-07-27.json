@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "capturedAt": "2026-07-27T00:48:43Z",
-  "sourceCommit": "cb4a7098645b6d7a40cd4d99b71cb7f6c1edcda3",
+  "capturedAt": "2026-07-27T01:23:50Z",
+  "sourceCommit": "0d37b20507bca7d2c15c18266d7075932e8c5abf",
   "route": "/labs/shaders",
   "command": "SHADER_HARDWARE_PROOF=1 pnpm exec playwright test --project chrome-hardware --grep \"accessible deterministic\"",
   "environment": {
@@ -25,22 +25,24 @@
       "mainThreadSubmissionMedianMs": 0,
       "mainThreadSampleCount": 50,
       "gpuTimer": "EXT_disjoint_timer_query_webgl2",
-      "gpuFrameMedianMs": 0.543,
-      "gpuSampleCount": 49,
+      "gpuFrameMedianMs": 0.079,
+      "gpuSampleCount": 50,
       "gpuPassesBudget": true
     },
     "rendering": {
+      "requestedColorSpace": "display-p3",
       "alphaContext": false,
       "alphaBits": 0,
       "sampledAlpha": 255,
-      "drawingBufferColorSpace": "srgb"
+      "drawingBufferColorSpace": "display-p3",
+      "powerPreference": "low-power"
     },
     "deterministicFrame": {
       "repeatMatched": true,
-      "sha256": "1c682314b0fb14df72fa0a56d4a24caf7eeed654c61680580a648828b10c7d5f"
+      "sha256": "c8b64b76496b72ceffc053e7ba4be7244be28b61376e87972cedaf413bae017a"
     },
-    "rawEvidenceSha256": "36385b109b057a5a38aa3886b954afe0b82ec3fa8a2db4b8d41665804fd798bb",
-    "fullPageScreenshotSha256": "4b6797594388413d12ff4ad93a6a86f0e1b1f13359654f30c0b564d68ada9f0c"
+    "rawEvidenceSha256": "6538176c7a2ad7d5de3c5fbc1e9aef37bdd1ffce84cb6c91e79b0177bb41e775",
+    "fullPageScreenshotSha256": "0b76130482616295e6d2fa4493fb7c94e12d8d87d2cc7217c2cfe3949b0e9804"
   },
   "assessedDimensions": [
     "deterministic-output",
@@ -48,7 +50,9 @@
     "main-thread-webgl-submission",
     "gpu-frame-time",
     "opaque-alpha-contract",
-    "render-color-space"
+    "render-color-space",
+    "wide-gamut-output-contract",
+    "low-power-context"
   ],
   "unassessedDimensions": [
     "power-consumption",
@@ -63,7 +67,7 @@
     {
       "dimension": "wide-gamut-color-accuracy",
       "status": "pending",
-      "reason": "The tested WebGL2 drawing buffer reports sRGB. No calibrated Display P3 reference and capture path has been verified."
+      "reason": "The tested WebGL2 drawing buffer accepts Display P3 and the evidence binds requested and applied output spaces, but no calibrated Display P3 reference and physical capture path has been verified."
     }
   ],
   "privacy": {
@@ -74,7 +78,7 @@
   "notes": [
     "The checked-in record is a privacy-preserving summary of a local hardware run.",
     "Chromium and WebKit software-renderer runs remain separate CI compatibility evidence.",
-    "This record must not be used to claim power or wide-gamut accuracy.",
+    "This record must not be used to claim measured power consumption or calibrated wide-gamut accuracy.",
     "The failed Power Profiler trace was temporary and is not treated as evidence."
   ]
 }

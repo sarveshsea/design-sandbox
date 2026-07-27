@@ -7,6 +7,7 @@
   "reducedMotion": false,
   "controls": {
     "mode": "noise",
+    "colorSpace": "display-p3",
     "seed": 404,
     "ripple": 0.35,
     "distortion": 0.2,
@@ -31,15 +32,17 @@
     "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
     "hardwareConcurrency": 12,
     "gpuTimer": "EXT_disjoint_timer_query_webgl2",
-    "medianGpuFrameMs": 0.543,
+    "medianGpuFrameMs": 0.079,
     "gpuPassesBudget": true,
-    "gpuSampleCount": 49
+    "gpuSampleCount": 50
   },
   "rendering": {
+    "requestedColorSpace": "display-p3",
     "alphaContext": false,
     "alphaBits": 0,
     "sampledAlpha": 255,
-    "drawingBufferColorSpace": "srgb",
+    "drawingBufferColorSpace": "display-p3",
+    "powerPreference": "low-power",
     "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Pro, Unspecified Version)",
     "vendor": "Google Inc. (Apple)",
     "softwareRenderer": false
@@ -52,7 +55,9 @@
     "main-thread-webgl-submission",
     "gpu-frame-time",
     "opaque-alpha-contract",
-    "render-color-space"
+    "render-color-space",
+    "wide-gamut-output-contract",
+    "low-power-context"
   ],
   "unassessedDimensions": [
     "power-consumption",
