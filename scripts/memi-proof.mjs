@@ -12,8 +12,8 @@ const MEMI_PACKAGE = `${releaseManifest.package}@${MEMI_VERSION}`;
 const registryBaseUrl = "https://raw.githubusercontent.com/sarveshsea/design-sandbox/main/public";
 const retainArtifacts = process.env.MEMI_PROOF_RETAIN_ARTIFACTS === "1";
 const proofRoot = retainArtifacts
-  ? process.cwd()
-  : mkdtempSync(join(process.cwd(), ".memi-proof-tmp-"));
+  ? "."
+  : mkdtempSync(".memi-proof-tmp-");
 const tokenOutput = retainArtifacts
   ? "generated/memi-proof/tokens"
   : join(proofRoot, "tokens");

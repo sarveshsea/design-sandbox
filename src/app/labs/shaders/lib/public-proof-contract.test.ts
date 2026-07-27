@@ -28,6 +28,7 @@ describe("public shader proof contract", () => {
     expect(proofScript).not.toContain('"2.4.0"');
     expect(proofScript).toContain(".memi-proof-tmp-");
     expect(proofScript).not.toContain("tmpdir()");
+    expect(proofScript).not.toContain("mkdtempSync(join(process.cwd()");
     expect(gitignore).toContain("/.memi-proof-tmp-*");
     expect(home).toContain("releaseManifest.version");
     expect(readme).toContain("@memi-design/cli@2.6.2");
