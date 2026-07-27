@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "1.0.0",
+  "route": "/labs/shaders",
+  "deterministic": true,
+  "renderer": "webgl2",
+  "rendererStatus": "ready",
+  "reducedMotion": false,
+  "controls": {
+    "mode": "noise",
+    "seed": 404,
+    "ripple": 0.35,
+    "distortion": 0.2,
+    "animate": true
+  },
+  "algorithms": [
+    "bayer-4x4",
+    "seeded-noise",
+    "ripple-distortion"
+  ],
+  "sourcePolicy": {
+    "implementation": "original-procedural-code",
+    "externalShaderCodeCopied": false,
+    "externalAssetsCopied": false
+  },
+  "performance": {
+    "measurement": "main-thread-webgl-submission",
+    "budgetMs": 16.7,
+    "medianMs": 0,
+    "passesBudget": true,
+    "sampleCount": 50,
+    "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+    "hardwareConcurrency": 12,
+    "gpuTimer": "EXT_disjoint_timer_query_webgl2",
+    "medianGpuFrameMs": 0.543,
+    "gpuPassesBudget": true,
+    "gpuSampleCount": 49
+  },
+  "rendering": {
+    "alphaContext": false,
+    "alphaBits": 0,
+    "sampledAlpha": 255,
+    "drawingBufferColorSpace": "srgb",
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Pro, Unspecified Version)",
+    "vendor": "Google Inc. (Apple)",
+    "softwareRenderer": false
+  },
+  "assessedDimensions": [
+    "deterministic-output",
+    "reduced-motion",
+    "canvas-2d-fallback",
+    "webgl2-availability",
+    "main-thread-webgl-submission",
+    "gpu-frame-time",
+    "opaque-alpha-contract",
+    "render-color-space"
+  ],
+  "unassessedDimensions": [
+    "power-consumption",
+    "wide-gamut-color-accuracy"
+  ]
+}
