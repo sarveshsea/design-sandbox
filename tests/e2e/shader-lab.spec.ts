@@ -27,6 +27,7 @@ test("offers an accessible deterministic shader comparison and evidence export",
   await expect(page.getByTestId("fallback-renderer")).toBeVisible();
 
   await page.getByLabel("Dither method").selectOption("noise");
+  await page.getByLabel("Output color space").selectOption("display-p3");
   await page.getByLabel("Deterministic seed").fill("404");
 
   const downloadPromise = page.waitForEvent("download");
@@ -44,11 +45,18 @@ test("offers an accessible deterministic shader comparison and evidence export",
     path: evidencePath,
     contentType: "application/json",
   });
-  expect(evidence.controls).toMatchObject({ mode: "noise", seed: 404 });
+  expect(evidence.controls).toMatchObject({
+    mode: "noise",
+    colorSpace: "display-p3",
+    seed: 404,
+  });
   expect(evidence.deterministic).toBe(true);
   expect(evidence.performance.medianMs).toBeLessThanOrEqual(16.7);
   expect(evidence.performance.sampleCount).toBeGreaterThanOrEqual(30);
   expect(evidence.rendering).toMatchObject({
+    requestedColorSpace: "display-p3",
+    drawingBufferColorSpace: "display-p3",
+    powerPreference: "low-power",
     alphaContext: false,
     alphaBits: 0,
     sampledAlpha: 255,

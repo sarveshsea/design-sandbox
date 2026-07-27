@@ -47,6 +47,7 @@ describe("shader lab contract", () => {
     expect(
       normalizeLabState({
         mode: "unsupported",
+        colorSpace: "unsupported",
         seed: -2,
         ripple: 3,
         distortion: Number.NaN,
@@ -63,6 +64,7 @@ describe("shader lab contract", () => {
     expect(
       normalizeLabState({
         mode: "noise",
+        colorSpace: "display-p3",
         seed: 44.6,
         ripple: -3,
         distortion: 0.7,
@@ -70,6 +72,7 @@ describe("shader lab contract", () => {
       }),
     ).toEqual({
       mode: "noise",
+      colorSpace: "display-p3",
       seed: 45,
       ripple: 0,
       distortion: 0.7,
@@ -98,10 +101,12 @@ describe("shader lab contract", () => {
         gpuSampleCount: 30,
       },
       rendering: {
+        requestedColorSpace: "display-p3",
         alphaContext: false,
         alphaBits: 0,
         sampledAlpha: 255,
-        drawingBufferColorSpace: "srgb",
+        drawingBufferColorSpace: "display-p3",
+        powerPreference: "low-power",
         renderer: "ANGLE Metal Renderer: Apple M3 Pro",
         vendor: "Google Inc. (Apple)",
         softwareRenderer: false,
@@ -127,15 +132,21 @@ describe("shader lab contract", () => {
         gpuSampleCount: 30,
       },
       rendering: {
+        requestedColorSpace: "display-p3",
         alphaContext: false,
         alphaBits: 0,
         sampledAlpha: 255,
-        drawingBufferColorSpace: "srgb",
+        drawingBufferColorSpace: "display-p3",
+        powerPreference: "low-power",
         softwareRenderer: false,
       },
     });
     expect(evidence.assessedDimensions).toContain("gpu-frame-time");
     expect(evidence.assessedDimensions).toContain("opaque-alpha-contract");
+    expect(evidence.assessedDimensions).toContain(
+      "wide-gamut-output-contract",
+    );
+    expect(evidence.assessedDimensions).toContain("low-power-context");
     expect(evidence.unassessedDimensions).not.toContain("gpu-frame-time");
   });
 
@@ -176,10 +187,12 @@ describe("shader lab contract", () => {
         gpuSampleCount: 30,
       },
       rendering: {
+        requestedColorSpace: "srgb",
         alphaContext: false,
         alphaBits: 0,
         sampledAlpha: 255,
         drawingBufferColorSpace: "srgb",
+        powerPreference: "low-power",
         renderer: "ANGLE Vulkan SwiftShader",
         vendor: "Google Inc.",
         softwareRenderer: true,
