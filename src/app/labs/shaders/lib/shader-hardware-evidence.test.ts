@@ -63,6 +63,19 @@ describe("durable shader hardware evidence", () => {
     expect(summary.sourceCommit).toMatch(/^[0-9a-f]{40}$/);
     expect(runReport.sourceCommit).toBe(summary.sourceCommit);
     const sourceCommit = String(summary.sourceCommit);
+    const latestNonEvidenceCommit = execFileSync(
+      "git",
+      [
+        "log",
+        "-1",
+        "--format=%H",
+        "--",
+        ".",
+        ":(exclude)docs/evidence/shader-lab-hardware-*",
+      ],
+      { encoding: "utf8" },
+    ).trim();
+    expect(sourceCommit).toBe(latestNonEvidenceCommit);
     expect(() =>
       execFileSync("git", ["cat-file", "-e", `${sourceCommit}^{commit}`], {
         stdio: "pipe",

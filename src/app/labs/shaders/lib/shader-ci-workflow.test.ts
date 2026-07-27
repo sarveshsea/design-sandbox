@@ -87,11 +87,13 @@ describe("shader lab CI workflow", () => {
     expect(workflow).toContain("retention-days: 30");
   });
 
-  it("captures retained hardware screenshots from a production build", () => {
+  it("runs every browser proof against a freshly started production build", () => {
     const config = readFileSync(PLAYWRIGHT_CONFIG_PATH, "utf8");
 
     expect(config).toContain(
-      'hardwareProof\n      ? "pnpm build && pnpm start --hostname 127.0.0.1 --port 3100"',
+      'command: "pnpm build && pnpm start --hostname 127.0.0.1 --port 3100"',
     );
+    expect(config).toContain("reuseExistingServer: false");
+    expect(config).not.toContain('command: "pnpm dev');
   });
 });
