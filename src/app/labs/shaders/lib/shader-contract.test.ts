@@ -161,6 +161,36 @@ describe("shader lab contract", () => {
     );
   });
 
+  it("does not count software-renderer timing as hardware GPU proof", () => {
+    const evidence = createAuditEvidence({
+      state: DEFAULT_LAB_STATE,
+      reducedMotion: false,
+      renderer: "webgl2",
+      performance: {
+        medianSubmissionMs: 0.2,
+        sampleCount: 60,
+        browser: "Headless Chromium",
+        hardwareConcurrency: 4,
+        gpuTimer: "EXT_disjoint_timer_query_webgl2",
+        medianGpuFrameMs: 0.4,
+        gpuSampleCount: 30,
+      },
+      rendering: {
+        alphaContext: false,
+        alphaBits: 0,
+        sampledAlpha: 255,
+        drawingBufferColorSpace: "srgb",
+        renderer: "ANGLE Vulkan SwiftShader",
+        vendor: "Google Inc.",
+        softwareRenderer: true,
+      },
+    });
+
+    expect(evidence.performance).not.toHaveProperty("medianGpuFrameMs");
+    expect(evidence.assessedDimensions).not.toContain("gpu-frame-time");
+    expect(evidence.unassessedDimensions).toContain("gpu-frame-time");
+  });
+
   it("reports the Canvas 2D fallback instead of an unavailable WebGL renderer", () => {
     const evidence = createAuditEvidence({
       state: { ...DEFAULT_LAB_STATE, animate: false },

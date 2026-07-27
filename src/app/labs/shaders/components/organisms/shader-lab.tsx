@@ -8,6 +8,7 @@ import {
   normalizeLabState,
 } from "../../lib/shader-contract";
 import type {
+  RenderingEvidenceInput,
   RendererAvailability,
   RendererEvidenceStatus,
   RendererKind,
@@ -46,6 +47,13 @@ function useReducedMotion() {
 export function ShaderLab() {
   const [state, setState] = useState<ShaderLabState>(DEFAULT_LAB_STATE);
   const [samples, setSamples] = useState<number[]>([]);
+  const [gpuSamples, setGpuSamples] = useState<number[]>([]);
+  const [gpuTimer, setGpuTimer] = useState<
+    "EXT_disjoint_timer_query_webgl2" | null
+  >(null);
+  const [rendering, setRendering] = useState<RenderingEvidenceInput | null>(
+    null,
+  );
   const [webglStatus, setWebglStatus] =
     useState<RendererAvailability>("loading");
   const [fallbackStatus, setFallbackStatus] =
@@ -53,7 +61,22 @@ export function ShaderLab() {
   const reducedMotion = useReducedMotion();
   const paused = reducedMotion || !state.animate;
   const updatePerformance = useCallback((next: number[]) => setSamples(next), []);
+  const updateGpuPerformance = useCallback(
+    (
+      timer: "EXT_disjoint_timer_query_webgl2",
+      next: number[],
+    ) => {
+      setGpuTimer(timer);
+      setGpuSamples(next);
+    },
+    [],
+  );
+  const updateRendering = useCallback(
+    (next: RenderingEvidenceInput) => setRendering(next),
+    [],
+  );
   const medianSubmissionMs = useMemo(() => median(samples), [samples]);
+  const medianGpuFrameMs = useMemo(() => median(gpuSamples), [gpuSamples]);
   const rendererResolved =
     webglStatus === "ready" ||
     (webglStatus === "unavailable" && fallbackStatus !== "loading");
@@ -80,6 +103,7 @@ export function ShaderLab() {
       normalized.distortion !== state.distortion
     ) {
       setSamples([]);
+      setGpuSamples([]);
     }
     setState(normalized);
   };
@@ -101,7 +125,15 @@ export function ShaderLab() {
             sampleCount: samples.length,
             browser: navigator.userAgent,
             hardwareConcurrency: navigator.hardwareConcurrency,
+            ...(gpuTimer && gpuSamples.length >= PERFORMANCE_SAMPLE_TARGET
+              ? {
+                  gpuTimer,
+                  medianGpuFrameMs,
+                  gpuSampleCount: gpuSamples.length,
+                }
+              : {}),
           },
+      rendering: renderer === "webgl2" ? rendering : null,
     });
     const blob = new Blob([`${JSON.stringify(evidence, null, 2)}\n`], {
       type: "application/json",
@@ -141,6 +173,8 @@ export function ShaderLab() {
           paused={paused}
           testId="processed-renderer"
           onPerformance={updatePerformance}
+          onGpuPerformance={updateGpuPerformance}
+          onRenderingEvidence={updateRendering}
           onStatusChange={setWebglStatus}
         />
       ),
@@ -162,7 +196,10 @@ export function ShaderLab() {
         reducedMotion={reducedMotion}
         evidenceReady={
           rendererResolved &&
-          (staticEvidence || samples.length >= PERFORMANCE_SAMPLE_TARGET)
+          (staticEvidence ||
+            (samples.length >= PERFORMANCE_SAMPLE_TARGET &&
+              (!gpuTimer ||
+                gpuSamples.length >= PERFORMANCE_SAMPLE_TARGET)))
         }
         onChange={handleStateChange}
         onExport={handleExport}

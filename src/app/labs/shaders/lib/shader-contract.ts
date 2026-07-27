@@ -43,11 +43,24 @@ export const DEFAULT_LAB_STATE: ShaderLabState = {
   animate: true,
 };
 
-interface PerformanceEvidenceInput {
+export interface PerformanceEvidenceInput {
   medianSubmissionMs: number;
   sampleCount: number;
   browser: string;
   hardwareConcurrency: number;
+  gpuTimer?: "EXT_disjoint_timer_query_webgl2";
+  medianGpuFrameMs?: number;
+  gpuSampleCount?: number;
+}
+
+export interface RenderingEvidenceInput {
+  alphaContext: boolean;
+  alphaBits: number;
+  sampledAlpha: number;
+  drawingBufferColorSpace: string;
+  renderer: string;
+  vendor: string;
+  softwareRenderer: boolean;
 }
 
 interface AuditEvidenceInput {
@@ -56,6 +69,7 @@ interface AuditEvidenceInput {
   renderer: RendererKind;
   rendererStatus?: RendererEvidenceStatus;
   performance: PerformanceEvidenceInput | null;
+  rendering: RenderingEvidenceInput | null;
 }
 
 function wrapCoordinate(value: number) {
@@ -133,6 +147,13 @@ export function createAuditEvidence(input: AuditEvidenceInput) {
       : input.renderer === "canvas-2d"
         ? "fallback"
         : "unavailable");
+  const hasHardwareGpuEvidence =
+    input.performance?.gpuTimer === "EXT_disjoint_timer_query_webgl2" &&
+    typeof input.performance.medianGpuFrameMs === "number" &&
+    Number.isFinite(input.performance.medianGpuFrameMs) &&
+    typeof input.performance.gpuSampleCount === "number" &&
+    input.performance.gpuSampleCount > 0 &&
+    input.rendering?.softwareRenderer === false;
   const performance = input.performance
     ? {
         measurement: "main-thread-webgl-submission",
@@ -143,6 +164,15 @@ export function createAuditEvidence(input: AuditEvidenceInput) {
         sampleCount: input.performance.sampleCount,
         browser: input.performance.browser,
         hardwareConcurrency: input.performance.hardwareConcurrency,
+        ...(hasHardwareGpuEvidence
+          ? {
+              gpuTimer: input.performance.gpuTimer,
+              medianGpuFrameMs:
+                Math.round(input.performance.medianGpuFrameMs! * 1000) / 1000,
+              gpuPassesBudget: input.performance.medianGpuFrameMs! <= 16.7,
+              gpuSampleCount: input.performance.gpuSampleCount,
+            }
+          : {}),
       }
     : {
         measurement: "unassessed-static-mode",
@@ -172,6 +202,7 @@ export function createAuditEvidence(input: AuditEvidenceInput) {
       externalAssetsCopied: false,
     },
     performance,
+    rendering: input.rendering ? { ...input.rendering } : null,
     assessedDimensions: [
       "deterministic-output",
       "reduced-motion",
@@ -180,12 +211,15 @@ export function createAuditEvidence(input: AuditEvidenceInput) {
         ? ["webgl2-availability"]
         : ["renderer-fallback-resolution"]),
       ...(input.performance ? ["main-thread-webgl-submission"] : []),
+      ...(hasHardwareGpuEvidence ? ["gpu-frame-time"] : []),
+      ...(input.rendering ? ["opaque-alpha-contract", "render-color-space"] : []),
     ],
     unassessedDimensions: [
       ...(!input.performance ? ["main-thread-webgl-submission"] : []),
       ...(input.renderer !== "webgl2" ? ["webgl2-rendering"] : []),
       ...(input.renderer === "unavailable" ? ["rendered-output"] : []),
-      "gpu-frame-time",
+      ...(!hasHardwareGpuEvidence ? ["gpu-frame-time"] : []),
+      ...(!input.rendering ? ["opaque-alpha-contract", "render-color-space"] : []),
       "power-consumption",
       "wide-gamut-color-accuracy",
     ],

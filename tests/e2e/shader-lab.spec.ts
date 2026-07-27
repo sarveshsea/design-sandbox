@@ -1,4 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { createHash } from "node:crypto";
+import { readFile, writeFile } from "node:fs/promises";
+
+function sha256(value: Buffer) {
+  return createHash("sha256").update(value).digest("hex");
+}
 
 test("offers an accessible deterministic shader comparison and evidence export", async ({
   page,
@@ -30,19 +36,45 @@ test("offers an accessible deterministic shader comparison and evidence export",
   expect(path).not.toBeNull();
 
   const evidence = JSON.parse(
-    await (await import("node:fs/promises")).readFile(path!, "utf8"),
+    await readFile(path!, "utf8"),
   );
-  await (await import("node:fs/promises")).writeFile(
-    testInfo.outputPath("shader-audit-evidence.json"),
-    `${JSON.stringify(evidence, null, 2)}\n`,
-  );
+  const evidencePath = testInfo.outputPath("shader-audit-evidence.json");
+  await writeFile(evidencePath, `${JSON.stringify(evidence, null, 2)}\n`);
+  await testInfo.attach("shader-audit-evidence", {
+    path: evidencePath,
+    contentType: "application/json",
+  });
   expect(evidence.controls).toMatchObject({ mode: "noise", seed: 404 });
   expect(evidence.deterministic).toBe(true);
   expect(evidence.performance.medianMs).toBeLessThanOrEqual(16.7);
   expect(evidence.performance.sampleCount).toBeGreaterThanOrEqual(30);
+  expect(evidence.rendering).toMatchObject({
+    alphaContext: false,
+    alphaBits: 0,
+    sampledAlpha: 255,
+  });
 
   await page.getByLabel("Animate field").uncheck();
   await expect(page.getByText("Static frame active")).toBeVisible();
+  const processed = page.getByTestId("processed-renderer");
+  const firstFrame = await processed.screenshot();
+  const secondFrame = await processed.screenshot();
+  expect(secondFrame).toEqual(firstFrame);
+  const frameDigest = {
+    browser: testInfo.project.name,
+    sha256: sha256(firstFrame),
+    deterministicRepeat: true,
+  };
+  const digestPath = testInfo.outputPath("processed-static-frame.sha256.json");
+  await writeFile(digestPath, `${JSON.stringify(frameDigest, null, 2)}\n`);
+  await testInfo.attach("processed-static-frame", {
+    body: firstFrame,
+    contentType: "image/png",
+  });
+  await testInfo.attach("processed-static-frame-digest", {
+    path: digestPath,
+    contentType: "application/json",
+  });
   await page.screenshot({
     path: testInfo.outputPath("shader-lab.png"),
     fullPage: true,
@@ -65,12 +97,16 @@ test("honors reduced motion and exports static evidence", async ({
   expect(path).not.toBeNull();
 
   const evidence = JSON.parse(
-    await (await import("node:fs/promises")).readFile(path!, "utf8"),
+    await readFile(path!, "utf8"),
   );
-  await (await import("node:fs/promises")).writeFile(
-    testInfo.outputPath("reduced-motion-audit-evidence.json"),
-    `${JSON.stringify(evidence, null, 2)}\n`,
+  const evidencePath = testInfo.outputPath(
+    "reduced-motion-audit-evidence.json",
   );
+  await writeFile(evidencePath, `${JSON.stringify(evidence, null, 2)}\n`);
+  await testInfo.attach("reduced-motion-audit-evidence", {
+    path: evidencePath,
+    contentType: "application/json",
+  });
   expect(evidence.reducedMotion).toBe(true);
   expect(evidence.controls.animate).toBe(false);
   expect(evidence.performance).toMatchObject({
@@ -78,6 +114,10 @@ test("honors reduced motion and exports static evidence", async ({
     medianMs: null,
     passesBudget: null,
     sampleCount: 0,
+  });
+  await testInfo.attach("reduced-motion-render", {
+    body: await page.getByTestId("processed-renderer").screenshot(),
+    contentType: "image/png",
   });
 });
 
@@ -95,7 +135,7 @@ test("keeps the comparison usable on a narrow viewport", async ({ page }) => {
 
 test("exports Canvas 2D fallback evidence when WebGL2 is unavailable", async ({
   page,
-}) => {
+}, testInfo) => {
   await page.addInitScript(() => {
     const getContext = HTMLCanvasElement.prototype.getContext;
     HTMLCanvasElement.prototype.getContext = function (
@@ -125,12 +165,16 @@ test("exports Canvas 2D fallback evidence when WebGL2 is unavailable", async ({
   const path = await download.path();
   expect(path).not.toBeNull();
   const evidence = JSON.parse(
-    await (await import("node:fs/promises")).readFile(path!, "utf8"),
+    await readFile(path!, "utf8"),
   );
 
   expect(evidence).toMatchObject({
     renderer: "canvas-2d",
     rendererStatus: "fallback",
     reducedMotion: true,
+  });
+  await testInfo.attach("canvas-2d-fallback", {
+    body: await page.getByTestId("fallback-renderer").screenshot(),
+    contentType: "image/png",
   });
 });

@@ -73,20 +73,20 @@ jobs:
       - name: Build production bundle
         run: pnpm build
 
-      - name: Install Chromium and system dependencies
-        run: pnpm exec playwright install --with-deps chromium
+      - name: Install browser engines and system dependencies
+        run: pnpm exec playwright install --with-deps chromium webkit
 
-      - name: Run Chromium shader proof
+      - name: Run cross-browser shader proof
         run: pnpm test:e2e
 
-      - name: Upload shader proof failure artifacts
-        if: failure() && !cancelled()
+      - name: Upload shader proof artifacts
+        if: always() && !cancelled()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: shader-lab-proof-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          name: shader-lab-proof-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             test-results/
             playwright-report/
             coverage/
-          if-no-files-found: ignore
-          retention-days: 14
+          if-no-files-found: error
+          retention-days: 30
